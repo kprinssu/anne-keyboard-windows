@@ -16,7 +16,7 @@
     <PackageRegistrationPath>
     </PackageRegistrationPath>
     <RemoveNonLayoutFiles>true</RemoveNonLayoutFiles>
-    <RegisteredManifestChecksum>DD0DB85B996FF76405282D48D499546AC56CE5EC28AEDE1BDD4D78DEC2174EB6</RegisteredManifestChecksum>
+    <RegisteredManifestChecksum>8634C550C12BC03C4302EB5B4D7B1E15081BBE66852644AC692BFC9BE9A947DE</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>2f23bec5-1506-4ef7-9768-7a82dce46a09_1.0.0.0_x86__w7amz0rwn319p</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>2f23bec5-1506-4ef7-9768-7a82dce46a09_w7amz0rwn319p!App</RegisteredUserModeAppID>
     <RegisteredPackageID>2f23bec5-1506-4ef7-9768-7a82dce46a09</RegisteredPackageID>
@@ -28,13 +28,13 @@
     <AppXManifest Include="C:\Users\Kishor\documents\visual studio 2015\Projects\AnneProKeyboard\AnneProKeyboard\bin\x86\Debug\Core\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2016-07-17T15:39:40.796</Modified>
+      <Modified>2016-07-21T14:00:13.666</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
     <AppxPackagedFile Include="C:\Users\Kishor\documents\visual studio 2015\Projects\AnneProKeyboard\AnneProKeyboard\bin\x86\Debug\AnneProKeyboard.exe">
       <PackagePath>entrypoint\AnneProKeyboard.exe</PackagePath>
-      <Modified>2016-07-17T15:39:40.622</Modified>
+      <Modified>2016-07-21T14:00:13.486</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kishor\.nuget\packages\Microsoft.CSharp\4.0.0\lib\netcore50\Microsoft.CSharp.dll">
       <PackagePath>Microsoft.CSharp.dll</PackagePath>
@@ -496,11 +496,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kishor\documents\visual studio 2015\Projects\AnneProKeyboard\AnneProKeyboard\bin\x86\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2016-07-17T15:28:22.046</Modified>
+      <Modified>2016-07-20T13:38:59.870</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\Kishor\documents\visual studio 2015\Projects\AnneProKeyboard\AnneProKeyboard\bin\x86\Debug\Core\AnneProKeyboard.exe">
       <PackagePath>AnneProKeyboard.exe</PackagePath>
-      <Modified>2016-07-17T15:39:40.794</Modified>
+      <Modified>2016-07-21T14:00:13.664</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
