@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Collections.ObjectModel;
+
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
+using Windows.UI;
 using Windows.UI.ViewManagement;
+using Windows.UI.Xaml.Media;
 using Windows.Foundation;
-using System.Collections.ObjectModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -43,9 +46,9 @@ namespace AnneProKeyboard
 
             Size window_size = new Size(960, 480);
 
-          //  ApplicationView.PreferredLaunchViewSize = window_size;
-           // ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-           // ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
+           ApplicationView.PreferredLaunchViewSize = window_size;
+           ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+           ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
 
             FindKeyboard();
 
@@ -174,6 +177,9 @@ namespace AnneProKeyboard
                 this.Watcher.Stop();
                 this.Watcher.Stop();
 
+                connectionStatusLabel.Text = "Connected";
+                connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+
                 /* Random Random = new Random();
 
 
@@ -211,7 +217,13 @@ namespace AnneProKeyboard
 
         private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
         {
-            content.Text = (e.ClickedItem as ProfileItem).Label + " Page";
+            ProfileItem profile = (e.ClickedItem as ProfileItem);
+            chosenProfileName.Text = profile.Label;
+        }
+
+        private void initProfileColours(List<int> colours)
+        {
+
         }
 
         private void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
