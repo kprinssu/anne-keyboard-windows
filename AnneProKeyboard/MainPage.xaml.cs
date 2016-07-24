@@ -11,6 +11,7 @@ using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
 using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
@@ -33,9 +34,10 @@ namespace AnneProKeyboard
 
         private GattCharacteristic WriteGatt;
 
-        private ObservableCollection<ProfileItem> _keyboardProfiles = new ObservableCollection<ProfileItem>();
+        private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
+        private KeyboardProfileItem editingProfile;
 
-        public ObservableCollection<ProfileItem> KeyboardProfiles
+        public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
             get { return _keyboardProfiles; }
         }
@@ -51,20 +53,10 @@ namespace AnneProKeyboard
             ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
 
             FindKeyboard();
-
-            ProfileItem profile_item = new ProfileItem();
-            profile_item.Label = "Test Profile";
-            profile_item.KeyboardColours = new List<int>();
-            SetupProperties(profile_item.KeyboardColours);
-
-            this._keyboardProfiles.Add(profile_item);
-        }
-
-        private void SetupProperties(List<int> KeyboardColours)
-        {
-            for (int i = 0; i < 70; i++)
+            
+            if(this._keyboardProfiles.Count == 0)
             {
-                KeyboardColours.Add(0);
+                this.CreateNewKeyboardProfile();
             }
         }
 
@@ -216,15 +208,24 @@ namespace AnneProKeyboard
             }
         }
 
-        private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
+        private void CreateNewKeyboardProfile()
         {
-            ProfileItem profile = (e.ClickedItem as ProfileItem);
-            chosenProfileName.Text = profile.Label;
+            KeyboardProfileItem profile_item = new KeyboardProfileItem();
+            profile_item.Label = "Profile " + (this._keyboardProfiles.Count + 1);
+            profile_item.KeyboardColours = new List<int>();
+
+            for (int i = 0; i < 70; i++)
+            {
+                profile_item.KeyboardColours.Add(0);
+            }
+
+            this._keyboardProfiles.Add(profile_item);
         }
 
-        private void changeKeyboardColours(List<int> colours)
+        private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
         {
-
+            KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
+            chosenProfileName.Text = profile.Label;
         }
 
         private void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
@@ -272,15 +273,59 @@ namespace AnneProKeyboard
             //Debug.WriteLine($"Device updated: {update.Id}");
         }
 
-        private void keyboardColourButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
+
+        private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox profileName = (sender as TextBox);
+            // update Views and KeyboardProfileItem class
+            chosenProfileName.Text = profileName.Text;
+
+            if(this.editingProfile != null)
+            {
+                this.editingProfile.Label = profileName.Text;
+            }
+        }
+
+        private void ProfileNameFocusEvent(object sender, RoutedEventArgs e)
+        {
+            //Find and store the profile we are editing
+            TextBox textbox = ((TextBox)sender);
+            string profile_name = textbox.Text;
+            foreach(KeyboardProfileItem profile_item in this._keyboardProfiles)
+            {
+                if(profile_item.Label == profile_name)
+                {
+                    this.editingProfile = profile_item;
+                    break;
+                }
+            }
+        }
+
+        private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.CreateNewKeyboardProfile();
+            //this.keyboardProfilesList.UpdateLayout();
+        }
     }
 
-    public class ProfileItem
+    public class KeyboardProfileItem
     {
-        public string Label { get; set; }
+        private string _label;
+        public string Label
+        {
+            get
+            {
+                return this._label;
+            }
+            set
+            {
+                this._label = value;
+            }
+        }
         public List<int> KeyboardColours { get; set; }
     }
 }
