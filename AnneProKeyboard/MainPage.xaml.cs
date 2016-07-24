@@ -46,12 +46,11 @@ namespace AnneProKeyboard
 
             Size window_size = new Size(960, 480);
 
-           ApplicationView.PreferredLaunchViewSize = window_size;
-           ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-           ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
+            ApplicationView.PreferredLaunchViewSize = window_size;
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
 
             FindKeyboard();
-
 
             ProfileItem profile_item = new ProfileItem();
             profile_item.Label = "Test Profile";
@@ -150,8 +149,7 @@ namespace AnneProKeyboard
                 else if(this.Watcher.Status != BluetoothLEAdvertisementWatcherStatus.Started)
                 {
                     // automatically start searching for the keyboard
-                    this.Watcher.Start();
-                    this.Watcher.Start();
+                    this.SetupBluetooth();
 
                     return;
                 }
@@ -174,8 +172,11 @@ namespace AnneProKeyboard
 
 
                 // Make sure to disable Bluetooth listener
-                this.Watcher.Stop();
-                this.Watcher.Stop();
+                if(this.Watcher != null && this.Watcher.Status == BluetoothLEAdvertisementWatcherStatus.Started)
+                {
+                    this.Watcher.Stop();
+                    this.Watcher.Stop();
+                }
 
                 connectionStatusLabel.Text = "Connected";
                 connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
@@ -221,7 +222,7 @@ namespace AnneProKeyboard
             chosenProfileName.Text = profile.Label;
         }
 
-        private void initProfileColours(List<int> colours)
+        private void changeKeyboardColours(List<int> colours)
         {
 
         }
@@ -271,9 +272,9 @@ namespace AnneProKeyboard
             //Debug.WriteLine($"Device updated: {update.Id}");
         }
 
-        private void startButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void keyboardColourButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            this.SetupBluetooth();
+
         }
     }
 
