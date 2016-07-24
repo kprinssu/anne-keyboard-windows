@@ -32,9 +32,10 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="14,24,0,24" >
-                    <SymbolIcon Symbol="Remote" Foreground="White" />
-                    <TextBlock Text="Connect to Keyboard" Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                <StackPanel Background="#303030" Orientation="Horizontal" Grid.Row="3" Margin="0,21,0,0" Height="30px" >
+                    <SymbolIcon Symbol="Remote" Margin="6,0,0,0" Foreground="White" />
+                    <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
                 </StackPanel>
             </Grid>
         </SplitView.Pane>
@@ -44,8 +45,84 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock Text="SPLITVIEW CONTENT" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}"/>
-            <TextBlock x:Name="content" Grid.Row="1" Margin="12,12,0,0" Style="{StaticResource BodyTextBlockStyle}" />
+            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}"/>
+            <Grid>
+                
+
+                <RelativePanel  Background="Aqua" Height="38" Margin="337,98,307,489" Width="450">
+                    <Button Content="ESC" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="1" Click="startButton_Click" Margin="31,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="2" Click="startButton_Click" Margin="61,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="3" Click="startButton_Click" Margin="91,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="4" Click="startButton_Click" Margin="121,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="5" Click="startButton_Click" Margin="151,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="6" Click="startButton_Click" Margin="181,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="7" Click="startButton_Click" Margin="211,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="8" Click="startButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="9" Click="startButton_Click" Margin="271,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="0" Click="startButton_Click" Margin="301,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="-" Click="startButton_Click" Margin="331,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="+" Click="startButton_Click" Margin="361,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="Backspace" Click="startButton_Click" Margin="390,5,0,5" HorizontalAlignment="Left" Width="56"/>
+                </RelativePanel>
+                <RelativePanel  Background="Red" Height="38" Margin="337,140,307,454" Width="450">
+                    <Button Content="Tab" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="42"/>
+                    <Button Content="Q" Click="startButton_Click" Margin="45,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="W" Click="startButton_Click" Margin="75,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="E" Click="startButton_Click" Margin="105,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="R" Click="startButton_Click" Margin="135,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="T" Click="startButton_Click" Margin="165,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="Y" Click="startButton_Click" Margin="195,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="U" Click="startButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="I" Click="startButton_Click" Margin="255,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="O" Click="startButton_Click" Margin="285,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="P" Click="startButton_Click" Margin="315,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="[" Click="startButton_Click" Margin="345,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="]" Click="startButton_Click" Margin="375,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="Tab 2" Click="startButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left"  Width="42"/>
+                </RelativePanel>
+                <RelativePanel  Background="Green" Height="38" Margin="337,177,307,417" Width="450" >
+                    <Button Content="CAPS" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="49"/>
+                    <Button Content="A" Click="startButton_Click" Margin="54,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="S" Click="startButton_Click" Margin="85,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="D" Click="startButton_Click" Margin="115,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="F" Click="startButton_Click" Margin="145,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="G" Click="startButton_Click" Margin="175,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="H" Click="startButton_Click" Margin="205,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="J" Click="startButton_Click" Margin="235,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="K" Click="startButton_Click" Margin="265,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="L" Click="startButton_Click" Margin="295,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content=";" Click="startButton_Click" Margin="325,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="'" Click="startButton_Click" Margin="355,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="ENTER" Click="startButton_Click" Margin="385,5,0,5" HorizontalAlignment="Left"  Width="63"/>
+                </RelativePanel>
+                <RelativePanel  Background="Yellow" Height="38" Margin="337,213,307,381" Width="450">
+                    <Button Content="Shift" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="63"/>
+                    <Button Content="Z" Click="startButton_Click" Margin="68,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="X" Click="startButton_Click" Margin="99,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="C" Click="startButton_Click" Margin="129,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="V" Click="startButton_Click" Margin="159,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="B" Click="startButton_Click" Margin="189,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="N" Click="startButton_Click" Margin="221,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="M" Click="startButton_Click" Margin="251,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="," Click="startButton_Click" Margin="281,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="." Click="startButton_Click" Margin="311,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="?" Click="startButton_Click" Margin="341,5,0,5" HorizontalAlignment="Left"  Width="28"/>
+                    <Button Content="Shift 2" Click="startButton_Click" Margin="371,5,0,5" HorizontalAlignment="Left"  Width="77"/>
+                </RelativePanel>
+                <RelativePanel  Background="Crimson" Height="38" Margin="337,249,307,345" Width="450">
+                    <Button Content="LCtrl" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="Win" Click="startButton_Click" Margin="42,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="LAlt" Click="startButton_Click" Margin="81,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="Space" Click="startButton_Click" Margin="120,5,0,5" HorizontalAlignment="Left"  Width="175"/>
+                    <Button Content="RAlt" Click="startButton_Click" Margin="300,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="Fn" Click="startButton_Click" Margin="339,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="Context" Click="startButton_Click" Margin="377,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                    <Button Content="RCtrl" Click="startButton_Click" Margin="414,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                </RelativePanel>
+            </Grid>
+
+            <Button x:Name="startButton" Content="Find Keyboard" Margin="4,120,0,160" Click="startButton_Click"/>
         </Grid>
     </SplitView>
 </Page>
