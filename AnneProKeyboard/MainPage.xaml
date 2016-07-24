@@ -22,7 +22,7 @@
                         <SymbolIcon Symbol="Add" Foreground="White" />
                     </Button>
                 </Grid>
-                
+
                 <ListView x:Name="NavLinksList" Margin="0,12,0,0" SelectionMode="None" Grid.Row="1" VerticalAlignment="Stretch" 
                            ItemClick="KeyboardProfiles_ItemClick" IsItemClickEnabled="True" 
                            ItemsSource="{x:Bind KeyboardProfiles}" >
@@ -46,83 +46,81 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}"/>
-            <Grid>
-                
-
-                <RelativePanel  Background="Aqua" Height="38" Margin="337,98,307,489" Width="450">
-                    <Button Content="ESC" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="1" Click="startButton_Click" Margin="31,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="2" Click="startButton_Click" Margin="61,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="3" Click="startButton_Click" Margin="91,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="4" Click="startButton_Click" Margin="121,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="5" Click="startButton_Click" Margin="151,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="6" Click="startButton_Click" Margin="181,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="7" Click="startButton_Click" Margin="211,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="8" Click="startButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="9" Click="startButton_Click" Margin="271,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="0" Click="startButton_Click" Margin="301,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="-" Click="startButton_Click" Margin="331,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="+" Click="startButton_Click" Margin="361,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="Backspace" Click="startButton_Click" Margin="390,5,0,5" HorizontalAlignment="Left" Width="56"/>
+            <Grid Margin="45,-40,-45,40">
+                <RelativePanel Height="38" Margin="10,114,244,480" Width="450">
+                    <Button Name="keyboardButton1" Content="ESC" Click="keyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton2" Content="1" Click="keyboardColourButton_Click" Margin="31,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton3" Content="2" Click="keyboardColourButton_Click" Margin="61,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton4" Content="3" Click="keyboardColourButton_Click" Margin="91,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton5" Content="4" Click="keyboardColourButton_Click" Margin="121,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton6" Content="5" Click="keyboardColourButton_Click" Margin="151,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton7" Content="6" Click="keyboardColourButton_Click" Margin="181,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton8" Content="7" Click="keyboardColourButton_Click" Margin="211,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton9" Content="8" Click="keyboardColourButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton10" Content="9" Click="keyboardColourButton_Click" Margin="271,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton11" Content="0" Click="keyboardColourButton_Click" Margin="301,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton12" Content="-" Click="keyboardColourButton_Click" Margin="331,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton13" Content="+" Click="keyboardColourButton_Click" Margin="361,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton14" Content="Backspace" Click="keyboardColourButton_Click" Margin="390,5,-4,5" HorizontalAlignment="Left" Width="60" Height="38"/>
                 </RelativePanel>
-                <RelativePanel  Background="Red" Height="38" Margin="337,140,307,454" Width="450">
-                    <Button Content="Tab" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="42"/>
-                    <Button Content="Q" Click="startButton_Click" Margin="45,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="W" Click="startButton_Click" Margin="75,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="E" Click="startButton_Click" Margin="105,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="R" Click="startButton_Click" Margin="135,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="T" Click="startButton_Click" Margin="165,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="Y" Click="startButton_Click" Margin="195,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="U" Click="startButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="I" Click="startButton_Click" Margin="255,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="O" Click="startButton_Click" Margin="285,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="P" Click="startButton_Click" Margin="315,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="[" Click="startButton_Click" Margin="345,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="]" Click="startButton_Click" Margin="375,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="Tab 2" Click="startButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left"  Width="42"/>
+                <RelativePanel Height="38" Margin="10,143,244,451" Width="450">
+                    <Button Name="keyboardButton15" Content="Tab" Click="keyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="42" Height="38"/>
+                    <Button Name="keyboardButton16" Content="Q" Click="keyboardColourButton_Click" Margin="45,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton17" Content="W" Click="keyboardColourButton_Click" Margin="75,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton18" Content="E" Click="keyboardColourButton_Click" Margin="105,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton19" Content="R" Click="keyboardColourButton_Click" Margin="135,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton20" Content="T" Click="keyboardColourButton_Click" Margin="165,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton21" Content="Y" Click="keyboardColourButton_Click" Margin="195,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton22" Content="U" Click="keyboardColourButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton23" Content="I" Click="keyboardColourButton_Click" Margin="255,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton24" Content="O" Click="keyboardColourButton_Click" Margin="285,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton25" Content="P" Click="keyboardColourButton_Click" Margin="315,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton26" Content="[" Click="keyboardColourButton_Click" Margin="345,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton27" Content="]" Click="keyboardColourButton_Click" Margin="375,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton28" Content="Tab 2" Click="keyboardColourButton_Click" Margin="405,5,-3,5" HorizontalAlignment="Left"  Width="45" Height="38"/>
                 </RelativePanel>
-                <RelativePanel  Background="Green" Height="38" Margin="337,177,307,417" Width="450" >
-                    <Button Content="CAPS" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="49"/>
-                    <Button Content="A" Click="startButton_Click" Margin="54,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="S" Click="startButton_Click" Margin="85,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="D" Click="startButton_Click" Margin="115,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="F" Click="startButton_Click" Margin="145,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="G" Click="startButton_Click" Margin="175,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="H" Click="startButton_Click" Margin="205,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="J" Click="startButton_Click" Margin="235,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="K" Click="startButton_Click" Margin="265,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="L" Click="startButton_Click" Margin="295,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content=";" Click="startButton_Click" Margin="325,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="'" Click="startButton_Click" Margin="355,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="ENTER" Click="startButton_Click" Margin="385,5,0,5" HorizontalAlignment="Left"  Width="63"/>
+                <RelativePanel Height="38" Margin="10,172,244,422" Width="450" >
+                    <Button Name="keyboardButton29" Content="CAP" Click="keyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="49" Height="38"/>
+                    <Button Name="keyboardButton30" Content="A" Click="keyboardColourButton_Click" Margin="54,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton31" Content="S" Click="keyboardColourButton_Click" Margin="85,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton32" Content="D" Click="keyboardColourButton_Click" Margin="115,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton33" Content="F" Click="keyboardColourButton_Click" Margin="145,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton34" Content="G" Click="keyboardColourButton_Click" Margin="175,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton35" Content="H" Click="keyboardColourButton_Click" Margin="205,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton36" Content="J" Click="keyboardColourButton_Click" Margin="235,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton37" Content="K" Click="keyboardColourButton_Click" Margin="265,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton38" Content="L" Click="keyboardColourButton_Click" Margin="295,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton39" Content=";" Click="keyboardColourButton_Click" Margin="325,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton40" Content="'" Click="keyboardColourButton_Click" Margin="355,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton41" Content="ENTER" Click="keyboardColourButton_Click" Margin="385,5,-4,5" HorizontalAlignment="Left"  Width="65" Height="38"/>
                 </RelativePanel>
-                <RelativePanel  Background="Yellow" Height="38" Margin="337,213,307,381" Width="450">
-                    <Button Content="Shift" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="63"/>
-                    <Button Content="Z" Click="startButton_Click" Margin="68,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="X" Click="startButton_Click" Margin="99,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="C" Click="startButton_Click" Margin="129,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="V" Click="startButton_Click" Margin="159,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="B" Click="startButton_Click" Margin="189,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="N" Click="startButton_Click" Margin="221,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="M" Click="startButton_Click" Margin="251,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="," Click="startButton_Click" Margin="281,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="." Click="startButton_Click" Margin="311,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="?" Click="startButton_Click" Margin="341,5,0,5" HorizontalAlignment="Left"  Width="28"/>
-                    <Button Content="Shift 2" Click="startButton_Click" Margin="371,5,0,5" HorizontalAlignment="Left"  Width="77"/>
+                <RelativePanel Height="38" Margin="10,201,244,393" Width="450">
+                    <Button Name="keyboardButton43" Content="Shift" Click="keyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="63"  Height="38"/>
+                    <Button Name="keyboardButton44" Content="Z" Click="keyboardColourButton_Click" Margin="68,5,0,5" HorizontalAlignment="Left"  Width="28"   Height="38"/>
+                    <Button Name="keyboardButton45" Content="X" Click="keyboardColourButton_Click" Margin="99,5,0,5" HorizontalAlignment="Left"  Width="28" Height="38"/>
+                    <Button Name="keyboardButton46" Content="C" Click="keyboardColourButton_Click" Margin="129,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton47" Content="V" Click="keyboardColourButton_Click" Margin="159,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton48" Content="B" Click="keyboardColourButton_Click" Margin="189,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton49" Content="N" Click="keyboardColourButton_Click" Margin="221,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton50" Content="M" Click="keyboardColourButton_Click" Margin="251,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton51" Content="," Click="keyboardColourButton_Click" Margin="281,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton52" Content="." Click="keyboardColourButton_Click" Margin="311,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton53" Content="?" Click="keyboardColourButton_Click" Margin="341,5,0,5" HorizontalAlignment="Left"  Width="28"  Height="38"/>
+                    <Button Name="keyboardButton54" Content="Shift 2" Click="keyboardColourButton_Click" Margin="371,5,-2,5" HorizontalAlignment="Left"  Width="79"  Height="38"/>
                 </RelativePanel>
-                <RelativePanel  Background="Crimson" Height="38" Margin="337,249,307,345" Width="450">
-                    <Button Content="LCtrl" Click="startButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="Win" Click="startButton_Click" Margin="42,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="LAlt" Click="startButton_Click" Margin="81,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="Space" Click="startButton_Click" Margin="120,5,0,5" HorizontalAlignment="Left"  Width="175"/>
-                    <Button Content="RAlt" Click="startButton_Click" Margin="300,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="Fn" Click="startButton_Click" Margin="339,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="Context" Click="startButton_Click" Margin="377,5,0,5" HorizontalAlignment="Left"  Width="35"/>
-                    <Button Content="RCtrl" Click="startButton_Click" Margin="414,5,0,5" HorizontalAlignment="Left"  Width="35"/>
+                <RelativePanel Height="38" Margin="10,230,244,364" Width="450">
+                    <Button Name="keyboardButton55" Content="LCtrl" Click="keyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="38"/>
+                    <Button Name="keyboardButton56" Content="Win" Click="keyboardColourButton_Click" Margin="42,5,0,5" HorizontalAlignment="Left"  Width="37"  Height="38"/>
+                    <Button Name="keyboardButton57" Content="LAlt" Click="keyboardColourButton_Click" Margin="81,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="38"/>
+                    <Button Name="keyboardButton58" Content="Space" Click="keyboardColourButton_Click" Margin="120,5,0,5" HorizontalAlignment="Left"  Width="175"  Height="38"/>
+                    <Button Name="keyboardButton59" Content="RAlt" Click="keyboardColourButton_Click" Margin="296,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="38"/>
+                    <Button Name="keyboardButton60" Content="Fn" Click="keyboardColourButton_Click" Margin="335,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="38"/>
+                    <Button Name="keyboardButton61" Content="Context" Click="keyboardColourButton_Click" Margin="374,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="38"/>
+                    <Button Name="keyboardButton62" Content="RCtrl" Click="keyboardColourButton_Click" Margin="414,5,-1,5" HorizontalAlignment="Left"  Width="38" Height="38"/>
                 </RelativePanel>
             </Grid>
 
-            <Button x:Name="startButton" Content="Find Keyboard" Margin="4,120,0,160" Click="startButton_Click"/>
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,162" Click="keyboardColourButton_Click"/>
         </Grid>
     </SplitView>
 </Page>
