@@ -36,6 +36,10 @@ namespace AnneProKeyboard
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
         private KeyboardProfileItem editingProfile;
+        private const byte selectedColourAlpha = 255;
+        private byte selectedColourRed = 255;
+        private byte selectedColourGreen = 255;
+        private byte selectedColourBlue = 255;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -214,6 +218,7 @@ namespace AnneProKeyboard
             profile_item.Label = "Profile " + (this._keyboardProfiles.Count + 1);
             profile_item.KeyboardColours = new List<int>();
 
+            // We only need 70 values to represent the 62 keys (70 is needed for some reason by the keyboard..)
             for (int i = 0; i < 70; i++)
             {
                 profile_item.KeyboardColours.Add(0);
@@ -238,6 +243,8 @@ namespace AnneProKeyboard
 
         private byte[] GenerateKeyboardBLEData(List<Int32> colours)
         {
+            //All of the below logic was ported over from the Android app
+            //Credits to devs at obins.net
             byte[] bluetooth_data = new byte[214];
 
             for (int i = 0; i < 70; i++)
@@ -275,7 +282,10 @@ namespace AnneProKeyboard
 
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
-
+            Button button = (Button)sender;
+            Color colour = Color.FromArgb(selectedColourAlpha, selectedColourRed, selectedColourGreen, selectedColourBlue);
+            button.BorderBrush = new SolidColorBrush(colour);
+            button.BorderThickness = new Thickness(1);
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
@@ -308,7 +318,6 @@ namespace AnneProKeyboard
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
-            //this.keyboardProfilesList.UpdateLayout();
         }
     }
 
