@@ -35,11 +35,14 @@ namespace AnneProKeyboard
         private GattCharacteristic WriteGatt;
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
-        private KeyboardProfileItem editingProfile;
-        private const byte selectedColourAlpha = 255;
-        private byte selectedColourRed = 255;
-        private byte selectedColourGreen = 255;
-        private byte selectedColourBlue = 255;
+        private KeyboardProfileItem EditingProfile;
+        private KeyboardProfileItem DeletingProfile;
+        private KeyboardProfileItem RenamingProfile;
+
+        private const byte SelectedColourAlpha = 255;
+        private byte SelectedColourRed = 255;
+        private byte SelectedColourGreen = 255;
+        private byte SelectedColourBlue = 255;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -56,12 +59,16 @@ namespace AnneProKeyboard
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
 
+            // Start up the background thread to find the keyboard
             FindKeyboard();
             
+            // UI init code
             if(this._keyboardProfiles.Count == 0)
             {
                 this.CreateNewKeyboardProfile();
             }
+        
+            ChangeSelectedProfile(this._keyboardProfiles[0]);
         }
 
         private async void FindKeyboard()
@@ -69,24 +76,25 @@ namespace AnneProKeyboard
             string deviceSelectorInfo = BluetoothLEDevice.GetDeviceSelectorFromPairingState(true);
             DeviceInformationCollection deviceInfoCollection = await DeviceInformation.FindAllAsync(deviceSelectorInfo, null);
 
+            bool device_found = false;
+
             foreach (DeviceInformation deviceInfo in deviceInfoCollection)
             {
                 if (deviceInfo.Name.Contains("ANNE"))
                 {
                     ConnectToKeyboard(deviceInfo);
+                    device_found = true;
                     break;
                 }
             }
 
-            deviceSelectorInfo = BluetoothDevice.GetDeviceSelectorFromPairingState(true);
-            deviceInfoCollection = await DeviceInformation.FindAllAsync(deviceSelectorInfo, null);
-
-            foreach (DeviceInformation deviceInfo in deviceInfoCollection)
+            if(!device_found)
             {
-                if (deviceInfo.Name.Contains("ANNE"))
+                // if the device was never paired start doing the background check
+                // Make sure to disable Bluetooth listener
+                if (this.Watcher == null)
                 {
-                    ConnectToKeyboard(deviceInfo);
-                    break;
+                    this.SetupBluetooth();
                 }
             }
         }
@@ -170,8 +178,7 @@ namespace AnneProKeyboard
                 // Make sure to disable Bluetooth listener
                 if(this.Watcher != null && this.Watcher.Status == BluetoothLEAdvertisementWatcherStatus.Started)
                 {
-                    this.Watcher.Stop();
-                    this.Watcher.Stop();
+                    this.StopScanning();
                 }
 
                 connectionStatusLabel.Text = "Connected";
@@ -218,19 +225,47 @@ namespace AnneProKeyboard
             profile_item.Label = "Profile " + (this._keyboardProfiles.Count + 1);
             profile_item.KeyboardColours = new List<int>();
 
-            // We only need 70 values to represent the 62 keys (70 is needed for some reason by the keyboard..)
+            // We only need 70 values to represent the 61 keys (70 is needed for some reason by the keyboard..)
             for (int i = 0; i < 70; i++)
             {
-                profile_item.KeyboardColours.Add(0);
+                profile_item.KeyboardColours.Add(0xFFFFFF);
             }
 
             this._keyboardProfiles.Add(profile_item);
         }
 
+        private void ChangeSelectedProfile(KeyboardProfileItem profile)
+        {
+            this.EditingProfile = profile;
+            chosenProfileName.Text = profile.Label;
+
+            // set up the background colours for the keyboard lights
+            byte alpha = 255;
+            for (int i = 0; i < 61; i++)
+            {
+                string s = "keyboardButton" + (i + 1);
+                Button button = (this.FindName(s) as Button);
+
+                int red = (profile.KeyboardColours[i] >> 16) & 0xff;
+                int green = (profile.KeyboardColours[i] >> 8) & 0xff;
+                int blue = (profile.KeyboardColours[i] >> 0) & 0xff;
+
+                // Encode to int using below
+                //int rgb = red;
+              //  rgb = (rgb << 8) + green;
+              //  rgb = (rgb << 8) + blue;
+
+                Color colour = Color.FromArgb(alpha, (byte)red, (byte)green, (byte)blue);
+
+                button.BorderBrush = new SolidColorBrush(colour);
+                button.BorderThickness = new Thickness(1);
+            }
+        }
+
         private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
         {
             KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
-            chosenProfileName.Text = profile.Label;
+            ChangeSelectedProfile(profile);
         }
 
         private void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
@@ -283,7 +318,7 @@ namespace AnneProKeyboard
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Color colour = Color.FromArgb(selectedColourAlpha, selectedColourRed, selectedColourGreen, selectedColourBlue);
+            Color colour = Color.FromArgb(SelectedColourAlpha, SelectedColourRed, SelectedColourGreen, SelectedColourBlue);
             button.BorderBrush = new SolidColorBrush(colour);
             button.BorderThickness = new Thickness(1);
         }
@@ -292,11 +327,14 @@ namespace AnneProKeyboard
         {
             TextBox profileName = (sender as TextBox);
             // update Views and KeyboardProfileItem class
-            chosenProfileName.Text = profileName.Text;
-
-            if(this.editingProfile != null)
+            if(this.EditingProfile == RenamingProfile)
             {
-                this.editingProfile.Label = profileName.Text;
+                chosenProfileName.Text = profileName.Text;
+            }
+            
+            if(this.RenamingProfile != null)
+            {
+                this.RenamingProfile.Label = profileName.Text;
             }
         }
 
@@ -305,19 +343,45 @@ namespace AnneProKeyboard
             //Find and store the profile we are editing
             TextBox textbox = ((TextBox)sender);
             string profile_name = textbox.Text;
-            foreach(KeyboardProfileItem profile_item in this._keyboardProfiles)
+            this.RenamingProfile = FindProfileByName(profile_name);
+        }
+
+        private KeyboardProfileItem FindProfileByName(string profile_name)
+        {
+            foreach (KeyboardProfileItem profile_item in this._keyboardProfiles)
             {
-                if(profile_item.Label == profile_name)
+                if (profile_item.Label == profile_name)
                 {
-                    this.editingProfile = profile_item;
-                    break;
+                    return profile_item;
                 }
             }
+
+            return null;
         }
 
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
+        }
+
+        private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            this._keyboardProfiles.Remove(this.DeletingProfile); 
+
+            // always make sure that the keyboard profiles list has 1 element in it
+            if(this._keyboardProfiles.Count == 0)
+            {
+                this.CreateNewKeyboardProfile();
+                ChangeSelectedProfile(this._keyboardProfiles[0]);
+            }
+        }
+
+        private void ProfileDeleteButton_Focus(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            FrameworkElement parent = (FrameworkElement)button.Parent;
+            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
+            this.DeletingProfile = FindProfileByName(textbox.Text);
         }
     }
 

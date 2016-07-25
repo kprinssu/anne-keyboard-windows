@@ -17,7 +17,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid>
-                    <TextBlock Text="Profiles" x:Name="PaneHeader" Foreground="White" Margin="10,12,0,0" Style="{StaticResource BaseTextBlockStyle}"/>
+                    <TextBlock x:Name="PaneHeader" Foreground="White" Margin="10,12,0,0" Style="{StaticResource BaseTextBlockStyle}" Text="Profiles" FontSize="18"/>
                     <Button BorderThickness="0" Click="ProfileAddButton_Click" Margin="215,12,0,0">
                         <SymbolIcon Symbol="Add" Foreground="White" />
                     </Button>
@@ -28,7 +28,12 @@
                            ItemsSource="{x:Bind KeyboardProfiles}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Width="200" Background="Transparent" BorderThickness="0" GotFocus="ProfileNameFocusEvent" TextChanged="ProfileNameChangedEvent_TextChanged" Foreground="White" />
+                            <StackPanel>
+                                <TextBox Name="ProfileNameTextbox" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Width="200" Margin="0, 12, 0, 0" Background="Transparent" BorderThickness="0" GotFocus="ProfileNameFocusEvent" TextChanged="ProfileNameChangedEvent_TextChanged" Foreground="White" />
+                                <Button BorderThickness="0" GotFocus="ProfileDeleteButton_Click" Click="ProfileDeleteButton_Focus" Margin="0, 12, 0, 0">
+                                    <SymbolIcon Symbol="Delete" Foreground="White" />
+                                </Button>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -45,8 +50,13 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}"/>
-            <Grid Margin="45,-40,-45,40">
+            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" FontSize="16"/>
+            <Grid Margin="0,-79,0,79">
+                <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="23" Margin="12,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14">
+                    <Run Text="Keyboard "/>
+                    <Run Text="Lights"/>
+                    <Run Text=":"/>
+                </TextBlock>
                 <RelativePanel Height="40" Margin="10,114,194,480">
                     <Button Name="keyboardButton1" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton2" Click="KeyboardColourButton_Click" Margin="33,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
@@ -63,7 +73,7 @@
                     <Button Name="keyboardButton13" Click="KeyboardColourButton_Click" Margin="374,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton14" Click="KeyboardColourButton_Click" Margin="405,5,-3,5" HorizontalAlignment="Left" Width="60" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
-                <RelativePanel Height="40" Margin="10,159,194,464">
+                <RelativePanel Height="40" Margin="10,189,194,493">
                     <Button Name="keyboardButton15" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="45" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton16" Click="KeyboardColourButton_Click" Margin="48,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton17" Click="KeyboardColourButton_Click" Margin="79,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
@@ -79,7 +89,7 @@
                     <Button Name="keyboardButton27" Click="KeyboardColourButton_Click" Margin="389,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton28" Click="KeyboardColourButton_Click" Margin="420,5,-16,5" HorizontalAlignment="Left"  Width="45" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
-                <RelativePanel Height="40" Margin="10,204,194,448" >
+                <RelativePanel Height="40" Margin="10,206,194,448" >
                     <Button Name="keyboardButton29" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="52" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton30" Click="KeyboardColourButton_Click" Margin="55,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton31" Click="KeyboardColourButton_Click" Margin="86,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
@@ -94,33 +104,33 @@
                     <Button Name="keyboardButton40" Click="KeyboardColourButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton41" Click="KeyboardColourButton_Click" Margin="396,5,-10.333,5" HorizontalAlignment="Left"  Width="69" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
-                <RelativePanel Height="40" Margin="10,249,194,432">
-                    <Button Name="keyboardButton43" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton44" Click="KeyboardColourButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton45" Click="KeyboardColourButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton46" Click="KeyboardColourButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton47" Click="KeyboardColourButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton48" Click="KeyboardColourButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton49" Click="KeyboardColourButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton50" Click="KeyboardColourButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton51" Click="KeyboardColourButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton52" Click="KeyboardColourButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton53" Click="KeyboardColourButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton54" Click="KeyboardColourButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" RequestedTheme="Dark"/>
+                <RelativePanel Height="40" Margin="10,252,194,432">
+                    <Button Name="keyboardButton42" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton43" Click="KeyboardColourButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton44" Click="KeyboardColourButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton45" Click="KeyboardColourButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton46" Click="KeyboardColourButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton47" Click="KeyboardColourButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton48" Click="KeyboardColourButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton49" Click="KeyboardColourButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton50" Click="KeyboardColourButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton51" Click="KeyboardColourButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton52" Click="KeyboardColourButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton53" Click="KeyboardColourButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
-                <RelativePanel Height="40" Margin="10,280,194,401">
-                    <Button Name="keyboardButton55" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton56" Click="KeyboardColourButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton57" Click="KeyboardColourButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton58" Click="KeyboardColourButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton59" Click="KeyboardColourButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton60" Click="KeyboardColourButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
-                    <Button Name="keyboardButton62" Click="KeyboardColourButton_Click" Margin="425,5,-13,5" HorizontalAlignment="Left"  Width="40" Height="30" RequestedTheme="Dark"/>
+                <RelativePanel Height="40" Margin="10,283,194,401">
+                    <Button Name="keyboardButton54" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton55" Click="KeyboardColourButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton56" Click="KeyboardColourButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton57" Click="KeyboardColourButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton58" Click="KeyboardColourButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton59" Click="KeyboardColourButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton60" Click="KeyboardColourButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
+                    <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" Margin="425,5,-13,5" HorizontalAlignment="Left"  Width="40" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
             </Grid>
 
-            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,162" Click="KeyboardColourButton_Click"/>
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,254" Click="KeyboardColourButton_Click"/>
         </Grid>
     </SplitView>
 </Page>
