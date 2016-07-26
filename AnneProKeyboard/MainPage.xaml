@@ -29,7 +29,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Grid.Row="2">
-                                <TextBox Name="ProfileNameTextbox" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="150" GotFocus="ProfileNameFocusEvent" TextChanged="ProfileNameChangedEvent_TextChanged" Foreground="White" />
+                                <TextBox Name="ProfileNameTextbox" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="150" GotFocus="ProfileNameFocusEvent" TextChanged="ProfileNameChangedEvent_TextChanged" Foreground="White" />
                                 <Button BorderThickness="0"  Margin="43,0,0,0" Click="ProfileDeleteButton_Click">
                                     <SymbolIcon Symbol="Delete" Foreground="White" />
                                 </Button>
