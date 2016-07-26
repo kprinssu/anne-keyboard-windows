@@ -199,40 +199,64 @@ namespace AnneProKeyboard
 
                 WriteGatt = write_gatt;
 
-                this.KeyboardDeviceInformation = device;
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                {
+                    this.KeyboardDeviceInformation = device;
+                    this.connectionStatusLabel.Text = "Connected";
+                    this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                    this.syncButton.IsEnabled = true;
+                });
 
-                /* Debug code for testing Bluetooth connectivity
-                
-                Random Random = new Random();
+                // Debug code for testing Bluetooth connectivity
 
+                 Random Random = new Random();
 
-                 byte[] meta_data = { 0x09, 0xD7, 0x03 }; //  { 0x09, 0x02, 0x01 };
-                 byte[] send_data = GenerateKeyboardBLEData(colours);//{ 0x03 };
+            List<int> colours = new List<int>();
 
-                 KeyboardWriter keyboard_writer = new KeyboardWriter(Dispatcher, write_gatt, meta_data, send_data);
+              for(int i = 0; i < 70; i++)
+              {
+                  if(i < 5)
+                  {
+                      colours.Add(Random.Next(0, 0xFFFFFF));
+                  }
+                  else if(i == 68)
+                    {
+                        colours.Add(Random.Next(0, 0xFFFFFF));
+                    }
+                  else
+                  {
+                      colours.Add(0);
+                  }
+              }
 
-                 keyboard_writer.WriteToKeyboard();
+               byte[] meta_data = { 0x09, 0xD7, 0x03 }; //  { 0x09, 0x02, 0x01 };
+               byte[] send_data = GenerateKeyboardBLEData(colours);//{ 0x03 };
 
-                   var writer = new DataWriter();
-                   byte[] test_bytes = { 0x09, 0x02, 0x01, 0x01}; // this will set the keyboard to red
-                   writer.WriteBytes(test_bytes);
-                   var res = await write_gatt.WriteValueAsync(writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
+               KeyboardWriter keyboard_writer = new KeyboardWriter(Dispatcher, write_gatt, meta_data, send_data);
 
-                   if (res == GattCommunicationStatus.Success)
-                   {
-                       Debug.WriteLine("Wrote some data! " );
-                   }
-                   else
-                   {
-                       Debug.WriteLine("Failed to write some data!");
-                   }*/
+               keyboard_writer.WriteToKeyboard();
+
+              /*  var writer = new DataWriter();
+               byte[] test_bytes = { 0x09, 0x02, 0x01, 0x01}; // this will set the keyboard to red
+               writer.WriteBytes(test_bytes);
+               var res = await write_gatt.WriteValueAsync(writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
+
+              if (res == GattCommunicationStatus.Success)
+               {
+                   Debug.WriteLine("Wrote some data! " );
+               }
+               else
+               {
+                   Debug.WriteLine("Failed to write some data!");
+               }*/
 
 
 
 
             }
-            catch
+            catch (Exception)
             {
+
             }
         }
 
@@ -263,9 +287,17 @@ namespace AnneProKeyboard
                 string s = "keyboardButton" + (i + 1);
                 Button button = (this.FindName(s) as Button);
 
-                int red = (profile.KeyboardColours[i] >> 16) & 0xff;
-                int green = (profile.KeyboardColours[i] >> 8) & 0xff;
-                int blue = (profile.KeyboardColours[i] >> 0) & 0xff;
+                int coloured_int = profile.KeyboardColours[i];
+
+                // do not know why but the last 4 keys (RALT, FN, Anne, Ctrl) are identify as 66,67,68,69
+                if(i > 56)
+                {
+                    coloured_int = profile.KeyboardColours[i + 9];
+                }
+
+                int red = (coloured_int >> 16) & 0xff;
+                int green = (coloured_int >> 8) & 0xff;
+                int blue = (coloured_int >> 0) & 0xff;
 
                 Color colour = Color.FromArgb(alpha, (byte)red, (byte)green, (byte)blue);
 
@@ -334,9 +366,6 @@ namespace AnneProKeyboard
                     if (device_info.IsEnabled)
                     {
                         ConnectToKeyboard(device_info);
-                        connectionStatusLabel.Text = "Connected";
-                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
-                        syncButton.IsEnabled = true;
                     }
                     else
                     {
@@ -357,7 +386,14 @@ namespace AnneProKeyboard
 
             int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
-            this.EditingProfile.KeyboardColours[button_index] = this.SelectedColour;
+            if(button_index > 56)
+            {
+                this.EditingProfile.KeyboardColours[button_index + 8] = this.SelectedColour;
+            }
+            else
+            {
+                this.EditingProfile.KeyboardColours[button_index - 1] = this.SelectedColour;
+            }
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
@@ -424,6 +460,8 @@ namespace AnneProKeyboard
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
         {
+            this.SaveProfiles();
+
             // We need this to identify the type of data we are sending
             byte[] meta_data = { 0x09, 0xD7, 0x03 };
 

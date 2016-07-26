@@ -49,7 +49,7 @@ namespace AnneProKeyboard
         {
             if (this.BlocksSent < this.MaxBlocks)
             {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.High, async () =>
                 {
                     try
                     {
