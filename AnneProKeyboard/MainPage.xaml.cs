@@ -177,8 +177,6 @@ namespace AnneProKeyboard
                  KeyboardWriter keyboard_writer = new KeyboardWriter(Dispatcher, write_gatt, meta_data, send_data);
 
                  keyboard_writer.WriteToKeyboard();
-                 int z = 0;
-                 z += 1;
 
                  /*  var writer = new DataWriter();
                    byte[] test_bytes = { 0x09, 0x02, 0x01, 0x01}; // this will set the keyboard to red
@@ -307,11 +305,13 @@ namespace AnneProKeyboard
                     {
                         connectionStatusLabel.Text = "Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                        syncButton.IsEnabled = true;
                     }
                     else
                     {
                         connectionStatusLabel.Text = "Not Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                        syncButton.IsEnabled = false;
                     }
                 });
             }
@@ -381,6 +381,19 @@ namespace AnneProKeyboard
                 this.CreateNewKeyboardProfile();
                 ChangeSelectedProfile(this._keyboardProfiles[0]);
             }
+        }
+
+        private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
+        {
+            // We need this to identify the type of data we are sending
+            byte[] meta_data = { 0x09, 0xD7, 0x03 };
+
+            // Convert the list of keyboard colours to keyboard data
+            byte[] send_data = GenerateKeyboardBLEData(this.EditingProfile.KeyboardColours);
+
+            // Send the data to the keyboard
+            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, meta_data, send_data);
+            keyboard_writer.WriteToKeyboard();
         }
     }
 
