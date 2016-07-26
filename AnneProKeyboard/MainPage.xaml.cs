@@ -39,10 +39,7 @@ namespace AnneProKeyboard
         private KeyboardProfileItem EditingProfile;
         private KeyboardProfileItem RenamingProfile;
 
-        private const byte SelectedColourAlpha = 255;
-        private byte SelectedColourRed = 255;
-        private byte SelectedColourGreen = 255;
-        private byte SelectedColourBlue = 255;
+        private int SelectedColour;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -232,11 +229,6 @@ namespace AnneProKeyboard
                 int green = (profile.KeyboardColours[i] >> 8) & 0xff;
                 int blue = (profile.KeyboardColours[i] >> 0) & 0xff;
 
-                // Encode to int using below
-                //int rgb = red;
-              //  rgb = (rgb << 8) + green;
-              //  rgb = (rgb << 8) + blue;
-
                 Color colour = Color.FromArgb(alpha, (byte)red, (byte)green, (byte)blue);
 
                 button.BorderBrush = new SolidColorBrush(colour);
@@ -303,6 +295,7 @@ namespace AnneProKeyboard
                 {
                     if (device_info.IsEnabled)
                     {
+                        ConnectToKeyboard(device_info);
                         connectionStatusLabel.Text = "Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
                         syncButton.IsEnabled = true;
@@ -320,9 +313,13 @@ namespace AnneProKeyboard
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Color colour = Color.FromArgb(SelectedColourAlpha, SelectedColourRed, SelectedColourGreen, SelectedColourBlue);
+            Color colour = Color.FromArgb(255, (byte)((this.SelectedColour >> 16) & 0xff), (byte)((this.SelectedColour >> 8) & 0xff), (byte)((this.SelectedColour >> 0) & 0xff));
             button.BorderBrush = new SolidColorBrush(colour);
             button.BorderThickness = new Thickness(1);
+
+            int button_index = Int32.Parse(button.Name.Remove(0, 14));
+
+            this.EditingProfile.KeyboardColours[button_index] = this.SelectedColour;
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
@@ -394,6 +391,37 @@ namespace AnneProKeyboard
             // Send the data to the keyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, meta_data, send_data);
             keyboard_writer.WriteToKeyboard();
+        }
+
+        private void KeyboardColourPicker_SelectedColorChanged(object sender, EventArgs e)
+        {
+           /* if (KeyboardColourPicker.SelectedColor != null)
+            {
+                Color colour = KeyboardColourPicker.SelectedColor.Color;
+
+                // Encode to int using below
+                //int rgb = red;
+                //  rgb = (rgb << 8) + green;
+                //  rgb = (rgb << 8) + blue;
+                this.SelectedColour = colour.R;
+                this.SelectedColour = (this.SelectedColour << 8) + colour.G;
+                this.SelectedColour = (this.SelectedColour << 8) + colour.B;
+            }*/
+        }
+
+        private void ColourSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        {
+            this.SelectedColour = (int)this.redSlider.Value;
+            this.SelectedColour = (this.SelectedColour << 8) + (int)this.greenSlider.Value;
+            this.SelectedColour = (this.SelectedColour << 8) + (int)this.blueSlider.Value;
+
+            int red = (this.SelectedColour >> 16) & 0xff;
+            int green = (this.SelectedColour >> 8) & 0xff;
+            int blue = (this.SelectedColour >> 0) & 0xff;
+
+            Color colour = Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
+
+            this.SelectedColourBox.Background = new SolidColorBrush(colour);
         }
     }
 
