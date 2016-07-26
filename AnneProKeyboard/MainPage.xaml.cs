@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Runtime.Serialization;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
@@ -15,6 +15,9 @@ using Windows.UI.Xaml;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
 using Windows.Foundation;
+using Windows.Storage;
+using Windows.Storage.Streams;
+using Windows.ApplicationModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -58,14 +61,8 @@ namespace AnneProKeyboard
 
             // Start up the background thread to find the keyboard
             FindKeyboard();
-            
-            // UI init code
-            if(this._keyboardProfiles.Count == 0)
-            {
-                this.CreateNewKeyboardProfile();
-            }
-        
-            ChangeSelectedProfile(this._keyboardProfiles[0]);
+
+            LoadProfiles();
         }
 
         private async void FindKeyboard()
@@ -88,6 +85,45 @@ namespace AnneProKeyboard
             // if the device was never paired start doing the background check
             // Make sure to disable Bluetooth listener
             this.SetupBluetooth();
+        }
+        
+        private async void SaveProfiles()
+        {
+            MemoryStream memory_stream = new MemoryStream();
+            DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
+            serialiser.WriteObject(memory_stream, this._keyboardProfiles);
+            
+            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
+            using (Stream file_stream = await file.OpenStreamForWriteAsync())
+            {
+                memory_stream.Seek(0, SeekOrigin.Begin);
+                await memory_stream.CopyToAsync(file_stream);
+                await file_stream.FlushAsync();
+            }
+        }
+
+        private async void LoadProfiles()
+        {
+            try
+            {
+                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("KeyboardProfilesData");
+                using (IInputStream inStream = await file.OpenSequentialReadAsync())
+                {
+                    DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
+                    this._keyboardProfiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
+                }
+            }
+            catch
+            {
+            }
+
+            // UI init code
+            if (this._keyboardProfiles.Count == 0)
+            {
+                this.CreateNewKeyboardProfile();
+            }
+
+            ChangeSelectedProfile(this._keyboardProfiles[0]);
         }
 
         private void StartScanning()
@@ -165,7 +201,9 @@ namespace AnneProKeyboard
 
                 this.KeyboardDeviceInformation = device;
 
-                /* Random Random = new Random();
+                /* Debug code for testing Bluetooth connectivity
+                
+                Random Random = new Random();
 
 
                  byte[] meta_data = { 0x09, 0xD7, 0x03 }; //  { 0x09, 0x02, 0x01 };
@@ -175,7 +213,7 @@ namespace AnneProKeyboard
 
                  keyboard_writer.WriteToKeyboard();
 
-                 /*  var writer = new DataWriter();
+                   var writer = new DataWriter();
                    byte[] test_bytes = { 0x09, 0x02, 0x01, 0x01}; // this will set the keyboard to red
                    writer.WriteBytes(test_bytes);
                    var res = await write_gatt.WriteValueAsync(writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
@@ -361,6 +399,8 @@ namespace AnneProKeyboard
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
+
+            this.SaveProfiles();
         }
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -378,6 +418,8 @@ namespace AnneProKeyboard
                 this.CreateNewKeyboardProfile();
                 ChangeSelectedProfile(this._keyboardProfiles[0]);
             }
+
+            this.SaveProfiles();
         }
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
@@ -393,22 +435,6 @@ namespace AnneProKeyboard
             keyboard_writer.WriteToKeyboard();
         }
 
-        private void KeyboardColourPicker_SelectedColorChanged(object sender, EventArgs e)
-        {
-           /* if (KeyboardColourPicker.SelectedColor != null)
-            {
-                Color colour = KeyboardColourPicker.SelectedColor.Color;
-
-                // Encode to int using below
-                //int rgb = red;
-                //  rgb = (rgb << 8) + green;
-                //  rgb = (rgb << 8) + blue;
-                this.SelectedColour = colour.R;
-                this.SelectedColour = (this.SelectedColour << 8) + colour.G;
-                this.SelectedColour = (this.SelectedColour << 8) + colour.B;
-            }*/
-        }
-
         private void ColourSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
             this.SelectedColour = (int)this.redSlider.Value;
@@ -422,6 +448,11 @@ namespace AnneProKeyboard
             Color colour = Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
 
             this.SelectedColourBox.Background = new SolidColorBrush(colour);
+        }
+
+        private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            this.SaveProfiles();
         }
     }
 
