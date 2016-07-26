@@ -33,6 +33,7 @@ namespace AnneProKeyboard
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
 
         private GattCharacteristic WriteGatt;
+        private DeviceInformation KeyboardDeviceInformation;
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
         private KeyboardProfileItem EditingProfile;
@@ -75,27 +76,21 @@ namespace AnneProKeyboard
             string deviceSelectorInfo = BluetoothLEDevice.GetDeviceSelectorFromPairingState(true);
             DeviceInformationCollection deviceInfoCollection = await DeviceInformation.FindAllAsync(deviceSelectorInfo, null);
 
-            bool device_found = false;
-
-            foreach (DeviceInformation deviceInfo in deviceInfoCollection)
+            foreach (DeviceInformation device_info in deviceInfoCollection)
             {
-                if (deviceInfo.Name.Contains("ANNE"))
+                // Do not let the background task starve, check if we are paired then connect to the keyboard
+                if (device_info.Name.Contains("ANNE")
+                    && device_info.Pairing.IsPaired)
                 {
-                    ConnectToKeyboard(deviceInfo);
-                    device_found = true;
+                    ConnectToKeyboard(device_info);
+
                     break;
                 }
             }
 
-            if(!device_found)
-            {
-                // if the device was never paired start doing the background check
-                // Make sure to disable Bluetooth listener
-                if (this.Watcher == null)
-                {
-                    this.SetupBluetooth();
-                }
-            }
+            // if the device was never paired start doing the background check
+            // Make sure to disable Bluetooth listener
+            this.SetupBluetooth();
         }
 
         private void StartScanning()
@@ -130,6 +125,11 @@ namespace AnneProKeyboard
                 {
                     var device = await BluetoothLEDevice.FromBluetoothAddressAsync(btAdv.BluetoothAddress);
                     var result = await device.DeviceInformation.Pairing.PairAsync(DevicePairingProtectionLevel.None);
+
+                    if(result.Status == DevicePairingResultStatus.Paired)
+                    {
+                        ConnectToKeyboard(device.DeviceInformation);
+                    }
                 });
             }
         }
@@ -149,13 +149,6 @@ namespace AnneProKeyboard
                 {
                     return;
                 }
-                else if(this.Watcher.Status != BluetoothLEAdvertisementWatcherStatus.Started)
-                {
-                    // automatically start searching for the keyboard
-                    this.SetupBluetooth();
-
-                    return;
-                }
 
                 var service = keyboard.GetGattService(OAD_GUID);
 
@@ -173,15 +166,7 @@ namespace AnneProKeyboard
 
                 WriteGatt = write_gatt;
 
-
-                // Make sure to disable Bluetooth listener
-                if(this.Watcher != null && this.Watcher.Status == BluetoothLEAdvertisementWatcherStatus.Started)
-                {
-                    this.StopScanning();
-                }
-
-                connectionStatusLabel.Text = "Connected";
-                connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                this.KeyboardDeviceInformation = device;
 
                 /* Random Random = new Random();
 
@@ -309,9 +294,27 @@ namespace AnneProKeyboard
             return bluetooth_data;
         }
 
-        private void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate update)
+        private async void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)
         {
-            //Debug.WriteLine($"Device updated: {update.Id}");
+            DeviceInformation device_info = await DeviceInformation.CreateFromIdAsync(device.Id);
+
+            // Do not let the background task starve, check if we are paired then connect to the keyboard
+            if (device_info.Name.Contains("ANNE"))
+            {
+                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                {
+                    if (device_info.IsEnabled)
+                    {
+                        connectionStatusLabel.Text = "Connected";
+                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                    }
+                    else
+                    {
+                        connectionStatusLabel.Text = "Not Connected";
+                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                    }
+                });
+            }
         }
 
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
