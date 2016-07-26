@@ -36,7 +36,6 @@ namespace AnneProKeyboard
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
         private KeyboardProfileItem EditingProfile;
-        private KeyboardProfileItem DeletingProfile;
         private KeyboardProfileItem RenamingProfile;
 
         private const byte SelectedColourAlpha = 255;
@@ -366,22 +365,19 @@ namespace AnneProKeyboard
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            this._keyboardProfiles.Remove(this.DeletingProfile); 
+            Button button = (Button)sender;
+            FrameworkElement parent = (FrameworkElement)button.Parent;
+            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
+            KeyboardProfileItem selected_profile = FindProfileByName(textbox.Text);
+
+            this._keyboardProfiles.Remove(selected_profile);
 
             // always make sure that the keyboard profiles list has 1 element in it
-            if(this._keyboardProfiles.Count == 0)
+            if (this._keyboardProfiles.Count == 0)
             {
                 this.CreateNewKeyboardProfile();
                 ChangeSelectedProfile(this._keyboardProfiles[0]);
             }
-        }
-
-        private void ProfileDeleteButton_Focus(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            this.DeletingProfile = FindProfileByName(textbox.Text);
         }
     }
 
