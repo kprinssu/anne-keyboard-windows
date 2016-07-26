@@ -130,7 +130,7 @@
                 </RelativePanel>
             </Grid>
 
-            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,254" Click="KeyboardColourButton_Click"/>
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,254" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
         </Grid>
     </SplitView>
 </Page>
