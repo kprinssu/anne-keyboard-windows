@@ -128,9 +128,30 @@
                     <Button Name="keyboardButton60" Click="KeyboardColourButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" Margin="425,5,-13,5" HorizontalAlignment="Left"  Width="40" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
+                <TextBlock HorizontalAlignment="Left" Height="23" Margin="12,373,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:"/>
             </Grid>
+            <RelativePanel Margin="11,316,262,271">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Red:" Margin="0,9,0,-9" FontSize="12"/>
+                    <Slider x:Name="redSlider" ValueChanged="ColourSlider_ValueChanged" Margin="25,0,0,0" Width="255" Maximum="255"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,34,0,-34">
+                    <TextBlock Text="Green:" Margin="0,12,0,-12" Width="48" FontSize="12"/>
+                    <Slider x:Name="greenSlider" ValueChanged="ColourSlider_ValueChanged" Margin="0,0,0,0" Width="255" Maximum="255"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0,69,-4.333,-69">
+                    <TextBlock Text="Blue:" FontSize="12" Margin="0,9,0,-9"/>
+                    <Slider x:Name="blueSlider" ValueChanged="ColourSlider_ValueChanged" Margin="22,0,0,0" Width="255" Maximum="255"/>
+                </StackPanel>
 
-            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,254" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
+                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Colour:" VerticalAlignment="Top" Width="48" Margin="322,7,-324,0" FontSize="12"/>
+                <Grid Name="SelectedColourBox" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="322,25,-324,-45" >
+                </Grid>
+            </RelativePanel>
+
+
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,393,0,299" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
+
         </Grid>
     </SplitView>
 </Page>
