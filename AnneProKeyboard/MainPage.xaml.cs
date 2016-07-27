@@ -17,7 +17,6 @@ using Windows.UI.Xaml.Media;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.ApplicationModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -199,60 +198,13 @@ namespace AnneProKeyboard
 
                 WriteGatt = write_gatt;
 
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Low, () =>
+                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
                     this.KeyboardDeviceInformation = device;
                     this.connectionStatusLabel.Text = "Connected";
                     this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
                     this.syncButton.IsEnabled = true;
                 });
-
-                // Debug code for testing Bluetooth connectivity
-
-                 Random Random = new Random();
-
-            List<int> colours = new List<int>();
-
-              for(int i = 0; i < 70; i++)
-              {
-                  if(i < 5)
-                  {
-                      colours.Add(Random.Next(0, 0xFFFFFF));
-                  }
-                  else if(i == 68)
-                    {
-                        colours.Add(Random.Next(0, 0xFFFFFF));
-                    }
-                  else
-                  {
-                      colours.Add(0);
-                  }
-              }
-
-               byte[] meta_data = { 0x09, 0xD7, 0x03 }; //  { 0x09, 0x02, 0x01 };
-               byte[] send_data = GenerateKeyboardBLEData(colours);//{ 0x03 };
-
-               KeyboardWriter keyboard_writer = new KeyboardWriter(Dispatcher, write_gatt, meta_data, send_data);
-
-               keyboard_writer.WriteToKeyboard();
-
-              /*  var writer = new DataWriter();
-               byte[] test_bytes = { 0x09, 0x02, 0x01, 0x01}; // this will set the keyboard to red
-               writer.WriteBytes(test_bytes);
-               var res = await write_gatt.WriteValueAsync(writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
-
-              if (res == GattCommunicationStatus.Success)
-               {
-                   Debug.WriteLine("Wrote some data! " );
-               }
-               else
-               {
-                   Debug.WriteLine("Failed to write some data!");
-               }*/
-
-
-
-
             }
             catch (Exception)
             {
@@ -314,10 +266,7 @@ namespace AnneProKeyboard
 
         private void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
         {
-            if (device.Name.Contains("ANNE"))
-            {
-                ConnectToKeyboard(device);
-            }
+            //Do nothing...
         }
 
         private byte[] GenerateKeyboardBLEData(List<Int32> colours)
@@ -361,19 +310,21 @@ namespace AnneProKeyboard
             // Do not let the background task starve, check if we are paired then connect to the keyboard
             if (device_info.Name.Contains("ANNE"))
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                if (device_info.IsEnabled)
                 {
-                    if (device_info.IsEnabled)
-                    {
-                        ConnectToKeyboard(device_info);
-                    }
-                    else
+                    ConnectToKeyboard(device_info);
+                }
+                else
+                {
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                     {
                         connectionStatusLabel.Text = "Not Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
                         syncButton.IsEnabled = false;
-                    }
-                });
+                    });
+                }
+
+               
             }
         }
 
