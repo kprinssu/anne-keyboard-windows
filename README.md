@@ -4,6 +4,7 @@ A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth 
 ## Requirements
 This app has been tested against Windows 10. Windows 8 should be supported, but futher testing is required.
 Windows 7 will not be supported due to lack of support by Microsoft.
+The keyboard has to be L0 mode by: pressing Fn+B, Fn+0, ESC, Fn+B, +
 
 ## Supported Features
 * Automatic keyboard pairing (launch the app, and it should start scanning for the keyboard)
@@ -16,8 +17,7 @@ Windows 7 will not be supported due to lack of support by Microsoft.
 * Improve changing multiple button keyboard light colours
 
 ## Known Bugs
-* Profiles are not saved when the app closes
-* If the keyboard has been paired before, and connecting the keyboard will cause the app to not detect the keyboard (restarting the app fixes this)
+* If the keyboard has been paired before, and connecting the keyboard after launching the app will cause the app to not detect the keyboard (restarting the app will fix this)
 
 ## License
 The codebase and the project are released under the permissive MIT License. 

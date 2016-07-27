@@ -131,12 +131,6 @@ namespace AnneProKeyboard
             DeviceWatcher.Start();
         }
 
-        private void StopScanning()
-        {
-            Watcher.Stop();
-            DeviceWatcher.Stop();
-        }
-
         private void SetupBluetooth()
         {
             Watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
@@ -153,7 +147,7 @@ namespace AnneProKeyboard
         {
             if (btAdv.Advertisement.LocalName.Contains("ANNE"))
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Low, async () =>
+                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
                 {
                     var device = await BluetoothLEDevice.FromBluetoothAddressAsync(btAdv.BluetoothAddress);
                     var result = await device.DeviceInformation.Pairing.PairAsync(DevicePairingProtectionLevel.None);
@@ -206,9 +200,8 @@ namespace AnneProKeyboard
                     this.syncButton.IsEnabled = true;
                 });
             }
-            catch (Exception)
+            catch
             {
-
             }
         }
 
@@ -345,6 +338,9 @@ namespace AnneProKeyboard
             {
                 this.EditingProfile.KeyboardColours[button_index - 1] = this.SelectedColour;
             }
+
+            //this may be wasteful, only way to counteract the fact that we cannot save on close
+            this.SaveProfiles();
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
