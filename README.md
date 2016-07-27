@@ -6,7 +6,7 @@ This app has been tested against Windows 10. Windows 8 should be supported, but 
 Windows 7 will not be supported due to lack of support by Microsoft.
 The keyboard has to be L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 
-# Installation
+## Installation
 Enable Development mode on your Windows 10 machine by following the [instructions here](https://msdn.microsoft.com/windows/uwp/get-started/enable-your-device-for-development).
 Download the latest binary files from [Github](https://github.com/kprinssu/anne-keyboard-windows/releases). 
 Install the app by extracting the zip file, and right-clicking on ```Add-AppDevPackage.ps1``` and select ```Run with PowerShell```. 
