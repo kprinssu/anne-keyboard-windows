@@ -4,7 +4,7 @@ A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth 
 ## Requirements
 This app has been tested against Windows 10. Windows 8 should be supported, but futher testing is required.
 Windows 7 will not be supported due to lack of support by Microsoft.
-The keyboard has to be L0 mode by: pressing Fn+B, Fn+0, ESC, Fn+B, +
+The keyboard has to be L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 
 # Installation
 Enable Development mode on your Windows 10 machine by following the [instructions here](https://msdn.microsoft.com/windows/uwp/get-started/enable-your-device-for-development).
