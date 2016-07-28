@@ -41,7 +41,7 @@ namespace AnneProKeyboard
         private KeyboardProfileItem EditingProfile;
         private KeyboardProfileItem RenamingProfile;
 
-        private int SelectedColour;
+        private int SelectedColour = 16777215;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -52,7 +52,7 @@ namespace AnneProKeyboard
         {
             this.InitializeComponent();
 
-            Size window_size = new Size(960, 480);
+            Size window_size = new Size(1000, 510);
 
             ApplicationView.PreferredLaunchViewSize = window_size;
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
@@ -62,6 +62,8 @@ namespace AnneProKeyboard
             FindKeyboard();
 
             LoadProfiles();
+
+            Cpicker.SelectedColorChanged += Cpicker_SelectedColorChanged;
         }
 
         private async void FindKeyboard()
@@ -85,13 +87,13 @@ namespace AnneProKeyboard
             // Make sure to disable Bluetooth listener
             this.SetupBluetooth();
         }
-        
+
         private async void SaveProfiles()
         {
             MemoryStream memory_stream = new MemoryStream();
             DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
             serialiser.WriteObject(memory_stream, this._keyboardProfiles);
-            
+
             StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
             using (Stream file_stream = await file.OpenStreamForWriteAsync())
             {
@@ -317,7 +319,7 @@ namespace AnneProKeyboard
                     });
                 }
 
-               
+
             }
         }
 
@@ -351,7 +353,7 @@ namespace AnneProKeyboard
             {
                 chosenProfileName.Text = profileName.Text;
             }
-            
+
             if(this.RenamingProfile != null)
             {
                 this.RenamingProfile.Label = profileName.Text;
@@ -420,19 +422,14 @@ namespace AnneProKeyboard
             keyboard_writer.WriteToKeyboard();
         }
 
-        private void ColourSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+        private void Cpicker_SelectedColorChanged(object sender, EventArgs e)
         {
-            this.SelectedColour = (int)this.redSlider.Value;
-            this.SelectedColour = (this.SelectedColour << 8) + (int)this.greenSlider.Value;
-            this.SelectedColour = (this.SelectedColour << 8) + (int)this.blueSlider.Value;
+            this.SelectedColour = (int)Cpicker.SelectedColor.Color.R;
+            this.SelectedColour = (this.SelectedColour << 8) + (int)Cpicker.SelectedColor.Color.G;
+            this.SelectedColour = (this.SelectedColour << 8) + (int)Cpicker.SelectedColor.Color.B;
 
-            int red = (this.SelectedColour >> 16) & 0xff;
-            int green = (this.SelectedColour >> 8) & 0xff;
-            int blue = (this.SelectedColour >> 0) & 0xff;
+            SelectedColourBox.Background = Cpicker.SelectedColor;
 
-            Color colour = Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
-
-            this.SelectedColourBox.Background = new SolidColorBrush(colour);
         }
 
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)

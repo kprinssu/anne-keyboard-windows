@@ -5,7 +5,8 @@
     xmlns:local="using:AnneProKeyboard"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d" Width="960" Height="480">
+    xmlns:xc="using:ColorPicker"
+    mc:Ignorable="d" Width="1000" Height="413.5">
 
 
     <SplitView x:Name="splitView" PaneBackground="#FF2B2B2B" IsPaneOpen="True" OpenPaneLength="256" CompactPaneLength="48" DisplayMode="Inline">
@@ -50,7 +51,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" FontSize="16"/>
+            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="10,2,2,10" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" FontSize="16"/>
             <Grid Margin="0,-79,0,79">
                 <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="23" Margin="12,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14">
                     <Run Text="Keyboard "/>
@@ -128,29 +129,17 @@
                     <Button Name="keyboardButton60" Click="KeyboardColourButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" RequestedTheme="Dark"/>
                     <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" Margin="425,5,-13,5" HorizontalAlignment="Left"  Width="40" Height="30" RequestedTheme="Dark"/>
                 </RelativePanel>
-                <TextBlock HorizontalAlignment="Left" Height="23" Margin="12,373,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:"/>
+                <TextBlock HorizontalAlignment="Left" Height="23" Margin="491,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:"/>
             </Grid>
-            <RelativePanel Margin="11,316,262,271">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Red:" Margin="0,9,0,-9" FontSize="12"/>
-                    <Slider x:Name="redSlider" ValueChanged="ColourSlider_ValueChanged" Margin="25,0,0,0" Width="255" Maximum="255"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,34,0,-34">
-                    <TextBlock Text="Green:" Margin="0,12,0,-12" Width="48" FontSize="12"/>
-                    <Slider x:Name="greenSlider" ValueChanged="ColourSlider_ValueChanged" Margin="0,0,0,0" Width="255" Maximum="255"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,69,-4.333,-69">
-                    <TextBlock Text="Blue:" FontSize="12" Margin="0,9,0,-9"/>
-                    <Slider x:Name="blueSlider" ValueChanged="ColourSlider_ValueChanged" Margin="22,0,0,0" Width="255" Maximum="255"/>
-                </StackPanel>
+            <RelativePanel Margin="10,247,262,340">
+                <xc:ColorPicker x:Name="Cpicker" Margin="481,-162,-721,-155"/>
 
-                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Colour:" VerticalAlignment="Top" Width="48" Margin="322,7,-324,0" FontSize="12"/>
-                <Grid Name="SelectedColourBox" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="322,25,-324,-45" >
+                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Colour:" VerticalAlignment="Top" Width="48" Margin="0,0,-2,-23" FontSize="12"/>
+                <Grid Name="SelectedColourBox" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="42,4,-44,-24" Background="White" >
                 </Grid>
             </RelativePanel>
 
-
-            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,393,0,299" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="385,370,0,322" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
 
         </Grid>
     </SplitView>
