@@ -262,7 +262,7 @@ namespace AnneProKeyboard
             //Do nothing...
         }
 
-        private byte[] GenerateKeyboardBLEData(List<Int32> colours)
+        private byte[] GenerateKeyboardBacklightData(List<Int32> colours)
         {
             //All of the below logic was ported over from the Android app
             //Credits to devs at obins.net
@@ -296,6 +296,11 @@ namespace AnneProKeyboard
             return bluetooth_data;
         }
 
+        private byte[] GenerateKeyboardLayoutData(List<Int32> buttons)
+        {
+            return null;
+        }
+
         private async void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)
         {
             DeviceInformation device_info = await DeviceInformation.CreateFromIdAsync(device.Id);
@@ -316,8 +321,6 @@ namespace AnneProKeyboard
                         syncButton.IsEnabled = false;
                     });
                 }
-
-               
             }
         }
 
@@ -410,13 +413,14 @@ namespace AnneProKeyboard
             this.SaveProfiles();
 
             // We need this to identify the type of data we are sending
-            byte[] meta_data = { 0x09, 0xD7, 0x03 };
+            byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
+            byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
 
             // Convert the list of keyboard colours to keyboard data
-            byte[] send_data = GenerateKeyboardBLEData(this.EditingProfile.KeyboardColours);
+            byte[] send_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
 
             // Send the data to the keyboard
-            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, meta_data, send_data);
+            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, send_data);
             keyboard_writer.WriteToKeyboard();
         }
 
