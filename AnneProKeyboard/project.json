@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "Color_Picker": "1.0.2",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
   },
   "frameworks": {

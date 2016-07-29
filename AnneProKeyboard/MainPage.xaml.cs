@@ -41,7 +41,7 @@ namespace AnneProKeyboard
         private KeyboardProfileItem EditingProfile;
         private KeyboardProfileItem RenamingProfile;
 
-        private int SelectedColour;
+        private Color SelectedColour;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -333,23 +333,31 @@ namespace AnneProKeyboard
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            Color colour = Color.FromArgb(255, (byte)((this.SelectedColour >> 16) & 0xff), (byte)((this.SelectedColour >> 8) & 0xff), (byte)((this.SelectedColour >> 0) & 0xff));
-            button.BorderBrush = new SolidColorBrush(colour);
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
             button.BorderThickness = new Thickness(1);
 
             int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
             if(button_index > 56)
             {
-                this.EditingProfile.KeyboardColours[button_index + 8] = this.SelectedColour;
+                this.EditingProfile.KeyboardColours[button_index + 8] = ConvertColourToInt(this.SelectedColour);
             }
             else
             {
-                this.EditingProfile.KeyboardColours[button_index - 1] = this.SelectedColour;
+                this.EditingProfile.KeyboardColours[button_index - 1] = ConvertColourToInt(this.SelectedColour);
             }
 
-            //this may be wasteful, only way to counteract the fact that we cannot save on close
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
             this.SaveProfiles();
+        }
+
+        private int ConvertColourToInt(Color colour)
+        {
+            int colour_int = colour.R;
+            colour_int = (colour_int << 8) + colour.G;
+            colour_int = (colour_int << 8) + colour.B;
+
+            return colour_int;
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
@@ -429,24 +437,14 @@ namespace AnneProKeyboard
             keyboard_writer.WriteToKeyboard();
         }
 
-        private void ColourSlider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
-        {
-            this.SelectedColour = (int)this.redSlider.Value;
-            this.SelectedColour = (this.SelectedColour << 8) + (int)this.greenSlider.Value;
-            this.SelectedColour = (this.SelectedColour << 8) + (int)this.blueSlider.Value;
-
-            int red = (this.SelectedColour >> 16) & 0xff;
-            int green = (this.SelectedColour >> 8) & 0xff;
-            int blue = (this.SelectedColour >> 0) & 0xff;
-
-            Color colour = Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
-
-            this.SelectedColourBox.Background = new SolidColorBrush(colour);
-        }
-
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
         {
             this.SaveProfiles();
+        }
+
+        private void colourPicker_colourChanged(object sender, EventArgs e)
+        {
+            this.SelectedColour = this.colourPicker.SelectedColor;
         }
     }
 
