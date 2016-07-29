@@ -133,6 +133,12 @@ namespace AnneProKeyboard
 
         private void SetupBluetooth()
         {
+            // quick sanity check
+            if(this.Watcher != null || this.DeviceWatcher != null)
+            {
+                return;
+            }
+
             Watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
             Watcher.Received += DeviceFound;
 
@@ -310,7 +316,7 @@ namespace AnneProKeyboard
             {
                 if (device_info.IsEnabled)
                 {
-                    ConnectToKeyboard(device_info);
+                    FindKeyboard();
                 }
                 else
                 {
@@ -415,7 +421,6 @@ namespace AnneProKeyboard
             // We need this to identify the type of data we are sending
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
             byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
-
             // Convert the list of keyboard colours to keyboard data
             byte[] send_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
 
