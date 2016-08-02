@@ -268,10 +268,10 @@ namespace AnneProKeyboard
             //Do nothing...
         }
 
+        //All of the below logic was ported over from the Android app
+        //Credits to devs at obins.net
         private byte[] GenerateKeyboardBacklightData(List<Int32> colours)
         {
-            //All of the below logic was ported over from the Android app
-            //Credits to devs at obins.net
             byte[] bluetooth_data = new byte[214];
 
             for (int i = 0; i < 70; i++)
@@ -302,9 +302,28 @@ namespace AnneProKeyboard
             return bluetooth_data;
         }
 
+        //All of the below logic was ported over from the Android app
+        //Credits to devs at obins.net
         private byte[] GenerateKeyboardLayoutData(List<Int32> buttons)
         {
-            return null;
+            byte[] bluetooth_data = new byte[144];
+
+
+            // checksum logic
+            int checksum = CRC16.CalculateChecksum(bluetooth_data);
+            if (checksum < 10)
+            {
+                checksum += 10;
+            }
+            byte[] checksum_data = BitConverter.GetBytes(checksum);
+            Array.Reverse(checksum_data);
+
+            for (int i = 0; i < 4; i++)
+            {
+                bluetooth_data[i] = checksum_data[i];
+            }
+
+            return bluetooth_data;
         }
 
         private async void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)

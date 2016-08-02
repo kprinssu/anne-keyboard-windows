@@ -51,7 +51,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="12,12,0,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" FontSize="16"/>
+            <TextBlock x:Name="chosenProfileName" Text="Profile" Margin="10,12,2,0" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" FontSize="16"/>
             <Grid Margin="0,-79,0,79">
                 <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Height="23" Margin="12,141,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14">
                     <Run Text="Keyboard "/>
@@ -136,7 +136,7 @@
                 <xcp:Clr_Pckr SelectedColor="Red" x:Name="colourPicker" colorChanged="colourPicker_colourChanged"  HorizontalAlignment="Left"/>
             </RelativePanel>
 
-            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,393,0,299" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
+            <Button x:Name="syncButton" Content="Sync Profile" Margin="597,438,0,254" IsEnabled="False" Click="KeyboardSyncButton_Click"/>
 
         </Grid>
     </SplitView>
