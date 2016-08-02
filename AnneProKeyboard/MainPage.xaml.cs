@@ -62,6 +62,7 @@ namespace AnneProKeyboard
             FindKeyboard();
 
             LoadProfiles();
+            SelectedColour = colourPicker.SelectedColor;
         }
 
         private async void FindKeyboard()
