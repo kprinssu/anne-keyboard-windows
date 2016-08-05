@@ -435,8 +435,10 @@ namespace AnneProKeyboard
             if (this._keyboardProfiles.Count == 0)
             {
                 this.CreateNewKeyboardProfile();
-                ChangeSelectedProfile(this._keyboardProfiles[0]);
             }
+
+            // Change the chosen profile to the first element
+            ChangeSelectedProfile(this._keyboardProfiles[0]);
 
             this.SaveProfiles();
         }
