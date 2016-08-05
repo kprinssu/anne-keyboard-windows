@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xcp="using:Color_Picker"
-    mc:Ignorable="d" Width="960" Height="480">
+    mc:Ignorable="d" MinWidth="960" MinHeight="480">
 
 
     <SplitView x:Name="splitView" PaneBackground="#FF2B2B2B" IsPaneOpen="True" OpenPaneLength="256" CompactPaneLength="48" DisplayMode="Inline">
@@ -137,7 +137,7 @@
             </Grid>
 
             <RelativePanel Margin="492,91,10,484">
-                <xcp:Clr_Pckr SelectedColor="Red" x:Name="colourPicker" colorChanged="colourPicker_colourChanged"  HorizontalAlignment="Left"/>
+                <xcp:Clr_Pckr SelectedColor="Red" x:Name="colourPicker" colorChanged="colourPicker_colourChanged" MaxHeight="200" MaxWidth="200"  HorizontalAlignment="Left"/>
             </RelativePanel>
 
             <Button x:Name="syncButton" Content="Sync Profile" Margin="597,409,0,283" IsEnabled="False" Click="KeyboardSyncButton_Click"/>

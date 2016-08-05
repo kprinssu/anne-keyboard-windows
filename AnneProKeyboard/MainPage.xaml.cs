@@ -56,12 +56,6 @@ namespace AnneProKeyboard
         {
             this.InitializeComponent();
 
-            Size window_size = new Size(960, 480);
-
-            ApplicationView.PreferredLaunchViewSize = window_size;
-            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            ApplicationView.GetForCurrentView().SetPreferredMinSize(window_size);
-
             // Start up the background thread to find the keyboard
             FindKeyboard();
 
