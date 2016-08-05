@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Collections.Specialized;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
@@ -46,6 +49,7 @@ namespace AnneProKeyboard
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
             get { return _keyboardProfiles; }
+            set { }
         }
 
         public MainPage()
@@ -63,6 +67,8 @@ namespace AnneProKeyboard
 
             LoadProfiles();
             SelectedColour = colourPicker.SelectedColor;
+
+            this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
         }
 
         private async void FindKeyboard()
@@ -110,7 +116,9 @@ namespace AnneProKeyboard
                 using (IInputStream inStream = await file.OpenSequentialReadAsync())
                 {
                     DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-                    this._keyboardProfiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
+                    ObservableCollection <KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
+
+                    this._keyboardProfiles.Concat(saved_profiles);
                 }
             }
             catch
@@ -215,13 +223,14 @@ namespace AnneProKeyboard
         private void CreateNewKeyboardProfile()
         {
             KeyboardProfileItem profile_item = new KeyboardProfileItem();
+            profile_item.ID = this._keyboardProfiles.Count;
             profile_item.Label = "Profile " + (this._keyboardProfiles.Count + 1);
             profile_item.KeyboardColours = new List<int>();
 
             // We only need 70 values to represent the 61 keys (70 is needed for some reason by the keyboard..)
             for (int i = 0; i < 70; i++)
             {
-                profile_item.KeyboardColours.Add(0xFFFFFF);
+                profile_item.KeyboardColours.Add(0xFFFFFF); // White by default
             }
 
             this._keyboardProfiles.Add(profile_item);
@@ -395,27 +404,6 @@ namespace AnneProKeyboard
             }
         }
 
-        private void ProfileNameFocusEvent(object sender, RoutedEventArgs e)
-        {
-            //Find and store the profile we are editing
-            TextBox textbox = ((TextBox)sender);
-            string profile_name = textbox.Text;
-            this.RenamingProfile = FindProfileByName(profile_name);
-        }
-
-        private KeyboardProfileItem FindProfileByName(string profile_name)
-        {
-            foreach (KeyboardProfileItem profile_item in this._keyboardProfiles)
-            {
-                if (profile_item.Label == profile_name)
-                {
-                    return profile_item;
-                }
-            }
-
-            return null;
-        }
-
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
@@ -423,12 +411,29 @@ namespace AnneProKeyboard
             this.SaveProfiles();
         }
 
+        private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            FrameworkElement parent = (FrameworkElement)button.Parent;
+
+            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
+            textbox.IsEnabled = true;
+            textbox.Visibility = Visibility.Visible;
+            FocusState focus_state = FocusState.Keyboard;
+            textbox.Focus(focus_state);
+
+            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
+            textblock.Visibility = Visibility.Collapsed;
+
+            this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
+        }
+
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             FrameworkElement parent = (FrameworkElement)button.Parent;
             TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            KeyboardProfileItem selected_profile = FindProfileByName(textbox.Text);
+            KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
 
             this._keyboardProfiles.Remove(selected_profile);
 
@@ -460,28 +465,70 @@ namespace AnneProKeyboard
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
         {
             this.SaveProfiles();
+
+            TextBox textbox = (TextBox)sender;
+            textbox.IsEnabled = false;
+            textbox.Visibility = Visibility.Collapsed;
+
+            FrameworkElement parent = (FrameworkElement)textbox.Parent;
+            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
+            textblock.Visibility = Visibility.Visible;
+
+            this.RenamingProfile = null;
         }
 
         private void colourPicker_colourChanged(object sender, EventArgs e)
         {
             this.SelectedColour = this.colourPicker.SelectedColor;
         }
+        
+        private void KeyboardProfiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if(e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                // Really inefficient, we should consider re-implementing this later
+                for (int i = 0; i < this._keyboardProfiles.Count; i++)
+                {
+                    KeyboardProfileItem profile = this._keyboardProfiles[i];
+                    profile.ID = i;
+                }
+            }
+        }
     }
 
-    public class KeyboardProfileItem
+    public class KeyboardProfileItem : INotifyPropertyChanged
     {
+        private int _ID;
+        public int ID
+        {
+            get { return this._ID; }
+            set
+            {
+                this._ID = value;
+                OnPropertyChanged("ID");
+            }
+        }
         private string _label;
         public string Label
         {
-            get
-            {
-                return this._label;
-            }
+            get { return this._label; }
+
             set
             {
                 this._label = value;
+                OnPropertyChanged("Label");
             }
         }
         public List<int> KeyboardColours { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged(string property)
+        {
+            var property_handler = PropertyChanged;
+
+            if (property_handler != null)
+            {
+                property_handler(this, new PropertyChangedEventArgs(property));
+            }
+        }
     }
 }
