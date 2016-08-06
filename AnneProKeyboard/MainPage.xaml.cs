@@ -237,18 +237,20 @@ namespace AnneProKeyboard
 
             // set up the background colours for the keyboard lights
             byte alpha = 255;
-            for (int i = 0; i < 61; i++)
+            for (int i = 0; i < 70; i++)
             {
-                string s = "keyboardButton" + (i + 1);
+                string s = "keyboardButton" + i;
                 Button button = (this.FindName(s) as Button);
+
+                if(button == null)
+                {
+                    continue;
+                }
 
                 int coloured_int = profile.KeyboardColours[i];
 
-                // do not know why but the last 4 keys (RALT, FN, Anne, Ctrl) are identify as 66,67,68,69
-                if(i > 56)
-                {
-                    coloured_int = profile.KeyboardColours[i + 9];
-                }
+
+                // NOTE: last 4 keys (RALT, FN, Anne, Ctrl) are identify as 66,67,68,69
 
                 int red = (coloured_int >> 16) & 0xff;
                 int green = (coloured_int >> 8) & 0xff;
@@ -361,14 +363,7 @@ namespace AnneProKeyboard
 
             int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
-            if(button_index > 56)
-            {
-                this.EditingProfile.KeyboardColours[button_index + 8] = ConvertColourToInt(this.SelectedColour);
-            }
-            else
-            {
-                this.EditingProfile.KeyboardColours[button_index - 1] = ConvertColourToInt(this.SelectedColour);
-            }
+            this.EditingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
             this.SaveProfiles();
