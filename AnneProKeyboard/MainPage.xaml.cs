@@ -314,9 +314,21 @@ namespace AnneProKeyboard
         {
             byte[] bluetooth_data = new byte[144];
 
+            // standard 70 keys layer
+            for(int i = 0; i < 70; i++)
+            {
+
+            }
+
+            // Fn + x 70 keys layer
+            for(int j = 0; j < 70; j++)
+            {
+
+            }
+
 
             // checksum logic
-            int checksum = CRC16.CalculateChecksum(bluetooth_data);
+           /* int checksum = CRC16.CalculateChecksum(bluetooth_data);
             if (checksum < 10)
             {
                 checksum += 10;
@@ -327,7 +339,7 @@ namespace AnneProKeyboard
             for (int i = 0; i < 4; i++)
             {
                 bluetooth_data[i] = checksum_data[i];
-            }
+            }*/
 
             return bluetooth_data;
         }
@@ -446,10 +458,10 @@ namespace AnneProKeyboard
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
             byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
             // Convert the list of keyboard colours to keyboard data
-            byte[] send_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
+            byte[] light_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
 
             // Send the data to the keyboard
-            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, send_data);
+            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
         }
 
