@@ -300,47 +300,46 @@ namespace AnneProKeyboard
 
             byte[] checksum_data = BitConverter.GetBytes(checksum);
             Array.Reverse(checksum_data);
-
-            for (int i = 0; i < 4; i++)
-            {
-                bluetooth_data[i] = checksum_data[i];
-            }
+            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
 
             return bluetooth_data;
         }
 
         //All of the below logic was ported over from the Android app
         //Credits to devs at obins.net
-        private byte[] GenerateKeyboardLayoutData(List<Int32> buttons)
+        private byte[] GenerateKeyboardLayoutData(KeyboardProfileItem profile)
         {
             byte[] bluetooth_data = new byte[144];
 
-            // standard 70 keys layer
-            for(int i = 0; i < 70; i++)
-            {
+            byte[] standard_keys = profile.NormalKeys.Select(key => (byte)key.KeyValue ).ToArray();
+            byte[] fn_keys = profile.FnKeys.Select(key => (byte)key.KeyValue).ToArray();
 
+            byte[] standard_converted_keys = new byte[70];
+            byte[] fn_converted_keys = new byte[70];
+
+            // convert from 61 keys to 70 keys
+            int j = 0;
+            for (int i = 0; i < 70; i++)
+            {
+                if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
+                {
+                    standard_converted_keys[i] = standard_keys[j];
+                    fn_converted_keys[j] = fn_keys[j];
+                    j++;
+                }
             }
 
-            // Fn + x 70 keys layer
-            for(int j = 0; j < 70; j++)
-            {
+            Array.Copy(standard_converted_keys, 0, bluetooth_data, 4, standard_converted_keys.Length);
+            Array.Copy(fn_converted_keys, 0, bluetooth_data, 74, fn_converted_keys.Length);
 
-            }
-
-
-            // checksum logic
-           /* int checksum = CRC16.CalculateChecksum(bluetooth_data);
+            int checksum = CRC16.CalculateChecksum(bluetooth_data);
             if (checksum < 10)
             {
                 checksum += 10;
             }
             byte[] checksum_data = BitConverter.GetBytes(checksum);
             Array.Reverse(checksum_data);
-
-            for (int i = 0; i < 4; i++)
-            {
-                bluetooth_data[i] = checksum_data[i];
-            }*/
+            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
 
             return bluetooth_data;
         }
@@ -458,8 +457,10 @@ namespace AnneProKeyboard
             // We need this to identify the type of data we are sending
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
             byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
-            // Convert the list of keyboard colours to keyboard data
+            // Convert the list of keyboard colours
             byte[] light_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
+            // Conver the list of keyboard keys
+            byte[] layout_data = GenerateKeyboardLayoutData(this.EditingProfile);
 
             // Send the data to the keyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
@@ -467,6 +468,9 @@ namespace AnneProKeyboard
 
             if (this.EditingProfile.ValidateKeyboardKeys())
             {
+                keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, layout_meta_data, layout_data);
+                keyboard_writer.WriteToKeyboard();
+
                 //write out the data for layout
             }
         }
