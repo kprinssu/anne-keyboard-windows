@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace AnneProKeyboard
 {
+    [DataContract]
     public class KeyboardKey
     {
         public static List<KeyboardKey> AlphabetKeys = new List<KeyboardKey>();
@@ -22,6 +21,21 @@ namespace AnneProKeyboard
 
         static KeyboardKey()
         {
+            // "Empty" key, also the unassigned value key
+            StringKeyboardKeys[""] = new KeyboardKey("", 0);
+            IntKeyboardKeys[0] = StringKeyboardKeys[""];
+
+            // "Anne" key
+            StringKeyboardKeys["Anne"] = new KeyboardKey("Anne", 250);
+            IntKeyboardKeys[250] = StringKeyboardKeys["Anne"];
+
+            // Fn Key
+            StringKeyboardKeys["Fn"] = new KeyboardKey("Fn", 250);
+            IntKeyboardKeys[254] = StringKeyboardKeys["Fn"];
+
+            // Windows Key Lock
+            // TODO: verify it works properly
+
             // Keys for the Alphabet (a-z, A-Z)
             AlphabetKeys.Add(new KeyboardKey("A", 4));
             AlphabetKeys.Add(new KeyboardKey("B", 5));
@@ -144,17 +158,19 @@ namespace AnneProKeyboard
 
             InitialiseKeyDictionaries(MediaKeys);
         }
-        
+
+        [DataMember]
         public readonly string KeyLabel;
+        [DataMember]
         public readonly int KeyValue;
 
-        public KeyboardKey(string KeyLabel, int KeyValue)
+        private KeyboardKey(string KeyLabel, int KeyValue)
         {
             this.KeyLabel = KeyLabel;
             this.KeyValue = KeyValue;
         }
 
-        public KeyboardKey(KeyboardKey keyboard_key)
+        private KeyboardKey(KeyboardKey keyboard_key)
         {
             this.KeyLabel = keyboard_key.KeyLabel;
             this.KeyValue = keyboard_key.KeyValue;
@@ -164,14 +180,149 @@ namespace AnneProKeyboard
         {
             foreach (KeyboardKey key in keys)
             {
-                StringKeyboardKeys.Add(key.KeyLabel, key);
-                IntKeyboardKeys.Add(key.KeyValue, key);
+                if(!StringKeyboardKeys.ContainsKey(key.KeyLabel))
+                {
+                    StringKeyboardKeys.Add(key.KeyLabel, key);
+                }
+
+                if (!IntKeyboardKeys.ContainsKey(key.KeyValue))
+                {
+                    IntKeyboardKeys.Add(key.KeyValue, key);
+                }
             }
         }
 
         public static void InitaliseKeyboardProfile(KeyboardProfileItem profile)
         {
+            // This is a straight copy from obins app
+            profile.NormalKeys = new List<KeyboardKey>();
+            profile.FnKeys = new List<KeyboardKey>();
 
+            // Normal keys
+            profile.NormalKeys.Add(IntKeyboardKeys[41]);
+            profile.NormalKeys.Add(IntKeyboardKeys[30]);
+            profile.NormalKeys.Add(IntKeyboardKeys[31]);
+            profile.NormalKeys.Add(IntKeyboardKeys[32]);
+            profile.NormalKeys.Add(IntKeyboardKeys[33]);
+            profile.NormalKeys.Add(IntKeyboardKeys[34]);
+            profile.NormalKeys.Add(IntKeyboardKeys[35]);
+            profile.NormalKeys.Add(IntKeyboardKeys[36]);
+            profile.NormalKeys.Add(IntKeyboardKeys[37]);
+            profile.NormalKeys.Add(IntKeyboardKeys[38]);
+            profile.NormalKeys.Add(IntKeyboardKeys[39]);
+            profile.NormalKeys.Add(IntKeyboardKeys[45]);
+            profile.NormalKeys.Add(IntKeyboardKeys[46]);
+            profile.NormalKeys.Add(IntKeyboardKeys[42]);
+            profile.NormalKeys.Add(IntKeyboardKeys[43]);
+            profile.NormalKeys.Add(IntKeyboardKeys[20]);
+            profile.NormalKeys.Add(IntKeyboardKeys[26]);
+            profile.NormalKeys.Add(IntKeyboardKeys[8]);
+            profile.NormalKeys.Add(IntKeyboardKeys[21]);
+            profile.NormalKeys.Add(IntKeyboardKeys[23]);
+            profile.NormalKeys.Add(IntKeyboardKeys[28]);
+            profile.NormalKeys.Add(IntKeyboardKeys[24]);
+            profile.NormalKeys.Add(IntKeyboardKeys[12]);
+            profile.NormalKeys.Add(IntKeyboardKeys[18]);
+            profile.NormalKeys.Add(IntKeyboardKeys[19]);
+            profile.NormalKeys.Add(IntKeyboardKeys[47]);
+            profile.NormalKeys.Add(IntKeyboardKeys[48]);
+            profile.NormalKeys.Add(IntKeyboardKeys[49]);
+            profile.NormalKeys.Add(IntKeyboardKeys[57]);
+            profile.NormalKeys.Add(IntKeyboardKeys[4]);
+            profile.NormalKeys.Add(IntKeyboardKeys[22]);
+            profile.NormalKeys.Add(IntKeyboardKeys[7]);
+            profile.NormalKeys.Add(IntKeyboardKeys[9]);
+            profile.NormalKeys.Add(IntKeyboardKeys[10]);
+            profile.NormalKeys.Add(IntKeyboardKeys[11]);
+            profile.NormalKeys.Add(IntKeyboardKeys[13]);
+            profile.NormalKeys.Add(IntKeyboardKeys[14]);
+            profile.NormalKeys.Add(IntKeyboardKeys[15]);
+            profile.NormalKeys.Add(IntKeyboardKeys[51]);
+            profile.NormalKeys.Add(IntKeyboardKeys[52]);
+            profile.NormalKeys.Add(IntKeyboardKeys[40]);
+            profile.NormalKeys.Add(IntKeyboardKeys[225]);
+            profile.NormalKeys.Add(IntKeyboardKeys[29]);
+            profile.NormalKeys.Add(IntKeyboardKeys[27]);
+            profile.NormalKeys.Add(IntKeyboardKeys[6]);
+            profile.NormalKeys.Add(IntKeyboardKeys[25]);
+            profile.NormalKeys.Add(IntKeyboardKeys[5]);
+            profile.NormalKeys.Add(IntKeyboardKeys[17]);
+            profile.NormalKeys.Add(IntKeyboardKeys[16]);
+            profile.NormalKeys.Add(IntKeyboardKeys[54]);
+            profile.NormalKeys.Add(IntKeyboardKeys[55]);
+            profile.NormalKeys.Add(IntKeyboardKeys[56]);
+            profile.NormalKeys.Add(IntKeyboardKeys[229]);
+            profile.NormalKeys.Add(IntKeyboardKeys[224]);
+            profile.NormalKeys.Add(IntKeyboardKeys[227]);
+            profile.NormalKeys.Add(IntKeyboardKeys[226]);
+            profile.NormalKeys.Add(IntKeyboardKeys[44]);
+            profile.NormalKeys.Add(IntKeyboardKeys[230]);
+            profile.NormalKeys.Add(IntKeyboardKeys[254]);
+            profile.NormalKeys.Add(IntKeyboardKeys[250]);
+            profile.NormalKeys.Add(IntKeyboardKeys[228]);
+
+            // Function keys (Fn + X)
+            profile.FnKeys.Add(IntKeyboardKeys[53]);
+            profile.FnKeys.Add(IntKeyboardKeys[58]);
+            profile.FnKeys.Add(IntKeyboardKeys[59]);
+            profile.FnKeys.Add(IntKeyboardKeys[60]);
+            profile.FnKeys.Add(IntKeyboardKeys[61]);
+            profile.FnKeys.Add(IntKeyboardKeys[62]);
+            profile.FnKeys.Add(IntKeyboardKeys[63]);
+            profile.FnKeys.Add(IntKeyboardKeys[64]);
+            profile.FnKeys.Add(IntKeyboardKeys[65]);
+            profile.FnKeys.Add(IntKeyboardKeys[66]);
+            profile.FnKeys.Add(IntKeyboardKeys[67]);
+            profile.FnKeys.Add(IntKeyboardKeys[68]);
+            profile.FnKeys.Add(IntKeyboardKeys[69]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[82]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[82]);
+            profile.FnKeys.Add(IntKeyboardKeys[71]);
+            profile.FnKeys.Add(IntKeyboardKeys[72]);
+            profile.FnKeys.Add(IntKeyboardKeys[74]);
+            profile.FnKeys.Add(IntKeyboardKeys[77]);
+            profile.FnKeys.Add(IntKeyboardKeys[70]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[80]);
+            profile.FnKeys.Add(IntKeyboardKeys[81]);
+            profile.FnKeys.Add(IntKeyboardKeys[79]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[80]);
+            profile.FnKeys.Add(IntKeyboardKeys[81]);
+            profile.FnKeys.Add(IntKeyboardKeys[79]);
+            profile.FnKeys.Add(IntKeyboardKeys[75]);
+            profile.FnKeys.Add(IntKeyboardKeys[78]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[73]);
+            profile.FnKeys.Add(IntKeyboardKeys[76]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[227]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
+            profile.FnKeys.Add(IntKeyboardKeys[254]);
+            profile.FnKeys.Add(IntKeyboardKeys[250]);
+            profile.FnKeys.Add(IntKeyboardKeys[0]);
         }
     }
 }

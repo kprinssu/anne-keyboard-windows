@@ -226,6 +226,8 @@ namespace AnneProKeyboard
                 profile_item.KeyboardColours.Add(0xFFFFFF); // White by default
             }
 
+            KeyboardKey.InitaliseKeyboardProfile(profile_item);
+
             this._keyboardProfiles.Add(profile_item);
         }
 
