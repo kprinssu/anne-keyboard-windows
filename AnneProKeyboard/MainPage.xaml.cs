@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
@@ -495,42 +494,6 @@ namespace AnneProKeyboard
                     KeyboardProfileItem profile = this._keyboardProfiles[i];
                     profile.ID = i;
                 }
-            }
-        }
-    }
-
-    public class KeyboardProfileItem : INotifyPropertyChanged
-    {
-        private int _ID;
-        public int ID
-        {
-            get { return this._ID; }
-            set
-            {
-                this._ID = value;
-                OnPropertyChanged("ID");
-            }
-        }
-        private string _label;
-        public string Label
-        {
-            get { return this._label; }
-
-            set
-            {
-                this._label = value;
-                OnPropertyChanged("Label");
-            }
-        }
-        public List<int> KeyboardColours { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged(string property)
-        {
-            var property_handler = PropertyChanged;
-
-            if (property_handler != null)
-            {
-                property_handler(this, new PropertyChangedEventArgs(property));
             }
         }
     }

@@ -16,6 +16,10 @@ namespace AnneProKeyboard
         public static List<KeyboardKey> SpecialKeys = new List<KeyboardKey>();
         public static List<KeyboardKey> MediaKeys = new List<KeyboardKey>();
 
+        // use for easy look ups
+        public static Dictionary<String, KeyboardKey> StringKeyboardKeys = new Dictionary<string, KeyboardKey>();
+        public static Dictionary<Int32, KeyboardKey> IntKeyboardKeys = new Dictionary<Int32, KeyboardKey>();
+
         static KeyboardKey()
         {
             // Keys for the Alphabet (a-z, A-Z)
@@ -46,6 +50,8 @@ namespace AnneProKeyboard
             AlphabetKeys.Add(new KeyboardKey("Y", 28));
             AlphabetKeys.Add(new KeyboardKey("Z", 29));
 
+            InitialiseKeyDictionaries(AlphabetKeys);
+
             // The row (not the NUMPAD) keyboard keys (0-9)
             NumberKeys.Add(new KeyboardKey("0", 39));
             NumberKeys.Add(new KeyboardKey("1", 30));
@@ -57,6 +63,8 @@ namespace AnneProKeyboard
             NumberKeys.Add(new KeyboardKey("7", 36));
             NumberKeys.Add(new KeyboardKey("8", 37));
             NumberKeys.Add(new KeyboardKey("9", 38));
+
+            InitialiseKeyDictionaries(NumberKeys);
 
             // Modifier keys (Shift, TAB, ESC, etc.)
             ModifierKeys.Add(new KeyboardKey("Escape", 41));
@@ -78,6 +86,8 @@ namespace AnneProKeyboard
             ModifierKeys.Add(new KeyboardKey("Enter", 40));
             ModifierKeys.Add(new KeyboardKey("Backspace", 42));
 
+            InitialiseKeyDictionaries(ModifierKeys);
+
             // Punctuation keys (~, \, ", etc)
             PunctuationKeys.Add(new KeyboardKey("`~", 53));
             PunctuationKeys.Add(new KeyboardKey("-_", 45));
@@ -90,6 +100,8 @@ namespace AnneProKeyboard
             PunctuationKeys.Add(new KeyboardKey(",<", 54));
             PunctuationKeys.Add(new KeyboardKey(".>", 55));
             PunctuationKeys.Add(new KeyboardKey("/?", 56));
+
+            InitialiseKeyDictionaries(PunctuationKeys);
 
             // Function keys (F1, F2, etc)
             FunctionKeys.Add(new KeyboardKey("F1", 58));
@@ -104,6 +116,8 @@ namespace AnneProKeyboard
             FunctionKeys.Add(new KeyboardKey("F10", 67));
             FunctionKeys.Add(new KeyboardKey("F11", 68));
             FunctionKeys.Add(new KeyboardKey("F12", 69));
+
+            InitialiseKeyDictionaries(FunctionKeys);
 
             // "Special" Keys (Insert, Home, etc.) also includes the Direction Keys
             // obins devs labelled these keys as the "Fn + x" keys
@@ -121,13 +135,16 @@ namespace AnneProKeyboard
             SpecialKeys.Add(new KeyboardKey("Down", 81));
             SpecialKeys.Add(new KeyboardKey("Right", 79));
 
+            InitialiseKeyDictionaries(SpecialKeys);
+
             // Volume keys (Volume Increase/Decrease, Mute only)
             MediaKeys.Add(new KeyboardKey("Mute", 127));
             MediaKeys.Add(new KeyboardKey("Volume Up", 128));
             MediaKeys.Add(new KeyboardKey("Volume Down", 129));
 
+            InitialiseKeyDictionaries(MediaKeys);
         }
-
+        
         public readonly string KeyLabel;
         public readonly int KeyValue;
 
@@ -141,6 +158,20 @@ namespace AnneProKeyboard
         {
             this.KeyLabel = keyboard_key.KeyLabel;
             this.KeyValue = keyboard_key.KeyValue;
+        }
+
+        private static void InitialiseKeyDictionaries(List<KeyboardKey> keys)
+        {
+            foreach (KeyboardKey key in keys)
+            {
+                StringKeyboardKeys.Add(key.KeyLabel, key);
+                IntKeyboardKeys.Add(key.KeyValue, key);
+            }
+        }
+
+        public static void InitaliseKeyboardProfile(KeyboardProfileItem profile)
+        {
+
         }
     }
 }
