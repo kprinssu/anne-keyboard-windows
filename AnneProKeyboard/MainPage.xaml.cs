@@ -464,6 +464,11 @@ namespace AnneProKeyboard
             // Send the data to the keyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
+
+            if (this.EditingProfile.ValidateKeyboardKeys())
+            {
+                //write out the data for layout
+            }
         }
 
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)

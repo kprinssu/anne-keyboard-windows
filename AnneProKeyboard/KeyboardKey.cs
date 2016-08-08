@@ -30,7 +30,7 @@ namespace AnneProKeyboard
             IntKeyboardKeys[250] = StringKeyboardKeys["Anne"];
 
             // Fn Key
-            StringKeyboardKeys["Fn"] = new KeyboardKey("Fn", 250);
+            StringKeyboardKeys["Fn"] = new KeyboardKey("Fn", 254);
             IntKeyboardKeys[254] = StringKeyboardKeys["Fn"];
 
             // Windows Key Lock
