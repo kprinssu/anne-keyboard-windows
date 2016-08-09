@@ -268,76 +268,7 @@ namespace AnneProKeyboard
                 }
             }
         }
-
-        //All of the below logic was ported over from the Android app
-        //Credits to devs at obins.net
-        private byte[] GenerateKeyboardBacklightData(List<Int32> colours)
-        {
-            byte[] bluetooth_data = new byte[214];
-
-            for (int i = 0; i < 70; i++)
-            {
-                int j = 0;
-                if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
-                {
-                    int colour = colours[i];
-                    byte green = (byte)((65280 & colour) >> 8);
-                    byte blue = (byte)(255 & colour);
-                    bluetooth_data[(i * 3) + 4] = (byte)((16711680 & colour) >> 16);
-                    bluetooth_data[((i * 3) + 4) + 1] = green;
-                    bluetooth_data[((i * 3) + 4) + 2] = blue;
-                    j++;
-                }
-            }
-
-            int checksum = CRC16.CalculateChecksum(bluetooth_data, 4, 210);
-
-            byte[] checksum_data = BitConverter.GetBytes(checksum);
-            Array.Reverse(checksum_data);
-            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
-
-            return bluetooth_data;
-        }
-
-        //All of the below logic was ported over from the Android app
-        //Credits to devs at obins.net
-        private byte[] GenerateKeyboardLayoutData(KeyboardProfileItem profile)
-        {
-            byte[] bluetooth_data = new byte[144];
-
-            byte[] standard_keys = profile.NormalKeys.Select(key => (byte)key.KeyValue ).ToArray();
-            byte[] fn_keys = profile.FnKeys.Select(key => (byte)key.KeyValue).ToArray();
-
-            byte[] standard_converted_keys = new byte[70];
-            byte[] fn_converted_keys = new byte[70];
-
-            // convert from 61 keys to 70 keys
-            int j = 0;
-            for (int i = 0; i < 70; i++)
-            {
-                if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
-                {
-                    standard_converted_keys[i] = standard_keys[j];
-                    fn_converted_keys[j] = fn_keys[j];
-                    j++;
-                }
-            }
-
-            Array.Copy(standard_converted_keys, 0, bluetooth_data, 4, standard_converted_keys.Length);
-            Array.Copy(fn_converted_keys, 0, bluetooth_data, 74, fn_converted_keys.Length);
-
-            int checksum = CRC16.CalculateChecksum(bluetooth_data);
-            if (checksum < 10)
-            {
-                checksum += 10;
-            }
-            byte[] checksum_data = BitConverter.GetBytes(checksum);
-            Array.Reverse(checksum_data);
-            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
-
-            return bluetooth_data;
-        }
-
+        
         private async void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)
         {
             DeviceInformation device_info = await DeviceInformation.CreateFromIdAsync(device.Id);
@@ -458,7 +389,7 @@ namespace AnneProKeyboard
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
 
             // Convert the list of keyboard colours
-            byte[] light_data = GenerateKeyboardBacklightData(profile.KeyboardColours);
+            byte[] light_data = profile.GenerateKeyboardBacklightData();
 
             // Send the data to the keyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
@@ -480,7 +411,7 @@ namespace AnneProKeyboard
             byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
 
             // Convert the list of keyboard keys
-            byte[] layout_data = GenerateKeyboardLayoutData(this.EditingProfile);
+            byte[] layout_data = profile.GenerateKeyboardLayoutData();
 
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, layout_meta_data, layout_data);
             keyboard_writer.WriteToKeyboard();

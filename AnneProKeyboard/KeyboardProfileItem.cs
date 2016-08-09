@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 
@@ -93,6 +95,76 @@ namespace AnneProKeyboard
             }
 
             return anne_key && fn_key;
+        }
+
+
+        //All of the below logic was ported over from the Android app
+        //Credits to devs at obins.net
+        public byte[] GenerateKeyboardBacklightData()
+        {
+            byte[] bluetooth_data = new byte[214];
+
+            for (int i = 0; i < 70; i++)
+            {
+                int j = 0;
+                if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
+                {
+                    int colour = this.KeyboardColours[i];
+                    byte green = (byte)((65280 & colour) >> 8);
+                    byte blue = (byte)(255 & colour);
+                    bluetooth_data[(i * 3) + 4] = (byte)((16711680 & colour) >> 16);
+                    bluetooth_data[((i * 3) + 4) + 1] = green;
+                    bluetooth_data[((i * 3) + 4) + 2] = blue;
+                    j++;
+                }
+            }
+
+            int checksum = CRC16.CalculateChecksum(bluetooth_data, 4, 210);
+
+            byte[] checksum_data = BitConverter.GetBytes(checksum);
+            Array.Reverse(checksum_data);
+            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
+
+            return bluetooth_data;
+        }
+
+        //All of the below logic was ported over from the Android app
+        //Credits to devs at obins.net
+        public byte[] GenerateKeyboardLayoutData()
+        {
+            byte[] bluetooth_data = new byte[144];
+
+            byte[] standard_keys = this.NormalKeys.Select(key => (byte)key.KeyValue).ToArray();
+            byte[] fn_keys = this.FnKeys.Select(key => (byte)key.KeyValue).ToArray();
+
+            byte[] standard_converted_keys = new byte[70];
+            byte[] fn_converted_keys = new byte[70];
+
+            // convert from 61 keys to 70 keys
+            int j = 0;
+            for (int i = 0; i < 70; i++)
+            {
+                if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
+                {
+                    standard_converted_keys[i] = standard_keys[j];
+                    fn_converted_keys[j] = fn_keys[j];
+                    j++;
+                }
+            }
+
+            Array.Copy(standard_converted_keys, 0, bluetooth_data, 4, standard_converted_keys.Length);
+            Array.Copy(fn_converted_keys, 0, bluetooth_data, 74, fn_converted_keys.Length);
+
+            int checksum = CRC16.CalculateChecksum(bluetooth_data);
+            if (checksum < 10)
+            {
+                checksum += 10;
+            }
+            byte[] checksum_data = BitConverter.GetBytes(checksum);
+            Array.Reverse(checksum_data);
+            Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
+
+            return bluetooth_data;
         }
     }
 }
