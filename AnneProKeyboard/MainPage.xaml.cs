@@ -143,7 +143,7 @@ namespace AnneProKeyboard
 
             Watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
             Watcher.Received += DeviceFound;
-
+            
             DeviceWatcher = DeviceInformation.CreateWatcher();
             DeviceWatcher.Added += DeviceAdded;
             DeviceWatcher.Updated += DeviceUpdated;
