@@ -145,6 +145,7 @@
                 </StackPanel>
                 <Button x:Name="syncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
             </StackPanel>
+            <ItemsControl HorizontalAlignment="Left" Height="100" Margin="-265,135.667,0,0" Grid.Row="1" VerticalAlignment="Top" Width="100"/>
         </Grid>
     </SplitView>
 </Page>

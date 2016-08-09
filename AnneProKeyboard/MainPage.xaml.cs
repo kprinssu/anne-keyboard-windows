@@ -14,9 +14,7 @@ using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
 using Windows.UI;
 using Windows.UI.Xaml;
-using Windows.UI.ViewManagement;
 using Windows.UI.Xaml.Media;
-using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Streams;
 
@@ -29,8 +27,6 @@ namespace AnneProKeyboard
     /// </summary>
     public sealed partial class MainPage : Page
     {
-
-        private BluetoothLEAdvertisementWatcher Watcher;
         private DeviceWatcher DeviceWatcher;
 
         private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
@@ -129,42 +125,43 @@ namespace AnneProKeyboard
 
         private void StartScanning()
         {
-            Watcher.Start();
             DeviceWatcher.Start();
         }
 
         private void SetupBluetooth()
         {
             // quick sanity check
-            if(this.Watcher != null || this.DeviceWatcher != null)
+            if(this.DeviceWatcher != null)
             {
                 return;
             }
 
-            Watcher = new BluetoothLEAdvertisementWatcher { ScanningMode = BluetoothLEScanningMode.Active };
-            Watcher.Received += DeviceFound;
-            
-            DeviceWatcher = DeviceInformation.CreateWatcher();
+            DeviceWatcher = DeviceInformation.CreateWatcher("System.Devices.Aep.ProtocolId:=\"{bb7bb05e-5972-42b5-94fc-76eaa7084d49}\"", null, DeviceInformationKind.AssociationEndpoint);
             DeviceWatcher.Added += DeviceAdded;
             DeviceWatcher.Updated += DeviceUpdated;
 
             StartScanning();
         }
 
-        private async void DeviceFound(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs btAdv)
+        private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            if (btAdv.Advertisement.LocalName.Contains("ANNE"))
+            if (this.DeviceWatcher != null)
             {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    var device = await BluetoothLEDevice.FromBluetoothAddressAsync(btAdv.BluetoothAddress);
-                    var result = await device.DeviceInformation.Pairing.PairAsync(DevicePairingProtectionLevel.None);
+                DeviceWatcher.Added -= DeviceAdded;
+                DeviceWatcher.Updated -= DeviceUpdated;
 
-                    if(result.Status == DevicePairingResultStatus.Paired)
-                    {
-                        ConnectToKeyboard(device.DeviceInformation);
-                    }
-                });
+                DeviceWatcher.Stop();
+            }
+        }
+
+        private void App_Resuming(object sender, object e)
+        {
+            if (this.DeviceWatcher != null)
+            {
+                DeviceWatcher.Added += DeviceAdded;
+                DeviceWatcher.Updated += DeviceUpdated;
+
+                DeviceWatcher.Start();
             }
         }
 
@@ -238,21 +235,20 @@ namespace AnneProKeyboard
 
             // set up the background colours for the keyboard lights
             byte alpha = 255;
+
             for (int i = 0; i < 70; i++)
             {
                 string s = "keyboardButton" + i;
                 Button button = (this.FindName(s) as Button);
-
-                if(button == null)
+                
+                // NOTE: last 4 keys (RALT, FN, Anne, Ctrl) are identify as 66,67,68,69
+                if (button == null)
                 {
                     continue;
                 }
 
                 int coloured_int = profile.KeyboardColours[i];
-
-
-                // NOTE: last 4 keys (RALT, FN, Anne, Ctrl) are identify as 66,67,68,69
-
+                
                 int red = (coloured_int >> 16) & 0xff;
                 int green = (coloured_int >> 8) & 0xff;
                 int blue = (coloured_int >> 0) & 0xff;
@@ -270,9 +266,17 @@ namespace AnneProKeyboard
             ChangeSelectedProfile(profile);
         }
 
-        private void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
+        private async void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
         {
-            //Do nothing...
+            if(device.Name.Contains("ANNE") && !device.Pairing.IsPaired)
+            {
+                var result = await device.Pairing.PairAsync();
+
+                if(result.Status == DevicePairingResultStatus.Paired)
+                {
+                    ConnectToKeyboard(device);
+                }
+            }
         }
 
         //All of the below logic was ported over from the Android app
