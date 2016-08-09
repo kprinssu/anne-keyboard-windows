@@ -212,19 +212,7 @@ namespace AnneProKeyboard
 
         private void CreateNewKeyboardProfile()
         {
-            KeyboardProfileItem profile_item = new KeyboardProfileItem();
-            profile_item.ID = this._keyboardProfiles.Count;
-            profile_item.Label = "Profile " + (this._keyboardProfiles.Count + 1);
-            profile_item.KeyboardColours = new List<int>();
-
-            // We only need 70 values to represent the 61 keys (70 is needed for some reason by the keyboard..)
-            for (int i = 0; i < 70; i++)
-            {
-                profile_item.KeyboardColours.Add(0xFFFFFF); // White by default
-            }
-
-            KeyboardKey.InitaliseKeyboardProfile(profile_item);
-
+            KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
             this._keyboardProfiles.Add(profile_item);
         }
 

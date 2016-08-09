@@ -26,6 +26,23 @@ namespace AnneProKeyboard
                 OnPropertyChanged("Label");
             }
         }
+
+        public KeyboardProfileItem(int ID, string Label)
+        {
+            this.ID = ID;
+            this.Label = Label;
+            
+            this.KeyboardColours = new List<int>();
+
+            // We only need 70 values to represent the 61 keys (70 is needed for some reason by the keyboard..)
+            for (int i = 0; i < 70; i++)
+            {
+                this.KeyboardColours.Add(0xFFFFFF); // White by default
+            }
+
+            KeyboardKey.InitaliseKeyboardProfile(this);
+        }
+
         public List<int> KeyboardColours { get; set; }
         public List<KeyboardKey> NormalKeys { get; set; } // the normal keys, WE ***MUST*** ENSURE THAT FN and ANNE keys EXIST!!!
         public List<KeyboardKey> FnKeys { get; set; } // represents the Fn + x key combo
