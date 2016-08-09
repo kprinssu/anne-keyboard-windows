@@ -8,7 +8,6 @@ using System.Collections.Specialized;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
-using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
@@ -107,7 +106,10 @@ namespace AnneProKeyboard
                     DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
                     ObservableCollection <KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
 
-                    this._keyboardProfiles.Concat(saved_profiles);
+                    foreach(KeyboardProfileItem profile in saved_profiles)
+                    {
+                        this._keyboardProfiles.Add(profile);
+                    }
                 }
             }
             catch
@@ -343,7 +345,7 @@ namespace AnneProKeyboard
             // Do not let the background task starve, check if we are paired then connect to the keyboard
             if (device_info.Name.Contains("ANNE"))
             {
-                if (device_info.IsEnabled)
+                if (device_info.Pairing.IsPaired)
                 {
                     FindKeyboard();
                 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace AnneProKeyboard
 {
+    [DataContract]
     public class KeyboardProfileItem : INotifyPropertyChanged
     {
         private int _ID;
