@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using Windows.UI.Core;
+using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
 namespace AnneProKeyboard
 {
@@ -165,6 +167,46 @@ namespace AnneProKeyboard
             Array.Copy(checksum_data, 0, bluetooth_data, 0, checksum_data.Length);
 
             return bluetooth_data;
+        }
+
+        public void SyncProfile(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        {
+            this.SyncProfilePhase1(dispatcher, gatt);
+        }
+
+        // send the backlight first data, should cause a waterfall effect on syncing up the profile
+        private void SyncProfilePhase1(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        {
+            // We need this to identify the type of data we are sending
+            byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
+
+            // Convert the list of keyboard colours
+            byte[] light_data = this.GenerateKeyboardBacklightData();
+
+            // Send the data to the keyboard
+            KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, lighting_meta_data, light_data);
+            keyboard_writer.WriteToKeyboard();
+
+            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(dispatcher, gatt); }; // we need to do this because of async calls, threading is fun!
+        }
+
+        // send the layout data
+        private void SyncProfilePhase2(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        {
+            if (!this.ValidateKeyboardKeys())
+            {
+                // raise an error?
+                return;
+            }
+
+            // We need this to identify the type of data we are sending
+            byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
+
+            // Convert the list of keyboard keys
+            byte[] layout_data = this.GenerateKeyboardLayoutData();
+
+            KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, layout_meta_data, layout_data);
+            keyboard_writer.WriteToKeyboard();
         }
     }
 }

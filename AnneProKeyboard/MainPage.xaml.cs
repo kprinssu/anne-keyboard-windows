@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Collections.Specialized;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
+using Windows.Devices.HumanInterfaceDevice;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
@@ -26,7 +25,8 @@ namespace AnneProKeyboard
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private DeviceWatcher DeviceWatcher;
+        private DeviceWatcher BluetoothDeviceWatcher;
+        private DeviceWatcher HIDDeviceWatcher;
 
         private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
@@ -125,48 +125,113 @@ namespace AnneProKeyboard
             ChangeSelectedProfile(this._keyboardProfiles[0]);
         }
 
-        private void StartScanning()
-        {
-            DeviceWatcher.Start();
-        }
-
         private void SetupBluetooth()
         {
-            // quick sanity check
-            if(this.DeviceWatcher != null)
+            if (this.BluetoothDeviceWatcher == null)
             {
-                return;
+                BluetoothDeviceWatcher = DeviceInformation.CreateWatcher("System.Devices.Aep.ProtocolId:=\"{bb7bb05e-5972-42b5-94fc-76eaa7084d49}\"", null, DeviceInformationKind.AssociationEndpoint);
+
+                try
+                {
+                    BluetoothDeviceWatcher.Added += BluetoothDeviceAdded;
+                    BluetoothDeviceWatcher.Updated += BluetoothDeviceUpdated;
+                    BluetoothDeviceWatcher.Start();
+                }
+                catch
+                {
+                }
             }
 
-            DeviceWatcher = DeviceInformation.CreateWatcher("System.Devices.Aep.ProtocolId:=\"{bb7bb05e-5972-42b5-94fc-76eaa7084d49}\"", null, DeviceInformationKind.AssociationEndpoint);
-            DeviceWatcher.Added += DeviceAdded;
-            DeviceWatcher.Updated += DeviceUpdated;
+            if(HIDDeviceWatcher == null)
+            {
+                HIDDeviceWatcher = DeviceInformation.CreateWatcher(DeviceClass.All);
 
-            StartScanning();
+                try
+                {
+                    HIDDeviceWatcher.Updated += HIDDeviceUpdated;
+                    HIDDeviceWatcher.Start();
+                }
+                catch
+                {
+                }
+            }
+        }
+
+        private async void HIDDeviceUpdated(DeviceWatcher sender, DeviceInformationUpdate args)
+        {
+            DeviceInformation device_info = await DeviceInformation.CreateFromIdAsync(args.Id);
+            
+            // Do not let the background task starve, check if we are paired then connect to the keyboard
+            if (device_info.Name.Contains("ANNE"))
+            {
+                if (device_info.IsEnabled)
+                {
+                    FindKeyboard();
+                }
+                else
+                {
+                    await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+                    {
+                        connectionStatusLabel.Text = "Not Connected";
+                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                        syncButton.IsEnabled = false;
+                    });
+                }
+            }
         }
 
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            if (this.DeviceWatcher != null)
+            if (this.BluetoothDeviceWatcher != null)
             {
-                DeviceWatcher.Added -= DeviceAdded;
-                DeviceWatcher.Updated -= DeviceUpdated;
+                BluetoothDeviceWatcher.Added -= BluetoothDeviceAdded;
+                BluetoothDeviceWatcher.Updated -= BluetoothDeviceUpdated;
 
-                DeviceWatcher.Stop();
+                BluetoothDeviceWatcher.Stop();
+
+                this.BluetoothDeviceWatcher = null;
+            }
+
+            if(this.HIDDeviceWatcher != null)
+            {
+                HIDDeviceWatcher.Updated -= HIDDeviceUpdated;
+
+                HIDDeviceWatcher.Stop();
+
+                this.HIDDeviceWatcher = null;
             }
         }
 
         private void App_Resuming(object sender, object e)
         {
-            if (this.DeviceWatcher != null)
-            {
-                DeviceWatcher.Added += DeviceAdded;
-                DeviceWatcher.Updated += DeviceUpdated;
+            this.SetupBluetooth();
+        }
 
-                DeviceWatcher.Start();
+        private async void BluetoothDeviceAdded(DeviceWatcher watcher, DeviceInformation device)
+        {
+            if(device.Name.Contains("ANNE"))
+            {
+                if(device.Pairing.IsPaired)
+                {
+                    ConnectToKeyboard(device);
+                }
+                else if(device.Pairing.CanPair)
+                {
+                    var result = await device.Pairing.PairAsync();
+
+                    if (result.Status == DevicePairingResultStatus.Paired)
+                    {
+                        ConnectToKeyboard(device);
+                    }
+                }
             }
         }
 
+        private  void BluetoothDeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)
+        {
+            // Need this function for Bluetooth LE device watcher, otherwise it won't detect anything
+        }
+        
         private async void ConnectToKeyboard(DeviceInformation device)
         {
             try
@@ -255,43 +320,7 @@ namespace AnneProKeyboard
             KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
             ChangeSelectedProfile(profile);
         }
-
-        private async void DeviceAdded(DeviceWatcher watcher, DeviceInformation device)
-        {
-            if(device.Name.Contains("ANNE") && !device.Pairing.IsPaired)
-            {
-                var result = await device.Pairing.PairAsync();
-
-                if(result.Status == DevicePairingResultStatus.Paired)
-                {
-                    ConnectToKeyboard(device);
-                }
-            }
-        }
         
-        private async void DeviceUpdated(DeviceWatcher watcher, DeviceInformationUpdate device)
-        {
-            DeviceInformation device_info = await DeviceInformation.CreateFromIdAsync(device.Id);
-
-            // Do not let the background task starve, check if we are paired then connect to the keyboard
-            if (device_info.Name.Contains("ANNE"))
-            {
-                if (device_info.Pairing.IsPaired)
-                {
-                    FindKeyboard();
-                }
-                else
-                {
-                    await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                    {
-                        connectionStatusLabel.Text = "Not Connected";
-                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                        syncButton.IsEnabled = false;
-                    });
-                }
-            }
-        }
-
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -379,44 +408,9 @@ namespace AnneProKeyboard
         {
             this.SaveProfiles();
 
-            SendProfilePhase1(this.EditingProfile);
+            this.EditingProfile.SyncProfile(this.Dispatcher, this.WriteGatt);
         }
-
-        // send the backlight first data, should cause a waterfall effect on syncing up the profile
-        private void SendProfilePhase1(KeyboardProfileItem profile)
-        {
-            // We need this to identify the type of data we are sending
-            byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
-
-            // Convert the list of keyboard colours
-            byte[] light_data = profile.GenerateKeyboardBacklightData();
-
-            // Send the data to the keyboard
-            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
-            keyboard_writer.WriteToKeyboard();
-
-            keyboard_writer.OnWriteFinished += (object_s, events) => { SendProfilePhase2(profile); }; // we need to do this because of async calls, threading is fun!
-        }
-
-        // send the layout data
-        private void SendProfilePhase2(KeyboardProfileItem profile)
-        {
-            if (!profile.ValidateKeyboardKeys())
-            {
-                // raise an error
-                return;
-            }
-
-            // We need this to identify the type of data we are sending
-            byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
-
-            // Convert the list of keyboard keys
-            byte[] layout_data = profile.GenerateKeyboardLayoutData();
-
-            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, layout_meta_data, layout_data);
-            keyboard_writer.WriteToKeyboard();
-        }
-
+        
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
         {
             this.SaveProfiles();
