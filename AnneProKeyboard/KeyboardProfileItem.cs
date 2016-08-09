@@ -8,6 +8,7 @@ namespace AnneProKeyboard
     public class KeyboardProfileItem : INotifyPropertyChanged
     {
         private int _ID;
+        [DataMember]
         public int ID
         {
             get { return this._ID; }
@@ -18,6 +19,7 @@ namespace AnneProKeyboard
             }
         }
         private string _label;
+        [DataMember]
         public string Label
         {
             get { return this._label; }
@@ -45,8 +47,11 @@ namespace AnneProKeyboard
             KeyboardKey.InitaliseKeyboardProfile(this);
         }
 
+        [DataMember]
         public List<int> KeyboardColours { get; set; }
+        [DataMember]
         public List<KeyboardKey> NormalKeys { get; set; } // the normal keys, WE ***MUST*** ENSURE THAT FN and ANNE keys EXIST!!!
+        [DataMember]
         public List<KeyboardKey> FnKeys { get; set; } // represents the Fn + x key combo
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)
