@@ -454,25 +454,42 @@ namespace AnneProKeyboard
         {
             this.SaveProfiles();
 
+            SendProfilePhase1(this.EditingProfile);
+        }
+
+        // send the backlight first data, should cause a waterfall effect on syncing up the profile
+        private void SendProfilePhase1(KeyboardProfileItem profile)
+        {
             // We need this to identify the type of data we are sending
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
-            byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
+
             // Convert the list of keyboard colours
-            byte[] light_data = GenerateKeyboardBacklightData(this.EditingProfile.KeyboardColours);
-            // Conver the list of keyboard keys
-            byte[] layout_data = GenerateKeyboardLayoutData(this.EditingProfile);
+            byte[] light_data = GenerateKeyboardBacklightData(profile.KeyboardColours);
 
             // Send the data to the keyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
 
-            if (this.EditingProfile.ValidateKeyboardKeys())
-            {
-                keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, layout_meta_data, layout_data);
-                keyboard_writer.WriteToKeyboard();
+            keyboard_writer.OnWriteFinished += (object_s, events) => { SendProfilePhase2(profile); }; // we need to do this because of async calls, threading is fun!
+        }
 
-                //write out the data for layout
+        // send the layout data
+        private void SendProfilePhase2(KeyboardProfileItem profile)
+        {
+            if (!profile.ValidateKeyboardKeys())
+            {
+                // raise an error
+                return;
             }
+
+            // We need this to identify the type of data we are sending
+            byte[] layout_meta_data = { 0x7, 0x91, 0x02 };
+
+            // Convert the list of keyboard keys
+            byte[] layout_data = GenerateKeyboardLayoutData(this.EditingProfile);
+
+            KeyboardWriter keyboard_writer = new KeyboardWriter(this.Dispatcher, this.WriteGatt, layout_meta_data, layout_data);
+            keyboard_writer.WriteToKeyboard();
         }
 
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)

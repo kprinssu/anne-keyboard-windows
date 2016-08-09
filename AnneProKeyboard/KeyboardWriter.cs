@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Windows.UI.Xaml;
 using System.Diagnostics;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
@@ -12,6 +8,9 @@ namespace AnneProKeyboard
 {
     public class KeyboardWriter
     {
+        public EventHandler OnWriteFinished;
+        public EventHandler OnWriteFailed;
+
         private CoreDispatcher Dispatcher;
 
         private GattCharacteristic WriteGATT;
@@ -54,7 +53,7 @@ namespace AnneProKeyboard
                     try
                     {
                         Array.Copy(this.MetaData, this.SendBuffer, this.MetaData.Length);
-                        
+
                         if (this.SendData.Length < OAD_BLOCK_SIZE)
                         {
                             Array.Copy(this.SendData, 0, this.SendBuffer, 3, this.SendData.Length);
@@ -81,7 +80,7 @@ namespace AnneProKeyboard
                         var result = await WriteGATT.WriteValueAsync(writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
 
                         // throw an error?
-                        if(result != GattCommunicationStatus.Success)
+                        if (result != GattCommunicationStatus.Success)
                         {
                             return;
                         }
@@ -94,8 +93,22 @@ namespace AnneProKeyboard
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex);
+
+                        EventHandler handler = this.OnWriteFailed;
+                        if (handler != null)
+                        {
+                            handler(ex, EventArgs.Empty);
+                        }
                     }
                 });
+            }
+            else
+            {
+                EventHandler handler = this.OnWriteFinished;
+                if (handler != null)
+                {
+                    handler(null, EventArgs.Empty);
+                }
             }
         }
     }
