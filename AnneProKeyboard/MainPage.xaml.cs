@@ -1,12 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
-using Windows.Devices.HumanInterfaceDevice;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth;
@@ -26,7 +28,7 @@ namespace AnneProKeyboard
     public sealed partial class MainPage : Page
     {
         private DeviceWatcher BluetoothDeviceWatcher;
-        private DeviceWatcher HIDDeviceWatcher;
+        private DeviceWatcher AllDevicesWatcher;
 
         private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
@@ -46,8 +48,19 @@ namespace AnneProKeyboard
             set { }
         }
 
+        public ObservableCollection<String> KeyboardKeyLabels = new ObservableCollection<String>();
+        private Dictionary<String, String> KeyboardKeyLabelTranslation = new Dictionary<String, String>();
+
+        private Button CurrentlyEditingStandardKey;
+
         public MainPage()
         {
+            foreach(KeyboardKey key in KeyboardKey.StringKeyboardKeys.Values)
+            {
+                KeyboardKeyLabels.Add(key.KeyShortLabel);
+                KeyboardKeyLabelTranslation[key.KeyShortLabel] = key.KeyLabel;
+            }
+
             this.InitializeComponent();
 
             // Start up the background thread to find the keyboard
@@ -142,14 +155,14 @@ namespace AnneProKeyboard
                 }
             }
 
-            if(HIDDeviceWatcher == null)
+            if(AllDevicesWatcher == null)
             {
-                HIDDeviceWatcher = DeviceInformation.CreateWatcher(DeviceClass.All);
+                AllDevicesWatcher = DeviceInformation.CreateWatcher(DeviceClass.All);
 
                 try
                 {
-                    HIDDeviceWatcher.Updated += HIDDeviceUpdated;
-                    HIDDeviceWatcher.Start();
+                    AllDevicesWatcher.Updated += HIDDeviceUpdated;
+                    AllDevicesWatcher.Start();
                 }
                 catch
                 {
@@ -174,7 +187,8 @@ namespace AnneProKeyboard
                     {
                         connectionStatusLabel.Text = "Not Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                        syncButton.IsEnabled = false;
+                        LightSyncButton.IsEnabled = false;
+                        LayoutSyncButton.IsEnabled = false;
                     });
                 }
             }
@@ -192,13 +206,13 @@ namespace AnneProKeyboard
                 this.BluetoothDeviceWatcher = null;
             }
 
-            if(this.HIDDeviceWatcher != null)
+            if(this.AllDevicesWatcher != null)
             {
-                HIDDeviceWatcher.Updated -= HIDDeviceUpdated;
+                AllDevicesWatcher.Updated -= HIDDeviceUpdated;
 
-                HIDDeviceWatcher.Stop();
+                AllDevicesWatcher.Stop();
 
-                this.HIDDeviceWatcher = null;
+                this.AllDevicesWatcher = null;
             }
         }
 
@@ -269,7 +283,8 @@ namespace AnneProKeyboard
                     this.KeyboardDeviceInformation = device;
                     this.connectionStatusLabel.Text = "Connected";
                     this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
-                    this.syncButton.IsEnabled = true;
+                    this.LightSyncButton.IsEnabled = true;
+                    this.LayoutSyncButton.IsEnabled = true;
                 });
             }
             catch
@@ -286,13 +301,25 @@ namespace AnneProKeyboard
         private void ChangeSelectedProfile(KeyboardProfileItem profile)
         {
             this.EditingProfile = profile;
-            chosenProfileName.Text = profile.Label;
+            chosenProfileName.Title = profile.Label;
 
             // set up the background colours for the keyboard lights
             byte alpha = 255;
 
             for (int i = 0; i < 70; i++)
             {
+                // set the standard layout keys
+                if (i < 61)
+                {
+                    string layout_id = "keyboardStandardLayoutButton" + i;
+                    Button layout_button = (this.FindName(layout_id) as Button);
+
+                    if (layout_button != null)
+                    {
+                        layout_button.Content = profile.NormalKeys[i].KeyShortLabel;
+                    }
+                }
+
                 string s = "keyboardButton" + i;
                 Button button = (this.FindName(s) as Button);
                 
@@ -350,7 +377,7 @@ namespace AnneProKeyboard
             // update Views and KeyboardProfileItem class
             if(this.EditingProfile == RenamingProfile)
             {
-                chosenProfileName.Text = profileName.Text;
+                chosenProfileName.Title = profileName.Text;
             }
             
             if(this.RenamingProfile != null)
@@ -442,6 +469,67 @@ namespace AnneProKeyboard
                     profile.ID = i;
                 }
             }
+        }
+
+        private async void LayoutSearch_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        {
+            string query = sender.Text;
+            // LINQ search is going to be O(n^x) (forn is the size of keys and x is the length of the string)
+            // so lets run it in a background thread without blocking the UI
+            var search_task = Task.Run(() => KeyboardKey.StringKeyboardKeys.Keys.Where(x => x.Contains(query)).Select(x => KeyboardKey.StringKeyboardKeys[x].KeyShortLabel).ToList());
+            var keys = await search_task;
+
+            sender.ItemsSource = keys;
+        }
+
+        private void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(this.CurrentlyEditingStandardKey != null)
+            {
+                this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+            }
+
+            Button button = (Button)sender;
+            button.Visibility = Visibility.Collapsed;
+            this.CurrentlyEditingStandardKey = button;
+
+            RelativePanel selector_parent = (RelativePanel)keyboardStandardLayout.Parent;
+            selector_parent.Children.Remove(keyboardStandardLayout);
+
+            keyboardStandardLayout.Visibility = Visibility.Visible;
+            keyboardStandardLayout.Margin = button.Margin;
+            keyboardStandardLayout.Width = button.Width;
+            keyboardStandardLayout.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
+
+            RelativePanel parent = (RelativePanel)button.Parent;
+            parent.Children.Add(keyboardStandardLayout);
+        }
+
+        private void KeyboardStandardLayout_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string label = keyboardStandardLayout.SelectedItem as string; ;
+            this.CurrentlyEditingStandardKey.Content = label;
+            this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+
+            int index = -1;
+
+            try
+            {
+                Int32.TryParse(this.CurrentlyEditingStandardKey.Name.Substring(28), out index);
+            }
+            catch
+            {
+            }
+
+            if(index >= 0)
+            {
+                string full_label = this.KeyboardKeyLabelTranslation[label];
+                this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+            }
+
+            keyboardStandardLayout.Visibility = Visibility.Collapsed;
+
+            this.SaveProfiles();
         }
     }
 }

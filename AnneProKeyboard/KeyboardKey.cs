@@ -22,139 +22,139 @@ namespace AnneProKeyboard
         static KeyboardKey()
         {
             // "Empty" key, also the unassigned value key
-            StringKeyboardKeys[""] = new KeyboardKey("", 0);
+            StringKeyboardKeys[""] = new KeyboardKey("", "None", 0);
             IntKeyboardKeys[0] = StringKeyboardKeys[""];
 
             // "Anne" key
-            StringKeyboardKeys["Anne"] = new KeyboardKey("Anne", 250);
+            StringKeyboardKeys["Anne"] = new KeyboardKey("Anne", "Anne", 250);
             IntKeyboardKeys[250] = StringKeyboardKeys["Anne"];
 
             // Fn Key
-            StringKeyboardKeys["Fn"] = new KeyboardKey("Fn", 254);
+            StringKeyboardKeys["Fn"] = new KeyboardKey("Fn", "Fn", 254);
             IntKeyboardKeys[254] = StringKeyboardKeys["Fn"];
 
             // Windows Key Lock
             // TODO: verify it works properly
 
             // Keys for the Alphabet (a-z, A-Z)
-            AlphabetKeys.Add(new KeyboardKey("A", 4));
-            AlphabetKeys.Add(new KeyboardKey("B", 5));
-            AlphabetKeys.Add(new KeyboardKey("C", 6));
-            AlphabetKeys.Add(new KeyboardKey("D", 7));
-            AlphabetKeys.Add(new KeyboardKey("E", 8));
-            AlphabetKeys.Add(new KeyboardKey("F", 9));
-            AlphabetKeys.Add(new KeyboardKey("G", 10));
-            AlphabetKeys.Add(new KeyboardKey("H", 11));
-            AlphabetKeys.Add(new KeyboardKey("I", 12));
-            AlphabetKeys.Add(new KeyboardKey("J", 13));
-            AlphabetKeys.Add(new KeyboardKey("K", 14));
-            AlphabetKeys.Add(new KeyboardKey("L", 15));
-            AlphabetKeys.Add(new KeyboardKey("M", 16));
-            AlphabetKeys.Add(new KeyboardKey("N", 17));
-            AlphabetKeys.Add(new KeyboardKey("O", 18));
-            AlphabetKeys.Add(new KeyboardKey("P", 19));
-            AlphabetKeys.Add(new KeyboardKey("Q", 20));
-            AlphabetKeys.Add(new KeyboardKey("R", 21));
-            AlphabetKeys.Add(new KeyboardKey("S", 22));
-            AlphabetKeys.Add(new KeyboardKey("T", 23));
-            AlphabetKeys.Add(new KeyboardKey("U", 24));
-            AlphabetKeys.Add(new KeyboardKey("V", 25));
-            AlphabetKeys.Add(new KeyboardKey("W", 26));
-            AlphabetKeys.Add(new KeyboardKey("X", 27));
-            AlphabetKeys.Add(new KeyboardKey("Y", 28));
-            AlphabetKeys.Add(new KeyboardKey("Z", 29));
+            AlphabetKeys.Add(new KeyboardKey("A", "A", 4));
+            AlphabetKeys.Add(new KeyboardKey("B", "B", 5));
+            AlphabetKeys.Add(new KeyboardKey("C", "C", 6));
+            AlphabetKeys.Add(new KeyboardKey("D", "D", 7));
+            AlphabetKeys.Add(new KeyboardKey("E", "E", 8));
+            AlphabetKeys.Add(new KeyboardKey("F", "F", 9));
+            AlphabetKeys.Add(new KeyboardKey("G", "G", 10));
+            AlphabetKeys.Add(new KeyboardKey("H", "H", 11));
+            AlphabetKeys.Add(new KeyboardKey("I", "I", 12));
+            AlphabetKeys.Add(new KeyboardKey("J", "J", 13));
+            AlphabetKeys.Add(new KeyboardKey("K", "K", 14));
+            AlphabetKeys.Add(new KeyboardKey("L", "L", 15));
+            AlphabetKeys.Add(new KeyboardKey("M", "M", 16));
+            AlphabetKeys.Add(new KeyboardKey("N", "N", 17));
+            AlphabetKeys.Add(new KeyboardKey("O", "O", 18));
+            AlphabetKeys.Add(new KeyboardKey("P", "P", 19));
+            AlphabetKeys.Add(new KeyboardKey("Q", "Q", 20));
+            AlphabetKeys.Add(new KeyboardKey("R", "R", 21));
+            AlphabetKeys.Add(new KeyboardKey("S", "S", 22));
+            AlphabetKeys.Add(new KeyboardKey("T", "T", 23));
+            AlphabetKeys.Add(new KeyboardKey("U", "U", 24));
+            AlphabetKeys.Add(new KeyboardKey("V", "V", 25));
+            AlphabetKeys.Add(new KeyboardKey("W", "W", 26));
+            AlphabetKeys.Add(new KeyboardKey("X", "X", 27));
+            AlphabetKeys.Add(new KeyboardKey("Y", "Y", 28));
+            AlphabetKeys.Add(new KeyboardKey("Z", "Z", 29));
 
             InitialiseKeyDictionaries(AlphabetKeys);
 
             // The row (not the NUMPAD) keyboard keys (0-9)
-            NumberKeys.Add(new KeyboardKey("0", 39));
-            NumberKeys.Add(new KeyboardKey("1", 30));
-            NumberKeys.Add(new KeyboardKey("2", 31));
-            NumberKeys.Add(new KeyboardKey("3", 32));
-            NumberKeys.Add(new KeyboardKey("4", 33));
-            NumberKeys.Add(new KeyboardKey("5", 34));
-            NumberKeys.Add(new KeyboardKey("6", 35));
-            NumberKeys.Add(new KeyboardKey("7", 36));
-            NumberKeys.Add(new KeyboardKey("8", 37));
-            NumberKeys.Add(new KeyboardKey("9", 38));
+            NumberKeys.Add(new KeyboardKey("0", "0", 39));
+            NumberKeys.Add(new KeyboardKey("1", "1", 30));
+            NumberKeys.Add(new KeyboardKey("2", "2", 31));
+            NumberKeys.Add(new KeyboardKey("3", "3", 32));
+            NumberKeys.Add(new KeyboardKey("4", "4", 33));
+            NumberKeys.Add(new KeyboardKey("5", "5", 34));
+            NumberKeys.Add(new KeyboardKey("6", "6", 35));
+            NumberKeys.Add(new KeyboardKey("7", "7", 36));
+            NumberKeys.Add(new KeyboardKey("8", "8", 37));
+            NumberKeys.Add(new KeyboardKey("9", "9", 38));
 
             InitialiseKeyDictionaries(NumberKeys);
 
             // Modifier keys (Shift, TAB, ESC, etc.)
-            ModifierKeys.Add(new KeyboardKey("Escape", 41));
-            ModifierKeys.Add(new KeyboardKey("Tab", 43));
-            ModifierKeys.Add(new KeyboardKey("Caps Lock", 57));
-            ModifierKeys.Add(new KeyboardKey("Left Shift", 225));
-            ModifierKeys.Add(new KeyboardKey("Left Control", 224));
-            ModifierKeys.Add(new KeyboardKey("Left Windows", 227));
-            ModifierKeys.Add(new KeyboardKey("Right Windows", 231));
-            ModifierKeys.Add(new KeyboardKey("Left Command", 227));
-            ModifierKeys.Add(new KeyboardKey("Right Command", 231));
-            ModifierKeys.Add(new KeyboardKey("Left Option", 226));
-            ModifierKeys.Add(new KeyboardKey("Right Option", 230));
-            ModifierKeys.Add(new KeyboardKey("Left Alt", 226));
-            ModifierKeys.Add(new KeyboardKey("Spacebar", 44));
-            ModifierKeys.Add(new KeyboardKey("Right Alt", 230));
-            ModifierKeys.Add(new KeyboardKey("Right Control", 228));
-            ModifierKeys.Add(new KeyboardKey("Right Shift", 229));
-            ModifierKeys.Add(new KeyboardKey("Enter", 40));
-            ModifierKeys.Add(new KeyboardKey("Backspace", 42));
+            ModifierKeys.Add(new KeyboardKey("Escape", "Esc", 41));
+            ModifierKeys.Add(new KeyboardKey("Tab", "Tab", 43));
+            ModifierKeys.Add(new KeyboardKey("Caps Lock", "Caps", 57));
+            ModifierKeys.Add(new KeyboardKey("Left Shift", "L Shft", 225));
+            ModifierKeys.Add(new KeyboardKey("Left Control", "L Ctrl", 224));
+            ModifierKeys.Add(new KeyboardKey("Left Windows", "L Win", 227));
+            ModifierKeys.Add(new KeyboardKey("Right Windows", "R Win", 231));
+            ModifierKeys.Add(new KeyboardKey("Left Command", "L Cmd", 227));
+            ModifierKeys.Add(new KeyboardKey("Right Command", "R Cmd", 231));
+            ModifierKeys.Add(new KeyboardKey("Left Option", "L Opt", 226));
+            ModifierKeys.Add(new KeyboardKey("Right Option", "R Opt", 230));
+            ModifierKeys.Add(new KeyboardKey("Left Alt", "L Alt", 226));
+            ModifierKeys.Add(new KeyboardKey("Spacebar", "Space", 44));
+            ModifierKeys.Add(new KeyboardKey("Right Alt", "R Alt", 230));
+            ModifierKeys.Add(new KeyboardKey("Right Control", "R Ctrl", 228));
+            ModifierKeys.Add(new KeyboardKey("Right Shift", "R Shft", 229));
+            ModifierKeys.Add(new KeyboardKey("Enter", "Enter", 40));
+            ModifierKeys.Add(new KeyboardKey("Backspace", "BkSpce", 42));
 
             InitialiseKeyDictionaries(ModifierKeys);
 
             // Punctuation keys (~, \, ", etc)
-            PunctuationKeys.Add(new KeyboardKey("`~", 53));
-            PunctuationKeys.Add(new KeyboardKey("-_", 45));
-            PunctuationKeys.Add(new KeyboardKey("=+", 46));
-            PunctuationKeys.Add(new KeyboardKey("[{", 47));
-            PunctuationKeys.Add(new KeyboardKey("]}", 48));
-            PunctuationKeys.Add(new KeyboardKey("\\|", 49));
-            PunctuationKeys.Add(new KeyboardKey(";:", 51));
-            PunctuationKeys.Add(new KeyboardKey("'\"", 52));
-            PunctuationKeys.Add(new KeyboardKey(",<", 54));
-            PunctuationKeys.Add(new KeyboardKey(".>", 55));
-            PunctuationKeys.Add(new KeyboardKey("/?", 56));
+            PunctuationKeys.Add(new KeyboardKey("`~", "`~", 53));
+            PunctuationKeys.Add(new KeyboardKey("-_", "-_", 45));
+            PunctuationKeys.Add(new KeyboardKey("=+", "=+", 46));
+            PunctuationKeys.Add(new KeyboardKey("[{", "[{", 47));
+            PunctuationKeys.Add(new KeyboardKey("]}", "]}", 48));
+            PunctuationKeys.Add(new KeyboardKey("\\|", "\\|", 49));
+            PunctuationKeys.Add(new KeyboardKey(";:", ";:", 51));
+            PunctuationKeys.Add(new KeyboardKey("'\"", "'\"", 52));
+            PunctuationKeys.Add(new KeyboardKey(",<", ",<", 54));
+            PunctuationKeys.Add(new KeyboardKey(".>", ".>", 55));
+            PunctuationKeys.Add(new KeyboardKey("/?", "/?", 56));
 
             InitialiseKeyDictionaries(PunctuationKeys);
 
             // Function keys (F1, F2, etc)
-            FunctionKeys.Add(new KeyboardKey("F1", 58));
-            FunctionKeys.Add(new KeyboardKey("F2", 59));
-            FunctionKeys.Add(new KeyboardKey("F3", 60));
-            FunctionKeys.Add(new KeyboardKey("F4", 61));
-            FunctionKeys.Add(new KeyboardKey("F5", 62));
-            FunctionKeys.Add(new KeyboardKey("F6", 63));
-            FunctionKeys.Add(new KeyboardKey("F7", 64));
-            FunctionKeys.Add(new KeyboardKey("F8", 65));
-            FunctionKeys.Add(new KeyboardKey("F9", 66));
-            FunctionKeys.Add(new KeyboardKey("F10", 67));
-            FunctionKeys.Add(new KeyboardKey("F11", 68));
-            FunctionKeys.Add(new KeyboardKey("F12", 69));
+            FunctionKeys.Add(new KeyboardKey("F1", "F1", 58));
+            FunctionKeys.Add(new KeyboardKey("F2", "F2", 59));
+            FunctionKeys.Add(new KeyboardKey("F3", "F3", 60));
+            FunctionKeys.Add(new KeyboardKey("F4", "F4", 61));
+            FunctionKeys.Add(new KeyboardKey("F5", "F5", 62));
+            FunctionKeys.Add(new KeyboardKey("F6", "F6", 63));
+            FunctionKeys.Add(new KeyboardKey("F7", "F7", 64));
+            FunctionKeys.Add(new KeyboardKey("F8", "F8", 65));
+            FunctionKeys.Add(new KeyboardKey("F9", "F9", 66));
+            FunctionKeys.Add(new KeyboardKey("F10", "F10", 67));
+            FunctionKeys.Add(new KeyboardKey("F11", "F11", 68));
+            FunctionKeys.Add(new KeyboardKey("F12", "F12", 69));
 
             InitialiseKeyDictionaries(FunctionKeys);
 
             // "Special" Keys (Insert, Home, etc.) also includes the Direction Keys
             // obins devs labelled these keys as the "Fn + x" keys
-            SpecialKeys.Add(new KeyboardKey("Print Screen", 70));
-            SpecialKeys.Add(new KeyboardKey("Scroll Lock", 71));
-            SpecialKeys.Add(new KeyboardKey("Pause", 72));
-            SpecialKeys.Add(new KeyboardKey("Insert", 73));
-            SpecialKeys.Add(new KeyboardKey("Delete", 76));
-            SpecialKeys.Add(new KeyboardKey("Home", 74));
-            SpecialKeys.Add(new KeyboardKey("End", 77));
-            SpecialKeys.Add(new KeyboardKey("Page Down", 78));
-            SpecialKeys.Add(new KeyboardKey("Page Up", 75));
-            SpecialKeys.Add(new KeyboardKey("Left", 80));
-            SpecialKeys.Add(new KeyboardKey("Up", 82));
-            SpecialKeys.Add(new KeyboardKey("Down", 81));
-            SpecialKeys.Add(new KeyboardKey("Right", 79));
+            SpecialKeys.Add(new KeyboardKey("Print Screen", "PrtSc", 70));
+            SpecialKeys.Add(new KeyboardKey("Scroll Lock", "ScrLk", 71));
+            SpecialKeys.Add(new KeyboardKey("Pause", "Pause",  72));
+            SpecialKeys.Add(new KeyboardKey("Insert", "Ins", 73));
+            SpecialKeys.Add(new KeyboardKey("Delete", "Del", 76));
+            SpecialKeys.Add(new KeyboardKey("Home", "Home", 74));
+            SpecialKeys.Add(new KeyboardKey("End", "End", 77));
+            SpecialKeys.Add(new KeyboardKey("Page Down", "PgDn", 78));
+            SpecialKeys.Add(new KeyboardKey("Page Up", "PgUp", 75));
+            SpecialKeys.Add(new KeyboardKey("Left", "Left", 80));
+            SpecialKeys.Add(new KeyboardKey("Up", "Up", 82));
+            SpecialKeys.Add(new KeyboardKey("Down", "Down", 81));
+            SpecialKeys.Add(new KeyboardKey("Right", "Right", 79));
 
             InitialiseKeyDictionaries(SpecialKeys);
 
             // Volume keys (Volume Increase/Decrease, Mute only)
-            MediaKeys.Add(new KeyboardKey("Mute", 127));
-            MediaKeys.Add(new KeyboardKey("Volume Up", 128));
-            MediaKeys.Add(new KeyboardKey("Volume Down", 129));
+            MediaKeys.Add(new KeyboardKey("Mute", "Mute", 127));
+            MediaKeys.Add(new KeyboardKey("Volume Up", "Vol. Up", 128));
+            MediaKeys.Add(new KeyboardKey("Volume Down", "Vol.D.", 129));
 
             InitialiseKeyDictionaries(MediaKeys);
         }
@@ -163,17 +163,21 @@ namespace AnneProKeyboard
         public readonly string KeyLabel;
         [DataMember]
         public readonly int KeyValue;
+        [DataMember]
+        public readonly string KeyShortLabel;
 
-        private KeyboardKey(string KeyLabel, int KeyValue)
+        private KeyboardKey(string KeyLabel, string KeyShortLabel, int KeyValue)
         {
             this.KeyLabel = KeyLabel;
             this.KeyValue = KeyValue;
+            this.KeyShortLabel = KeyShortLabel;
         }
 
         private KeyboardKey(KeyboardKey keyboard_key)
         {
             this.KeyLabel = keyboard_key.KeyLabel;
             this.KeyValue = keyboard_key.KeyValue;
+            this.KeyShortLabel = keyboard_key.KeyShortLabel;
         }
 
         private static void InitialiseKeyDictionaries(List<KeyboardKey> keys)
