@@ -482,7 +482,7 @@ namespace AnneProKeyboard
             sender.ItemsSource = keys;
         }
 
-        private void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
+        private async void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
         {
             if(this.CurrentlyEditingStandardKey != null)
             {
@@ -490,19 +490,24 @@ namespace AnneProKeyboard
             }
 
             Button button = (Button)sender;
-            button.Visibility = Visibility.Collapsed;
             this.CurrentlyEditingStandardKey = button;
 
+            // Switch parents
             RelativePanel selector_parent = (RelativePanel)keyboardStandardLayout.Parent;
             selector_parent.Children.Remove(keyboardStandardLayout);
 
-            keyboardStandardLayout.Visibility = Visibility.Visible;
+            RelativePanel parent = (RelativePanel)button.Parent;
+            parent.Children.Add(keyboardStandardLayout);
+            
             keyboardStandardLayout.Margin = button.Margin;
             keyboardStandardLayout.Width = button.Width;
             keyboardStandardLayout.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
+            
+            button.Visibility = Visibility.Collapsed;
+            keyboardStandardLayout.Visibility = Visibility.Visible;
 
-            RelativePanel parent = (RelativePanel)button.Parent;
-            parent.Children.Add(keyboardStandardLayout);
+            await Task.Delay(1);
+            keyboardStandardLayout.IsDropDownOpen = true;
         }
 
         private void KeyboardStandardLayout_SelectionChanged(object sender, SelectionChangedEventArgs e)
