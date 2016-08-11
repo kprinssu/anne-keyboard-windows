@@ -482,7 +482,7 @@ namespace AnneProKeyboard
             sender.ItemsSource = keys;
         }
 
-        private async void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
+        private void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
         {
             if(this.CurrentlyEditingStandardKey != null)
             {
@@ -505,8 +505,7 @@ namespace AnneProKeyboard
             
             button.Visibility = Visibility.Collapsed;
             keyboardStandardLayout.Visibility = Visibility.Visible;
-
-            await Task.Delay(1);
+            
             keyboardStandardLayout.IsDropDownOpen = true;
         }
 
@@ -532,9 +531,13 @@ namespace AnneProKeyboard
                 this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
             }
 
-            keyboardStandardLayout.Visibility = Visibility.Collapsed;
-
             this.SaveProfiles();
+        }
+
+        private void KeyboardStandardLayout_DropDownClosed(object sender, object e)
+        {
+            this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+            this.keyboardStandardLayout.Visibility = Visibility.Collapsed;
         }
     }
 }
