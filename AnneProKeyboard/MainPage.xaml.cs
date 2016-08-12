@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Collections.Specialized;
@@ -52,6 +51,7 @@ namespace AnneProKeyboard
         private Dictionary<String, String> KeyboardKeyLabelTranslation = new Dictionary<String, String>();
 
         private Button CurrentlyEditingStandardKey;
+        private Button CurrentlyEditingFnKey;
 
         public MainPage()
         {
@@ -318,6 +318,14 @@ namespace AnneProKeyboard
                     {
                         layout_button.Content = profile.NormalKeys[i].KeyShortLabel;
                     }
+
+                    string fn_layout_id = "keyboardFNLayoutButton" + i;
+                    Button fn_layout_button = (this.FindName(fn_layout_id) as Button);
+
+                    if (fn_layout_id != null)
+                    {
+                        fn_layout_button.Content = profile.FnKeys[i].KeyShortLabel;
+                    }
                 }
 
                 string s = "keyboardButton" + i;
@@ -433,9 +441,28 @@ namespace AnneProKeyboard
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
         {
+            if(!this.EditingProfile.ValidateKeyboardKeys())
+            {
+                this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
+                return;
+            }
+            
             this.SaveProfiles();
 
+            this.LayoutSyncButton.IsEnabled = false;
+            this.LightSyncButton.IsEnabled = false;
+
             this.EditingProfile.SyncProfile(this.Dispatcher, this.WriteGatt);
+            this.EditingProfile.SyncStatusNotify += async (object_s, events) =>
+            {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    this.SyncStatus.Text = (string)object_s;
+
+                    this.LayoutSyncButton.IsEnabled = true;
+                    this.LightSyncButton.IsEnabled = true;
+                });
+            };
         }
         
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
@@ -470,56 +497,71 @@ namespace AnneProKeyboard
                 }
             }
         }
-
-        private async void LayoutSearch_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        
+        private async void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
         {
-            string query = sender.Text;
-            // LINQ search is going to be O(n^x) (forn is the size of keys and x is the length of the string)
-            // so lets run it in a background thread without blocking the UI
-            var search_task = Task.Run(() => KeyboardKey.StringKeyboardKeys.Keys.Where(x => x.Contains(query)).Select(x => KeyboardKey.StringKeyboardKeys[x].KeyShortLabel).ToList());
-            var keys = await search_task;
+            if(this.CurrentlyEditingFnKey != null)
+            {
+                this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
+                this.CurrentlyEditingFnKey = null;
+            }
 
-            sender.ItemsSource = keys;
-        }
-
-        private void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
-        {
             if(this.CurrentlyEditingStandardKey != null)
             {
                 this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+                this.CurrentlyEditingStandardKey = null;
             }
 
             Button button = (Button)sender;
-            this.CurrentlyEditingStandardKey = button;
+
+
+            bool fn_mode = button.Name.StartsWith("keyboardFNLayoutButton");
+
+            if(fn_mode)
+            {
+                this.CurrentlyEditingFnKey = button;
+            }
+            else
+            {
+                this.CurrentlyEditingStandardKey = button;
+            }
 
             // Switch parents
-            RelativePanel selector_parent = (RelativePanel)keyboardStandardLayout.Parent;
-            selector_parent.Children.Remove(keyboardStandardLayout);
+            RelativePanel selector_parent = (RelativePanel)keyboardLayoutSelection.Parent;
+            selector_parent.Children.Remove(keyboardLayoutSelection);
 
             RelativePanel parent = (RelativePanel)button.Parent;
-            parent.Children.Add(keyboardStandardLayout);
+            parent.Children.Add(keyboardLayoutSelection);
             
-            keyboardStandardLayout.Margin = button.Margin;
-            keyboardStandardLayout.Width = button.Width;
-            keyboardStandardLayout.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
+            keyboardLayoutSelection.Margin = button.Margin;
+            keyboardLayoutSelection.Width = button.Width;
+            keyboardLayoutSelection.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
             
             button.Visibility = Visibility.Collapsed;
-            keyboardStandardLayout.Visibility = Visibility.Visible;
+            keyboardLayoutSelection.Visibility = Visibility.Visible;
+
+            await Task.Delay(1);
             
-            keyboardStandardLayout.IsDropDownOpen = true;
+            keyboardLayoutSelection.IsDropDownOpen = true;
         }
 
         private void KeyboardStandardLayout_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string label = keyboardStandardLayout.SelectedItem as string; ;
-            this.CurrentlyEditingStandardKey.Content = label;
-            this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+            string label = keyboardLayoutSelection.SelectedItem as string;
+
+            if(String.IsNullOrEmpty(label))
+            {
+                label = KeyboardKey.IntKeyboardKeys[0].KeyShortLabel;
+            }
+
+            Button button = (this.CurrentlyEditingStandardKey != null) ? this.CurrentlyEditingStandardKey : this.CurrentlyEditingFnKey;
+            int length = (this.CurrentlyEditingStandardKey != null) ? 28 : 22; // special constants 
 
             int index = -1;
 
             try
             {
-                Int32.TryParse(this.CurrentlyEditingStandardKey.Name.Substring(28), out index);
+                Int32.TryParse(button.Name.Substring(length), out index);
             }
             catch
             {
@@ -528,7 +570,22 @@ namespace AnneProKeyboard
             if(index >= 0)
             {
                 string full_label = this.KeyboardKeyLabelTranslation[label];
-                this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+
+                if(this.CurrentlyEditingFnKey != null)
+                {
+                    this.EditingProfile.FnKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+
+
+                    this.CurrentlyEditingFnKey.Content = label;
+                    this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+
+                    this.CurrentlyEditingStandardKey.Content = label;
+                    this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+                }
             }
 
             this.SaveProfiles();
@@ -536,8 +593,18 @@ namespace AnneProKeyboard
 
         private void KeyboardStandardLayout_DropDownClosed(object sender, object e)
         {
-            this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
-            this.keyboardStandardLayout.Visibility = Visibility.Collapsed;
+
+            if (this.CurrentlyEditingFnKey != null)
+            {
+                this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
+            }
+
+            if (this.CurrentlyEditingStandardKey != null)
+            {
+                this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+            }
+
+            this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
         }
     }
 }

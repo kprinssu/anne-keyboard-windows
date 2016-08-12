@@ -51,7 +51,7 @@
 
         <Grid Background="#1E1E1E">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Pivot x:Name="chosenProfileName">
@@ -67,88 +67,170 @@
                 </Pivot.HeaderTemplate>
                 <PivotItem Header="Layout">
                     <StackPanel Orientation="Vertical" Grid.Row="2">
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Height="250" Margin="10,0,0,0">
-                            <Grid>
-                                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Margin="0,15,0,0">
+                        <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                            <StackPanel Orientation="Horizontal" Grid.Row="2" Height="250" Margin="10,0,0,0">
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Margin="0,15,0,0">
                                     <Run Text="Standard"/>
                                     <Run Text="Layout"/>
                                     <Run Text=":"/>
-                                </TextBlock>
+                                    </TextBlock>
 
-                                <RelativePanel Height="40" Margin="0,38,2,172">
-                                    <ComboBox Name="keyboardStandardLayout" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton1" Click="KeyboardLayoutButton_Click" Margin="33,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton2" Click="KeyboardLayoutButton_Click" Margin="64,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton3" Click="KeyboardLayoutButton_Click" Margin="95,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton4" Click="KeyboardLayoutButton_Click" Margin="126,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton5" Click="KeyboardLayoutButton_Click" Margin="157,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton6" Click="KeyboardLayoutButton_Click" Margin="188,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton7" Click="KeyboardLayoutButton_Click" Margin="219,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton8" Click="KeyboardLayoutButton_Click" Margin="250,5,-5,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton9" Click="KeyboardLayoutButton_Click" Margin="281,5,-7,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton10" Click="KeyboardLayoutButton_Click" Margin="312,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton11" Click="KeyboardLayoutButton_Click" Margin="343,5,-9,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton12" Click="KeyboardLayoutButton_Click" Margin="374,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton13" Click="KeyboardLayoutButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left" Width="60" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,69,0,142">
-                                    <Button Name="keyboardStandardLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="45" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton15" Click="KeyboardLayoutButton_Click" Margin="48,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton16" Click="KeyboardLayoutButton_Click" Margin="79,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton17" Click="KeyboardLayoutButton_Click" Margin="110,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton18" Click="KeyboardLayoutButton_Click" Margin="141,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton19" Click="KeyboardLayoutButton_Click" Margin="172,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton20" Click="KeyboardLayoutButton_Click" Margin="203,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton21" Click="KeyboardLayoutButton_Click" Margin="234,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton22" Click="KeyboardLayoutButton_Click" Margin="265,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton23" Click="KeyboardLayoutButton_Click" Margin="296,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton24" Click="KeyboardLayoutButton_Click" Margin="327,5,-12,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton25" Click="KeyboardLayoutButton_Click" Margin="358,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton26" Click="KeyboardLayoutButton_Click" Margin="389,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton27" Click="KeyboardLayoutButton_Click" Margin="420,5,-16,5" HorizontalAlignment="Left"  Width="45" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,99,0,109" >
-                                    <Button Name="keyboardStandardLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="52" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton29" Click="KeyboardLayoutButton_Click" Margin="55,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton30" Click="KeyboardLayoutButton_Click" Margin="86,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton31" Click="KeyboardLayoutButton_Click" Margin="117,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton32" Click="KeyboardLayoutButton_Click" Margin="148,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton33" Click="KeyboardLayoutButton_Click" Margin="179,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton34" Click="KeyboardLayoutButton_Click" Margin="210,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton35" Click="KeyboardLayoutButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton36" Click="KeyboardLayoutButton_Click" Margin="272,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton37" Click="KeyboardLayoutButton_Click" Margin="303,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton38" Click="KeyboardLayoutButton_Click" Margin="334,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton39" Click="KeyboardLayoutButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton40" Click="KeyboardLayoutButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Width="69" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,131,0,80">
-                                    <Button Name="keyboardStandardLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton42" Click="KeyboardLayoutButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton43" Click="KeyboardLayoutButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton44" Click="KeyboardLayoutButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton45" Click="KeyboardLayoutButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton46" Click="KeyboardLayoutButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton47" Click="KeyboardLayoutButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton48" Click="KeyboardLayoutButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton49" Click="KeyboardLayoutButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton50" Click="KeyboardLayoutButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton51" Click="KeyboardLayoutButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton52" Click="KeyboardLayoutButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,154,0,40">
-                                    <Button Name="keyboardStandardLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton54" Click="KeyboardLayoutButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton55" Click="KeyboardLayoutButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton56" Click="KeyboardLayoutButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton57" Click="KeyboardLayoutButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton58" Click="KeyboardLayoutButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton59" Click="KeyboardLayoutButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardStandardLayoutButton60" Click="KeyboardLayoutButton_Click" Margin="425,5,-12,5" HorizontalAlignment="Left"  Width="40" Height="30" />
-                                </RelativePanel>
-                            </Grid>
-                        </StackPanel>
+                                    <RelativePanel Height="40" Margin="0,38,2,172">
+                                        <ComboBox Name="keyboardLayoutSelection" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton1" Click="KeyboardLayoutButton_Click" Margin="33,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton2" Click="KeyboardLayoutButton_Click" Margin="64,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton3" Click="KeyboardLayoutButton_Click" Margin="95,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton4" Click="KeyboardLayoutButton_Click" Margin="126,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton5" Click="KeyboardLayoutButton_Click" Margin="157,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton6" Click="KeyboardLayoutButton_Click" Margin="188,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton7" Click="KeyboardLayoutButton_Click" Margin="219,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton8" Click="KeyboardLayoutButton_Click" Margin="250,5,-5,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton9" Click="KeyboardLayoutButton_Click" Margin="281,5,-7,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton10" Click="KeyboardLayoutButton_Click" Margin="312,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton11" Click="KeyboardLayoutButton_Click" Margin="343,5,-9,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton12" Click="KeyboardLayoutButton_Click" Margin="374,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton13" Click="KeyboardLayoutButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left" Width="60" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,69,0,142">
+                                        <Button Name="keyboardStandardLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="45" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton15" Click="KeyboardLayoutButton_Click" Margin="48,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton16" Click="KeyboardLayoutButton_Click" Margin="79,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton17" Click="KeyboardLayoutButton_Click" Margin="110,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton18" Click="KeyboardLayoutButton_Click" Margin="141,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton19" Click="KeyboardLayoutButton_Click" Margin="172,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton20" Click="KeyboardLayoutButton_Click" Margin="203,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton21" Click="KeyboardLayoutButton_Click" Margin="234,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton22" Click="KeyboardLayoutButton_Click" Margin="265,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton23" Click="KeyboardLayoutButton_Click" Margin="296,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton24" Click="KeyboardLayoutButton_Click" Margin="327,5,-12,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton25" Click="KeyboardLayoutButton_Click" Margin="358,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton26" Click="KeyboardLayoutButton_Click" Margin="389,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton27" Click="KeyboardLayoutButton_Click" Margin="420,5,-16,5" HorizontalAlignment="Left"  Width="45" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,99,0,109" >
+                                        <Button Name="keyboardStandardLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="52" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton29" Click="KeyboardLayoutButton_Click" Margin="55,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton30" Click="KeyboardLayoutButton_Click" Margin="86,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton31" Click="KeyboardLayoutButton_Click" Margin="117,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton32" Click="KeyboardLayoutButton_Click" Margin="148,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton33" Click="KeyboardLayoutButton_Click" Margin="179,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton34" Click="KeyboardLayoutButton_Click" Margin="210,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton35" Click="KeyboardLayoutButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton36" Click="KeyboardLayoutButton_Click" Margin="272,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton37" Click="KeyboardLayoutButton_Click" Margin="303,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton38" Click="KeyboardLayoutButton_Click" Margin="334,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton39" Click="KeyboardLayoutButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton40" Click="KeyboardLayoutButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Width="69" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,131,0,80">
+                                        <Button Name="keyboardStandardLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton42" Click="KeyboardLayoutButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton43" Click="KeyboardLayoutButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton44" Click="KeyboardLayoutButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton45" Click="KeyboardLayoutButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton46" Click="KeyboardLayoutButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton47" Click="KeyboardLayoutButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton48" Click="KeyboardLayoutButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton49" Click="KeyboardLayoutButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton50" Click="KeyboardLayoutButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton51" Click="KeyboardLayoutButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton52" Click="KeyboardLayoutButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,154,0,40">
+                                        <Button Name="keyboardStandardLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton54" Click="KeyboardLayoutButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton55" Click="KeyboardLayoutButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton56" Click="KeyboardLayoutButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton57" Click="KeyboardLayoutButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton58" Click="KeyboardLayoutButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton59" Click="KeyboardLayoutButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardStandardLayoutButton60" Click="KeyboardLayoutButton_Click" Margin="425,5,-12,5" HorizontalAlignment="Left"  Width="40" Height="30" />
+                                    </RelativePanel>
+                                </Grid>
+
+                                <Grid>
+                                    <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Margin="0,15,0,0">
+                                    <Run Text="Fn"/>
+                                    <Run Text="Layout"/>
+                                    <Run Text=":"/>
+                                    </TextBlock>
+
+                                    <RelativePanel Height="40" Margin="0,38,2,172">
+                                        <Button Name="keyboardFNLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton1" Click="KeyboardLayoutButton_Click" Margin="33,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton2" Click="KeyboardLayoutButton_Click" Margin="64,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton3" Click="KeyboardLayoutButton_Click" Margin="95,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton4" Click="KeyboardLayoutButton_Click" Margin="126,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton5" Click="KeyboardLayoutButton_Click" Margin="157,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton6" Click="KeyboardLayoutButton_Click" Margin="188,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton7" Click="KeyboardLayoutButton_Click" Margin="219,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton8" Click="KeyboardLayoutButton_Click" Margin="250,5,-5,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton9" Click="KeyboardLayoutButton_Click" Margin="281,5,-7,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton10" Click="KeyboardLayoutButton_Click" Margin="312,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton11" Click="KeyboardLayoutButton_Click" Margin="343,5,-9,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton12" Click="KeyboardLayoutButton_Click" Margin="374,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton13" Click="KeyboardLayoutButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left" Width="60" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,69,0,142">
+                                        <Button Name="keyboardFNLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="45" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton15" Click="KeyboardLayoutButton_Click" Margin="48,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton16" Click="KeyboardLayoutButton_Click" Margin="79,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton17" Click="KeyboardLayoutButton_Click" Margin="110,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton18" Click="KeyboardLayoutButton_Click" Margin="141,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton19" Click="KeyboardLayoutButton_Click" Margin="172,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton20" Click="KeyboardLayoutButton_Click" Margin="203,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton21" Click="KeyboardLayoutButton_Click" Margin="234,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton22" Click="KeyboardLayoutButton_Click" Margin="265,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton23" Click="KeyboardLayoutButton_Click" Margin="296,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton24" Click="KeyboardLayoutButton_Click" Margin="327,5,-12,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton25" Click="KeyboardLayoutButton_Click" Margin="358,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton26" Click="KeyboardLayoutButton_Click" Margin="389,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton27" Click="KeyboardLayoutButton_Click" Margin="420,5,-16,5" HorizontalAlignment="Left"  Width="45" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,99,0,109" >
+                                        <Button Name="keyboardFNLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="52" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton29" Click="KeyboardLayoutButton_Click" Margin="55,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton30" Click="KeyboardLayoutButton_Click" Margin="86,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton31" Click="KeyboardLayoutButton_Click" Margin="117,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton32" Click="KeyboardLayoutButton_Click" Margin="148,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton33" Click="KeyboardLayoutButton_Click" Margin="179,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton34" Click="KeyboardLayoutButton_Click" Margin="210,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton35" Click="KeyboardLayoutButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton36" Click="KeyboardLayoutButton_Click" Margin="272,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton37" Click="KeyboardLayoutButton_Click" Margin="303,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton38" Click="KeyboardLayoutButton_Click" Margin="334,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton39" Click="KeyboardLayoutButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton40" Click="KeyboardLayoutButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Width="69" Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,131,0,80">
+                                        <Button Name="keyboardFNLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton42" Click="KeyboardLayoutButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" />
+                                        <Button Name="keyboardFNLayoutButton43" Click="KeyboardLayoutButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
+                                        <Button Name="keyboardFNLayoutButton44" Click="KeyboardLayoutButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton45" Click="KeyboardLayoutButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton46" Click="KeyboardLayoutButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton47" Click="KeyboardLayoutButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton48" Click="KeyboardLayoutButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton49" Click="KeyboardLayoutButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton50" Click="KeyboardLayoutButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton51" Click="KeyboardLayoutButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton52" Click="KeyboardLayoutButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" />
+                                    </RelativePanel>
+                                    <RelativePanel Height="40" Margin="0,154,0,40">
+                                        <Button Name="keyboardFNLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton54" Click="KeyboardLayoutButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton55" Click="KeyboardLayoutButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton56" Click="KeyboardLayoutButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton57" Click="KeyboardLayoutButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton58" Click="KeyboardLayoutButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton59" Click="KeyboardLayoutButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
+                                        <Button Name="keyboardFNLayoutButton60" Click="KeyboardLayoutButton_Click" Margin="425,5,-12,5" HorizontalAlignment="Left"  Width="40" Height="30" />
+                                    </RelativePanel>
+                                </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
                         <Button x:Name="LayoutSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
                     </StackPanel>
                 </PivotItem>
@@ -243,7 +325,10 @@
                     </StackPanel>
                 </PivotItem>
             </Pivot>
-
+            <StackPanel Background="Green" Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="30px" >
+                <TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />
+            </StackPanel>
         </Grid>
     </SplitView>
 </Page>

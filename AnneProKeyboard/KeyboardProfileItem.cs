@@ -11,6 +11,8 @@ namespace AnneProKeyboard
     [DataContract]
     public class KeyboardProfileItem : INotifyPropertyChanged
     {
+        public EventHandler SyncStatusNotify;
+
         private int _ID;
         [DataMember]
         public int ID
@@ -89,6 +91,7 @@ namespace AnneProKeyboard
                 if (key.KeyValue == 250)
                 {
                     anne_key = true;
+                    int index = keys.IndexOf(key);
                 }
                 else if (key.KeyValue == 254)
                 {
@@ -187,7 +190,8 @@ namespace AnneProKeyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
 
-            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(dispatcher, gatt); }; // we need to do this because of async calls, threading is fun!
+            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(dispatcher, gatt); NotifyStatus("Keyboard light has been synced");  }; // we need to do this because of async calls, threading is fun!
+            keyboard_writer.OnWriteFailed += (object_s, events) => { NotifyStatus("Failed to sync profile (light): exception handled"); };
         }
 
         // send the layout data
@@ -207,6 +211,18 @@ namespace AnneProKeyboard
 
             KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, layout_meta_data, layout_data);
             keyboard_writer.WriteToKeyboard();
+
+            keyboard_writer.OnWriteFinished += (object_s, events) => { NotifyStatus("Layout data has been synced"); }; // we need to do this because of async calls, threading is fun!
+            keyboard_writer.OnWriteFailed += (object_s, events) => { NotifyStatus("Failed to sync profile (layout): exception handled"); };
+        }
+
+        private void NotifyStatus(string status)
+        {
+            EventHandler handler = this.SyncStatusNotify;
+            if (handler != null)
+            {
+                handler(status, EventArgs.Empty);
+            }
         }
     }
 }

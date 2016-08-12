@@ -22,8 +22,8 @@ namespace AnneProKeyboard
         static KeyboardKey()
         {
             // "Empty" key, also the unassigned value key
-            StringKeyboardKeys[""] = new KeyboardKey("", "None", 0);
-            IntKeyboardKeys[0] = StringKeyboardKeys[""];
+            StringKeyboardKeys["None"] = new KeyboardKey("None", "None", 0);
+            IntKeyboardKeys[0] = StringKeyboardKeys["None"];
 
             // "Anne" key
             StringKeyboardKeys["Anne"] = new KeyboardKey("Anne", "Anne", 250);
