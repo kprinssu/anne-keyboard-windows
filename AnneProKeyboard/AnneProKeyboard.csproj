@@ -103,6 +103,7 @@
     <Compile Include="CRC16.cs" />
     <Compile Include="KeyboardKey.cs" />
     <Compile Include="KeyboardProfileItem.cs" />
+    <Compile Include="KeyboardReader.cs" />
     <Compile Include="KeyboardWriter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>

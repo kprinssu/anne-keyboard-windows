@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Runtime.Serialization;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
+using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
@@ -28,12 +30,17 @@ namespace AnneProKeyboard
     {
         private DeviceWatcher BluetoothDeviceWatcher;
         private DeviceWatcher AllDevicesWatcher;
-
+		
         private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
+		private readonly Guid READ_GATT_GUID = new Guid("f000ffc1-0451-4000-b000-000000000000");
 
-        private GattCharacteristic WriteGatt;
-        private DeviceInformation KeyboardDeviceInformation;
+		private readonly string ReadTaskName = "KeyboardReader";
+		private readonly string ReadTaskEntryPoint = "AnneProKeyboard.KeyboardReader";
+		private BackgroundTaskRegistration ReadTaskRegistration;
+
+		private GattCharacteristic WriteGatt;
+		private DeviceInformation KeyboardDeviceInformation;
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
         private KeyboardProfileItem EditingProfile;
@@ -263,22 +270,39 @@ namespace AnneProKeyboard
                 }
 
                 var service = keyboard.GetGattService(OAD_GUID);
-
-                if (service == null)
+				
+				if (service == null)
                 {
                     return;
                 }
 
-                var write_gatt = service.GetCharacteristics(WRITE_GATT_GUID)[0];
+				var write_gatt = service.GetCharacteristics(WRITE_GATT_GUID)[0];
+				var read_gatt = service.GetCharacteristics(READ_GATT_GUID)[0];
 
-                if (write_gatt == null)
+				if (write_gatt == null || read_gatt == null)
                 {
                     return;
                 }
 
-                WriteGatt = write_gatt;
+                this.WriteGatt = write_gatt;
 
-                await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+				// Setup a background event for read notifications
+				if(this.ReadTaskRegistration != null)
+				{
+					this.ReadTaskRegistration.Unregister(true);
+				}
+
+				BackgroundTaskBuilder task_builder = new BackgroundTaskBuilder();
+				task_builder.Name = this.ReadTaskName;
+				task_builder.TaskEntryPoint = this.ReadTaskEntryPoint;
+				task_builder.SetTrigger(new GattCharacteristicNotificationTrigger(read_gatt));
+
+
+				this.ReadTaskRegistration = task_builder.Register();
+
+				KeyboardProfileItem.ReadProfileData(write_gatt);
+
+				await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
                     this.KeyboardDeviceInformation = device;
                     this.connectionStatusLabel.Text = "Connected";
@@ -287,8 +311,10 @@ namespace AnneProKeyboard
                     this.LayoutSyncButton.IsEnabled = true;
                 });
             }
-            catch
-            {
+			// We should actually catch errors here...
+			catch(Exception ex)
+			{
+				throw ex;
             }
         }
 
@@ -452,7 +478,7 @@ namespace AnneProKeyboard
             this.LayoutSyncButton.IsEnabled = false;
             this.LightSyncButton.IsEnabled = false;
 
-            this.EditingProfile.SyncProfile(this.Dispatcher, this.WriteGatt);
+            this.EditingProfile.SyncProfile(this.WriteGatt);
             this.EditingProfile.SyncStatusNotify += async (object_s, events) =>
             {
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
@@ -513,8 +539,7 @@ namespace AnneProKeyboard
             }
 
             Button button = (Button)sender;
-
-
+			
             bool fn_mode = button.Name.StartsWith("keyboardFNLayoutButton");
 
             if(fn_mode)

@@ -289,6 +289,9 @@
                                     <Button Name="keyboardButton38" Click="KeyboardColourButton_Click" Margin="334,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
                                     <Button Name="keyboardButton39" Click="KeyboardColourButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
                                     <Button Name="keyboardButton41" Click="KeyboardColourButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Width="69" Height="30" />
+
+                                    <!-- Hack to get app to build properly -->
+                                    <Button Name="keyboardButton40" Click="KeyboardColourButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Visibility="Collapsed" Width="69" Height="30" />
                                 </RelativePanel>
                                 <RelativePanel Height="40" Margin="0,131,0,80">
                                     <Button Name="keyboardButton42" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" />

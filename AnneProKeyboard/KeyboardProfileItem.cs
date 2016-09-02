@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using Windows.UI.Core;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
 
+using Windows.Storage.Streams;
+
 namespace AnneProKeyboard
 {
     [DataContract]
@@ -172,13 +174,21 @@ namespace AnneProKeyboard
             return bluetooth_data;
         }
 
-        public void SyncProfile(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        public void SyncProfile(GattCharacteristic gatt)
         {
-            this.SyncProfilePhase1(dispatcher, gatt);
+            this.SyncProfilePhase1(gatt);
         }
 
+		public static async void ReadProfileData(GattCharacteristic gatt)
+		{
+			byte[] device_id_meta_data = { 0x07, 0x1, 0x04 };
+
+			KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, device_id_meta_data, null);
+			keyboard_writer.WriteToKeyboard();
+		}
+
         // send the backlight first data, should cause a waterfall effect on syncing up the profile
-        private void SyncProfilePhase1(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        private void SyncProfilePhase1(GattCharacteristic gatt)
         {
             // We need this to identify the type of data we are sending
             byte[] lighting_meta_data = { 0x09, 0xD7, 0x03 };
@@ -187,15 +197,15 @@ namespace AnneProKeyboard
             byte[] light_data = this.GenerateKeyboardBacklightData();
 
             // Send the data to the keyboard
-            KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, lighting_meta_data, light_data);
+            KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
 
-            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(dispatcher, gatt); NotifyStatus("Keyboard light has been synced");  }; // we need to do this because of async calls, threading is fun!
+            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(gatt); NotifyStatus("Keyboard light has been synced");  }; // we need to do this because of async calls, threading is fun!
             keyboard_writer.OnWriteFailed += (object_s, events) => { NotifyStatus("Failed to sync profile (light): exception handled"); };
         }
 
         // send the layout data
-        private void SyncProfilePhase2(CoreDispatcher dispatcher, GattCharacteristic gatt)
+        private void SyncProfilePhase2(GattCharacteristic gatt)
         {
             if (!this.ValidateKeyboardKeys())
             {
@@ -209,7 +219,7 @@ namespace AnneProKeyboard
             // Convert the list of keyboard keys
             byte[] layout_data = this.GenerateKeyboardLayoutData();
 
-            KeyboardWriter keyboard_writer = new KeyboardWriter(dispatcher, gatt, layout_meta_data, layout_data);
+            KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, layout_meta_data, layout_data);
             keyboard_writer.WriteToKeyboard();
 
             keyboard_writer.OnWriteFinished += (object_s, events) => { NotifyStatus("Layout data has been synced"); }; // we need to do this because of async calls, threading is fun!
