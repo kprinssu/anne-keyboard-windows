@@ -5,16 +5,21 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnneProKeyboard", "AnneProKeyboard\AnneProKeyboard.csproj", "{0690E972-D03D-4ED2-A35B-6F31896D74EB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnneProKeyboardMonitor", "AnneProKeyboardMonitor\AnneProKeyboardMonitor.csproj", "{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
 		Debug|ARM = Debug|ARM
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
 		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|ARM.ActiveCfg = Debug|ARM
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|ARM.Build.0 = Debug|ARM
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|ARM.Deploy.0 = Debug|ARM
@@ -24,6 +29,7 @@ Global
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|x86.ActiveCfg = Debug|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|x86.Build.0 = Debug|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Debug|x86.Deploy.0 = Debug|x86
+		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|Any CPU.ActiveCfg = Release|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|ARM.ActiveCfg = Release|ARM
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|ARM.Build.0 = Release|ARM
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|ARM.Deploy.0 = Release|ARM
@@ -33,6 +39,23 @@ Global
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|x86.ActiveCfg = Release|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|x86.Build.0 = Release|x86
 		{0690E972-D03D-4ED2-A35B-6F31896D74EB}.Release|x86.Deploy.0 = Release|x86
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|ARM.ActiveCfg = Debug|ARM
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|ARM.Build.0 = Debug|ARM
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|x64.ActiveCfg = Debug|x64
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|x64.Build.0 = Debug|x64
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|x64.Deploy.0 = Debug|x64
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|x86.ActiveCfg = Debug|x86
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Debug|x86.Build.0 = Debug|x86
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|ARM.ActiveCfg = Release|ARM
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|ARM.Build.0 = Release|ARM
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|x64.ActiveCfg = Release|x64
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|x64.Build.0 = Release|x64
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|x86.ActiveCfg = Release|x86
+		{34F01A7F-2F6C-4BD0-BC62-393D37BFDDA2}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
