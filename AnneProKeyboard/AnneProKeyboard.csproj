@@ -103,7 +103,6 @@
     <Compile Include="CRC16.cs" />
     <Compile Include="KeyboardKey.cs" />
     <Compile Include="KeyboardProfileItem.cs" />
-    <Compile Include="KeyboardReader.cs" />
     <Compile Include="KeyboardWriter.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -136,6 +135,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AnneProKeyboardMonitor\AnneProKeyboardMonitor.csproj">
+      <Project>{34f01a7f-2f6c-4bd0-bc62-393d37bfdda2}</Project>
+      <Name>AnneProKeyboardMonitor</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

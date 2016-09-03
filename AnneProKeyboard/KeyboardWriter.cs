@@ -25,11 +25,6 @@ namespace AnneProKeyboard
 
         public KeyboardWriter(GattCharacteristic WriteGATT, byte[] MetaData, byte[] SendData)
         {
-            if (MetaData.Length != 3)
-            {
-                throw new Exception("Meta Data byte array longer than 4 bytes!");
-            }
-
             this.WriteGATT = WriteGATT;
             this.MetaData = MetaData;
             this.SendData = SendData;
@@ -55,7 +50,6 @@ namespace AnneProKeyboard
 
 						this.BlocksSent += this.MetaData.Length;
 						ThreadedWriteData();
-						System.Diagnostics.Debug.WriteLine("DONE WRITING! Check for any status changes!");
 						return;
 					}
 

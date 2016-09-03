@@ -18,6 +18,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using AnneProKeyboardMonitor;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -35,11 +36,12 @@ namespace AnneProKeyboard
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
 		private readonly Guid READ_GATT_GUID = new Guid("f000ffc1-0451-4000-b000-000000000000");
 
-		private readonly string ReadTaskName = "KeyboardReader";
-		private readonly string ReadTaskEntryPoint = "AnneProKeyboard.KeyboardReader";
+		private readonly string ReadTaskName = "KeyboardMonitor";
+		private readonly string ReadTaskEntryPoint =  typeof(KeyboardMonitor).FullName;
 		private BackgroundTaskRegistration ReadTaskRegistration;
 
 		private GattCharacteristic WriteGatt;
+		private GattCharacteristic ReadGatt;
 		private DeviceInformation KeyboardDeviceInformation;
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
@@ -252,6 +254,45 @@ namespace AnneProKeyboard
         {
             // Need this function for Bluetooth LE device watcher, otherwise it won't detect anything
         }
+
+		private async void RegisterKeyboardMonitor()
+		{
+			await BackgroundExecutionManager.RequestAccessAsync();
+			
+			if(this.ReadTaskRegistration != null)
+			{
+				this.ReadTaskRegistration.Completed -= ReadTaskRegistration_Completed;
+			}
+
+			// Check if we already registered the background task
+			bool already_registered = false;
+			BackgroundTaskRegistration registration = null;
+
+			foreach (var task in BackgroundTaskRegistration.AllTasks)
+			{
+				Debug.WriteLine(task.Value.Name);
+				if (task.Value.Name == this.ReadTaskName)
+				{
+					already_registered = true;
+					registration = (BackgroundTaskRegistration)task.Value;
+					break;
+				}
+			}
+
+			// Setup a background event for read notifications
+			if (!already_registered)
+			{
+				BackgroundTaskBuilder task_builder = new BackgroundTaskBuilder();
+				task_builder.Name = this.ReadTaskName;
+				task_builder.TaskEntryPoint = this.ReadTaskEntryPoint;
+				task_builder.SetTrigger(new GattCharacteristicNotificationTrigger(this.ReadGatt));
+				registration = task_builder.Register();
+			}
+
+			this.ReadTaskRegistration = registration;
+			this.ReadTaskRegistration.Completed += ReadTaskRegistration_Completed;
+			KeyboardProfileItem.ReadProfileData(this.WriteGatt);
+		}
         
         private async void ConnectToKeyboard(DeviceInformation device)
         {
@@ -285,22 +326,9 @@ namespace AnneProKeyboard
                 }
 
                 this.WriteGatt = write_gatt;
+				this.ReadGatt = read_gatt;
 
-				// Setup a background event for read notifications
-				if(this.ReadTaskRegistration != null)
-				{
-					this.ReadTaskRegistration.Unregister(true);
-				}
-
-				BackgroundTaskBuilder task_builder = new BackgroundTaskBuilder();
-				task_builder.Name = this.ReadTaskName;
-				task_builder.TaskEntryPoint = this.ReadTaskEntryPoint;
-				task_builder.SetTrigger(new GattCharacteristicNotificationTrigger(read_gatt));
-
-
-				this.ReadTaskRegistration = task_builder.Register();
-
-				KeyboardProfileItem.ReadProfileData(write_gatt);
+				this.RegisterKeyboardMonitor();
 
 				await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
@@ -318,7 +346,14 @@ namespace AnneProKeyboard
             }
         }
 
-        private void CreateNewKeyboardProfile()
+		private void ReadTaskRegistration_Completed(BackgroundTaskRegistration sender, BackgroundTaskCompletedEventArgs args)
+		{
+			//TODO: Handle data from keyboard here
+			//throw new NotImplementedException();
+			return;
+		}
+
+		private void CreateNewKeyboardProfile()
         {
             KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
             this._keyboardProfiles.Add(profile_item);

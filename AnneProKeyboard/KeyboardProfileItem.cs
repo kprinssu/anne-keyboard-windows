@@ -179,9 +179,11 @@ namespace AnneProKeyboard
             this.SyncProfilePhase1(gatt);
         }
 
-		public static async void ReadProfileData(GattCharacteristic gatt)
+		// Currently for testing only!
+		public static void ReadProfileData(GattCharacteristic gatt)
 		{
-			byte[] device_id_meta_data = { 0x07, 0x1, 0x04 };
+			// expect firmware version and mac address
+			byte[] device_id_meta_data = { 0x10, 0x0 };
 
 			KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, device_id_meta_data, null);
 			keyboard_writer.WriteToKeyboard();
