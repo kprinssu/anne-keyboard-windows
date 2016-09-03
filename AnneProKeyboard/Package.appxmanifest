@@ -23,14 +23,6 @@
           <uap:Rotation Preference="landscape" />
         </uap:InitialRotationPreference>
       </uap:VisualElements>
-      <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="AnneProKeyboardMonitor.KeyboardMonitor">
-          <BackgroundTasks>
-            <Task Type="deviceConnectionChange" />
-            <Task Type="bluetooth" />
-          </BackgroundTasks>
-        </Extension>
-      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

@@ -136,12 +136,6 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\AnneProKeyboardMonitor\AnneProKeyboardMonitor.csproj">
-      <Project>{34f01a7f-2f6c-4bd0-bc62-393d37bfdda2}</Project>
-      <Name>AnneProKeyboardMonitor</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

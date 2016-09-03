@@ -7,7 +7,6 @@ using System.Runtime.Serialization;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
-using Windows.ApplicationModel.Background;
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
 using Windows.Devices.Bluetooth.GenericAttributeProfile;
@@ -18,7 +17,6 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using AnneProKeyboardMonitor;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -35,10 +33,6 @@ namespace AnneProKeyboard
         private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
         private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
 		private readonly Guid READ_GATT_GUID = new Guid("f000ffc1-0451-4000-b000-000000000000");
-
-		private readonly string ReadTaskName = "KeyboardMonitor";
-		private readonly string ReadTaskEntryPoint =  typeof(KeyboardMonitor).FullName;
-		private BackgroundTaskRegistration ReadTaskRegistration;
 
 		private GattCharacteristic WriteGatt;
 		private GattCharacteristic ReadGatt;
@@ -254,46 +248,7 @@ namespace AnneProKeyboard
         {
             // Need this function for Bluetooth LE device watcher, otherwise it won't detect anything
         }
-
-		private async void RegisterKeyboardMonitor()
-		{
-			await BackgroundExecutionManager.RequestAccessAsync();
-			
-			if(this.ReadTaskRegistration != null)
-			{
-				this.ReadTaskRegistration.Completed -= ReadTaskRegistration_Completed;
-			}
-
-			// Check if we already registered the background task
-			bool already_registered = false;
-			BackgroundTaskRegistration registration = null;
-
-			foreach (var task in BackgroundTaskRegistration.AllTasks)
-			{
-				Debug.WriteLine(task.Value.Name);
-				if (task.Value.Name == this.ReadTaskName)
-				{
-					already_registered = true;
-					registration = (BackgroundTaskRegistration)task.Value;
-					break;
-				}
-			}
-
-			// Setup a background event for read notifications
-			if (!already_registered)
-			{
-				BackgroundTaskBuilder task_builder = new BackgroundTaskBuilder();
-				task_builder.Name = this.ReadTaskName;
-				task_builder.TaskEntryPoint = this.ReadTaskEntryPoint;
-				task_builder.SetTrigger(new GattCharacteristicNotificationTrigger(this.ReadGatt));
-				registration = task_builder.Register();
-			}
-
-			this.ReadTaskRegistration = registration;
-			this.ReadTaskRegistration.Completed += ReadTaskRegistration_Completed;
-			KeyboardProfileItem.ReadProfileData(this.WriteGatt);
-		}
-        
+		
         private async void ConnectToKeyboard(DeviceInformation device)
         {
             try
@@ -328,7 +283,9 @@ namespace AnneProKeyboard
                 this.WriteGatt = write_gatt;
 				this.ReadGatt = read_gatt;
 
-				this.RegisterKeyboardMonitor();
+				this.ReadGatt.ValueChanged += Read_gatt_ValueChanged;
+				KeyboardProfileItem.ReadProfileData(WriteGatt);
+				//this.RegisterKeyboardMonitor();
 
 				await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                 {
@@ -346,13 +303,11 @@ namespace AnneProKeyboard
             }
         }
 
-		private void ReadTaskRegistration_Completed(BackgroundTaskRegistration sender, BackgroundTaskCompletedEventArgs args)
+		private void Read_gatt_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
 		{
-			//TODO: Handle data from keyboard here
-			//throw new NotImplementedException();
-			return;
+			throw new NotImplementedException();
 		}
-
+		
 		private void CreateNewKeyboardProfile()
         {
             KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
@@ -502,6 +457,8 @@ namespace AnneProKeyboard
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
         {
+			KeyboardProfileItem.ReadProfileData(WriteGatt);
+			return;
             if(!this.EditingProfile.ValidateKeyboardKeys())
             {
                 this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
