@@ -48,8 +48,12 @@ namespace AnneProKeyboard
 						small_writer.WriteBytes(this.MetaData);
 						await WriteGATT.WriteValueAsync(small_writer.DetachBuffer(), GattWriteOption.WriteWithoutResponse);
 
-						this.BlocksSent += this.MetaData.Length;
-						ThreadedWriteData();
+						EventHandler handler = this.OnWriteFinished;
+						if (handler != null)
+						{
+							handler(null, EventArgs.Empty);
+						}
+
 						return;
 					}
 

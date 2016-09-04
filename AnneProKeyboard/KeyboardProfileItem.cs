@@ -178,19 +178,7 @@ namespace AnneProKeyboard
         {
             this.SyncProfilePhase1(gatt);
         }
-
-		// Currently for testing only!
-		public static void ReadProfileData(GattCharacteristic gatt)
-		{
-			// expect firmware version and mac address
-			byte[] device_id_meta_data = { 0x02, 0x01, 0x01 };
-
-			KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, device_id_meta_data, null);
-			keyboard_writer.WriteToKeyboard();
-
-			keyboard_writer.OnWriteFinished += (object_s, events) => { System.Diagnostics.Debug.WriteLine("Done writing"); };
-			}
-
+		
         // send the backlight first data, should cause a waterfall effect on syncing up the profile
         private void SyncProfilePhase1(GattCharacteristic gatt)
         {

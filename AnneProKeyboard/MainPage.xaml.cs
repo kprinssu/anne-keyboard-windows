@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 using Windows.UI.Xaml.Controls;
 using Windows.Devices.Enumeration;
@@ -188,7 +189,8 @@ namespace AnneProKeyboard
                 {
                     await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                     {
-                        connectionStatusLabel.Text = "Not Connected";
+						KeyboardDeviceInformation = null;
+						connectionStatusLabel.Text = "Not Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
                         LightSyncButton.IsEnabled = false;
                         LayoutSyncButton.IsEnabled = false;
@@ -253,6 +255,11 @@ namespace AnneProKeyboard
         {
             try
             {
+				if(this.KeyboardDeviceInformation != null)
+				{
+					return;
+				}
+
                 var keyboard = await BluetoothLEDevice.FromIdAsync(device.Id);
 
                 if (keyboard == null)
@@ -266,7 +273,7 @@ namespace AnneProKeyboard
                 }
 
                 var service = keyboard.GetGattService(OAD_GUID);
-				
+
 				if (service == null)
                 {
                     return;
@@ -282,30 +289,51 @@ namespace AnneProKeyboard
 
                 this.WriteGatt = write_gatt;
 				this.ReadGatt = read_gatt;
+				this.KeyboardDeviceInformation = device;
 
-				this.ReadGatt.ValueChanged += Read_gatt_ValueChanged;
-				KeyboardProfileItem.ReadProfileData(WriteGatt);
-				//this.RegisterKeyboardMonitor();
+				await this.ReadGatt.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
+				this.ReadGatt.ValueChanged += ReadGatt_ValueChanged;
 
-				await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
-                {
-                    this.KeyboardDeviceInformation = device;
-                    this.connectionStatusLabel.Text = "Connected";
-                    this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
-                    this.LightSyncButton.IsEnabled = true;
-                    this.LayoutSyncButton.IsEnabled = true;
-                });
+				// Sync up the profile data
+				this.RequestKeyboardSync();
             }
 			// We should actually catch errors here...
 			catch(Exception ex)
 			{
-				throw ex;
+				Debug.WriteLine(ex);
             }
         }
-
-		private void Read_gatt_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
+		
+		private void ReadGatt_ValueChanged(GattCharacteristic sender, GattValueChangedEventArgs args)
 		{
-			throw new NotImplementedException();
+			var data = args.CharacteristicValue.ToArray();
+
+			//TODO: handle the retrieved data
+		}
+
+		private void RequestKeyboardSync()
+		{
+			// expect firmware version and mac address
+			byte[] device_id_meta_data = { 0x02, 0x01, 0x01 };
+
+			KeyboardWriter keyboard_writer = new KeyboardWriter(this.WriteGatt, device_id_meta_data, null);
+			keyboard_writer.WriteToKeyboard();
+
+			keyboard_writer.OnWriteFinished += (object_s, events) => 
+			{
+				FinishSync();
+			};
+		}
+
+		private async void FinishSync()
+		{
+			await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
+			{
+				this.connectionStatusLabel.Text = "Connected";
+				this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+				this.LightSyncButton.IsEnabled = true;
+				this.LayoutSyncButton.IsEnabled = true;
+			});
 		}
 		
 		private void CreateNewKeyboardProfile()
@@ -457,8 +485,6 @@ namespace AnneProKeyboard
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
         {
-			KeyboardProfileItem.ReadProfileData(WriteGatt);
-			return;
             if(!this.EditingProfile.ValidateKeyboardKeys())
             {
                 this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
