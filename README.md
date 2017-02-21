@@ -2,8 +2,7 @@
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
 
 ## Requirements
-This app has been tested against Windows 10. Windows 8 should be supported, but futher testing is required.
-Windows 7 will not be supported due to lack of support by Microsoft.
+This app has been tested against Windows 10. Other version of Windows is not supported due to Universal Windows App (UWP) platform only supporting Windows 10.
 The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 
 ## Installation
