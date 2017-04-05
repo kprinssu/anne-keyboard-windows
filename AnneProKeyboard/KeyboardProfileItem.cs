@@ -154,7 +154,7 @@ namespace AnneProKeyboard
                 if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
                 {
                     standard_converted_keys[i] = standard_keys[j];
-                    fn_converted_keys[j] = fn_keys[j];
+                    fn_converted_keys[i] = fn_keys[j];
                     j++;
                 }
             }
