@@ -66,7 +66,7 @@
                     </DataTemplate>
                 </Pivot.HeaderTemplate>
                 <PivotItem Header="Layout">
-                    <StackPanel Orientation="Vertical" Grid.Row="2" Margin="0,0,0,178">
+                    <StackPanel Orientation="Vertical" Grid.Row="2">
                         <ScrollViewer VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
                             <StackPanel Orientation="Horizontal" Grid.Row="2" Height="250" Margin="10,0,0,0">
                                 <Grid>
