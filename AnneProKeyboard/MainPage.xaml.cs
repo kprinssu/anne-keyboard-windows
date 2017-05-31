@@ -399,7 +399,30 @@ namespace AnneProKeyboard
             KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
             ChangeSelectedProfile(profile);
         }
-        
+
+        private void KeyboardAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+            button.BorderThickness = new Thickness(1);
+
+            for (int i = 0; i < 70; i++)
+            {
+                if(i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65)
+                {
+                    continue;
+                }
+                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                string s = "keyboardButton" + i;
+                button = (this.FindName(s) as Button);
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
+
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+            this.SaveProfiles();
+        }
+
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
@@ -409,6 +432,87 @@ namespace AnneProKeyboard
             int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
             this.EditingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
+
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+            this.SaveProfiles();
+        }
+
+        private void KeyboardWASDButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+            button.BorderThickness = new Thickness(1);
+
+            int[] modifiers = new int[4] { 16, 29, 30, 31 };
+            foreach (int i in modifiers)
+            {
+                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                
+                string s = "keyboardButton" + i;
+                button = (this.FindName(s) as Button);
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
+
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+            this.SaveProfiles();
+        }
+
+        private void KeyboardIJKLButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+            button.BorderThickness = new Thickness(1);
+
+            int[] modifiers = new int[4] { 22, 35, 36, 37 };
+            foreach (int i in modifiers)
+            {
+                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+
+                string s = "keyboardButton" + i;
+                button = (this.FindName(s) as Button);
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
+
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+            this.SaveProfiles();
+        }
+
+        private void KeyboardNumRowButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+            button.BorderThickness = new Thickness(1);
+            
+            for (int i = 1; i < 13; i++) //num: 1-10 -=: 11-12
+            {
+                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                string s = "keyboardButton" + i;
+                button = (this.FindName(s) as Button);
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
+
+            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+            this.SaveProfiles();
+        }
+
+        private void KeyboardModifiersButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+            button.BorderThickness = new Thickness(1);
+
+            int[] modifiers = new int[14] { 14, 28, 42, 56, 57, 58, 66, 67, 68, 69, 55, 41, 13, 27 }; //Tab->LCtrl->RCtrl->Bkspc: 14,28,42,56,57,58,66,67,68,69,55,41,13,27
+            foreach (int i in modifiers)
+            {
+                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                string s = "keyboardButton" + i;
+                button = (this.FindName(s) as Button);
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
             this.SaveProfiles();
