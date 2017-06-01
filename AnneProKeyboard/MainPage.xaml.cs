@@ -44,6 +44,7 @@ namespace AnneProKeyboard
         private KeyboardProfileItem RenamingProfile;
 
         private Color SelectedColour;
+        private Boolean matchingButtonColour = false;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -400,11 +401,27 @@ namespace AnneProKeyboard
             ChangeSelectedProfile(profile);
         }
 
+        private void setButtonColour(Button button)
+        {
+            if(!matchingButtonColour)
+            {
+                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderThickness = new Thickness(1);
+            }
+            else
+            {
+                int button_index = Int32.Parse(button.Name.Remove(0, 14));
+                int colour_int = this.EditingProfile.KeyboardColours[button_index];
+                Color colour = ConvertIntToColour(colour_int);
+                this.SelectedColour = colour;
+            }
+            matchingButtonColour = false;
+        }
+
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
+            setButtonColour(button);
 
             int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
@@ -416,9 +433,9 @@ namespace AnneProKeyboard
 
         private void KeyboardAllButton_Click(object sender, RoutedEventArgs e)
         {
+            
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
+            setButtonColour(button);
 
             for (int i = 0; i < 70; i++)
             {
@@ -440,8 +457,7 @@ namespace AnneProKeyboard
         private void KeyboardWASDButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
+            setButtonColour(button);
 
             int[] modifiers = new int[4] { 16, 29, 30, 31 };
             foreach (int i in modifiers)
@@ -461,8 +477,7 @@ namespace AnneProKeyboard
         private void KeyboardIJKLButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
+            setButtonColour(button);
 
             int[] modifiers = new int[4] { 22, 35, 36, 37 };
             foreach (int i in modifiers)
@@ -482,9 +497,8 @@ namespace AnneProKeyboard
         private void KeyboardNumRowButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
-            
+            setButtonColour(button);
+
             for (int i = 1; i < 13; i++) //num: 1-10 -=: 11-12
             {
                 this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
@@ -501,8 +515,7 @@ namespace AnneProKeyboard
         private void KeyboardModifiersButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-            button.BorderThickness = new Thickness(1);
+            setButtonColour(button);
 
             int[] modifiers = new int[14] { 14, 28, 42, 56, 57, 58, 66, 67, 68, 69, 55, 41, 13, 27 }; //Tab->LCtrl->RCtrl->Bkspc: 14,28,42,56,57,58,66,67,68,69,55,41,13,27
             foreach (int i in modifiers)
@@ -518,6 +531,11 @@ namespace AnneProKeyboard
             this.SaveProfiles();
         }
 
+        private void KeyboardColourPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+            matchingButtonColour = true;
+        }
+
         private int ConvertColourToInt(Color colour)
         {
             int colour_int = colour.R;
@@ -525,6 +543,15 @@ namespace AnneProKeyboard
             colour_int = (colour_int << 8) + colour.B;
 
             return colour_int;
+        }
+
+        private Color ConvertIntToColour(int coloured_int)
+        {
+            int red = (coloured_int >> 16) & 0xff;
+            int green = (coloured_int >> 8) & 0xff;
+            int blue = (coloured_int >> 0) & 0xff;
+
+            return Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
