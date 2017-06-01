@@ -328,11 +328,11 @@
                             <Button x:Name="LightSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
                             <StackPanel Orientation="Vertical">
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="3">
-                                    <Button x:Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
-                                    <Button x:Name="WASDKeys" Content="WASD Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardWASDButton_Click" Height="32" Width="100" />
-                                    <Button x:Name="IJKLKeys" Content="IJKL Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardIJKLButton_Click" Height="32" Width="100" />
-                                    <Button x:Name="NumKeys" Content="Num Row" Margin="10,0, 0, 0" IsEnabled="True" Click="KeyboardNumRowButton_Click" Height="32" Width="100" />
-                                    <Button x:Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
+                                    <Button Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
+                                    <Button Name="WASDKeys" Content="WASD Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardWASDButton_Click" Height="32" Width="100" />
+                                    <Button Name="IJKLKeys" Content="IJKL Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardIJKLButton_Click" Height="32" Width="100" />
+                                    <Button Name="NumKeys" Content="Num Row" Margin="10,0, 0, 0" IsEnabled="True" Click="KeyboardNumRowButton_Click" Height="32" Width="100" />
+                                    <Button Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="1">
                                     <Button x:Name="ColourTool" Content="Copy a Key" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="100" />

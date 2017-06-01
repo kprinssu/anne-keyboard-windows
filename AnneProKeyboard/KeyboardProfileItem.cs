@@ -61,6 +61,8 @@ namespace AnneProKeyboard
         public List<KeyboardKey> NormalKeys { get; set; } // the normal keys, WE ***MUST*** ENSURE THAT FN and ANNE keys EXIST!!!
         [DataMember]
         public List<KeyboardKey> FnKeys { get; set; } // represents the Fn + x key combo
+       // [DataMember]
+       // public List<>
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)
         {

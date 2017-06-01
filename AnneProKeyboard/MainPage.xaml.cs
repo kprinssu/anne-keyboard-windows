@@ -349,8 +349,6 @@ namespace AnneProKeyboard
             chosenProfileName.Title = profile.Label;
 
             // set up the background colours for the keyboard lights
-            byte alpha = 255;
-
             for (int i = 0; i < 70; i++)
             {
                 // set the standard layout keys
@@ -383,16 +381,104 @@ namespace AnneProKeyboard
                 }
 
                 int coloured_int = profile.KeyboardColours[i];
-                
-                int red = (coloured_int >> 16) & 0xff;
-                int green = (coloured_int >> 8) & 0xff;
-                int blue = (coloured_int >> 0) & 0xff;
 
-                Color colour = Color.FromArgb(alpha, (byte)red, (byte)green, (byte)blue);
+                Color colour = ConvertIntToColour(coloured_int);
 
                 button.BorderBrush = new SolidColorBrush(colour);
                 button.BorderThickness = new Thickness(1);
+                button.Background = new SolidColorBrush(colour);
             }
+
+            //check the WASD keys. If all same, color WASD button
+            Color multi_colour = ConvertIntToColour(profile.KeyboardColours[16]); //W key idx
+            Button multi_button = (this.FindName("WASDKeys") as Button);
+            Color default_colour = Color.FromArgb(255, 255, 255, 255);
+            if (colour_wasd(profile))
+            {
+                setButtonColour(multi_button, multi_colour);
+            }
+            else
+            {
+                setButtonColour(multi_button, default_colour);
+            }
+
+            //check IJKL keys
+            if (colour_ijkl(profile))
+            {
+                multi_colour = ConvertIntToColour(profile.KeyboardColours[22]); //I key idx
+                multi_button = (this.FindName("IJKLKeys") as Button);
+                setButtonColour(multi_button, multi_colour);
+            }
+            else
+            {
+                setButtonColour(multi_button, default_colour);
+            }
+
+            //check Modifier Keys
+            if (colour_modifiers(profile))
+            {
+                multi_colour = ConvertIntToColour(profile.KeyboardColours[14]); //Tab key idx
+                multi_button = (this.FindName("ModifierKeys") as Button);
+                setButtonColour(multi_button, multi_colour);
+            }
+            else
+            {
+                setButtonColour(multi_button, default_colour);
+            }
+
+            //check num row
+            if (colour_num_row(profile))
+            {
+                multi_colour = ConvertIntToColour(profile.KeyboardColours[1]); //1 key idx
+                multi_button = (this.FindName("NumKeys") as Button);
+                setButtonColour(multi_button, multi_colour);
+            }
+            else
+            {
+                setButtonColour(multi_button, default_colour);
+            }
+        }
+
+        private Boolean colour_wasd(KeyboardProfileItem profile)
+        {
+            return (
+                profile.KeyboardColours[16] == profile.KeyboardColours[29] &&
+                profile.KeyboardColours[29] == profile.KeyboardColours[30] &&
+                profile.KeyboardColours[30] == profile.KeyboardColours[31]
+            );
+        }
+
+        private Boolean colour_ijkl(KeyboardProfileItem profile)
+        {
+            return (
+                profile.KeyboardColours[22] == profile.KeyboardColours[35] &&
+                profile.KeyboardColours[35] == profile.KeyboardColours[36] &&
+                profile.KeyboardColours[36] == profile.KeyboardColours[37]
+            );
+        }
+
+        private Boolean colour_num_row(KeyboardProfileItem profile)
+        {
+            int colour = profile.KeyboardColours[1];
+            for (int i = 2; i < 11; i++)
+            {
+                if (profile.KeyboardColours[i] != colour)
+                    return false;
+            }
+            return true;
+        }
+
+        private Boolean colour_modifiers(KeyboardProfileItem profile)
+        {
+            int[] modifiers = new int[14] { 14, 28, 42, 56, 57, 58, 66, 67, 68, 69, 55, 41, 13, 27 }; //Tab->LCtrl->RCtrl->Bkspc: 14,28,42,56,57,58,66,67,68,69,55,41,13,27
+
+            int colour = profile.KeyboardColours[14];
+            foreach (int i in modifiers)
+            {
+                if (profile.KeyboardColours[i] != colour)
+                    return false;
+            }
+            return true;
         }
 
         private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
@@ -403,16 +489,21 @@ namespace AnneProKeyboard
 
         private void setButtonColour(Button button)
         {
-            if(!matchingButtonColour)
+            setButtonColour(button, this.SelectedColour);
+        }
+
+        private void setButtonColour(Button button, Color colour)
+        {
+            if (!matchingButtonColour)
             {
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
+                button.BorderBrush = new SolidColorBrush(colour);
                 button.BorderThickness = new Thickness(1);
+                button.Background = new SolidColorBrush(colour);
             }
             else
             {
                 int button_index = Int32.Parse(button.Name.Remove(0, 14));
                 int colour_int = this.EditingProfile.KeyboardColours[button_index];
-                Color colour = ConvertIntToColour(colour_int);
                 this.SelectedColour = colour;
                 this.colourPicker.SelectedColor = colour;
             }
@@ -447,8 +538,7 @@ namespace AnneProKeyboard
                 this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-                button.BorderThickness = new Thickness(1);
+                setButtonColour(button);
             }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
@@ -467,8 +557,7 @@ namespace AnneProKeyboard
                 
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-                button.BorderThickness = new Thickness(1);
+                setButtonColour(button);
             }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
@@ -487,8 +576,7 @@ namespace AnneProKeyboard
 
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-                button.BorderThickness = new Thickness(1);
+                setButtonColour(button);
             }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
@@ -505,8 +593,7 @@ namespace AnneProKeyboard
                 this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-                button.BorderThickness = new Thickness(1);
+                setButtonColour(button);
             }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
@@ -524,8 +611,7 @@ namespace AnneProKeyboard
                 this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                button.BorderBrush = new SolidColorBrush(this.SelectedColour);
-                button.BorderThickness = new Thickness(1);
+                setButtonColour(button);
             }
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
