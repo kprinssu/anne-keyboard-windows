@@ -500,7 +500,7 @@ namespace AnneProKeyboard
                 button.BorderThickness = new Thickness(1);
                 button.Background = new SolidColorBrush(colour);
             }
-            else
+            else if(button.Name.Length > 14)
             {
                 int button_index = Int32.Parse(button.Name.Remove(0, 14));
                 int colour_int = this.EditingProfile.KeyboardColours[button_index];
@@ -512,15 +512,29 @@ namespace AnneProKeyboard
 
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            setButtonColour(button);
+            if (matchingButtonColour)
+            {
+                (this.FindName("ColourTool") as Button).Content = "Match a Colour";
+                matchingButtonColour = false;
+                Button button = (Button)sender;
+                int btn_int = Int32.Parse(button.Name.Remove(0, 14));
+                btn_int = this.EditingProfile.KeyboardColours[btn_int];
+                this.SelectedColour = ConvertIntToColour(btn_int);
+                //enable multikey buttons
+                enableMultiButtons();
+            }
+            else
+            {
+                Button button = (Button)sender;
+                setButtonColour(button);
 
-            int button_index = Int32.Parse(button.Name.Remove(0, 14));
+                int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
-            this.EditingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
+                this.EditingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
 
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
+                //this may be resource intensive, but it's the only way to gurantee that profiles get saved
+                this.SaveProfiles();
+            }
         }
 
         private void KeyboardAllButton_Click(object sender, RoutedEventArgs e)
@@ -540,6 +554,12 @@ namespace AnneProKeyboard
                 button = (this.FindName(s) as Button);
                 setButtonColour(button);
             }
+            //set Multi selection button colors
+            setButtonColour(this.FindName("WASDKeys") as Button);
+            setButtonColour(this.FindName("IJKLKeys") as Button);
+            setButtonColour(this.FindName("NumKeys") as Button);
+            setButtonColour(this.FindName("AllKeys") as Button);
+            setButtonColour(this.FindName("ModifierKeys") as Button);
 
             //this may be resource intensive, but it's the only way to gurantee that profiles get saved
             this.SaveProfiles();
@@ -588,7 +608,7 @@ namespace AnneProKeyboard
             Button button = (Button)sender;
             setButtonColour(button);
 
-            for (int i = 1; i < 13; i++) //num: 1-10 -=: 11-12
+            for(int i = 1; i < 11; i++) //num: 1-10 -=: 11-12
             {
                 this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
@@ -620,8 +640,43 @@ namespace AnneProKeyboard
 
         private void KeyboardColourPickerButton_Click(object sender, RoutedEventArgs e)
         {
-            matchingButtonColour = true;
+            Button button = (Button)sender;
+            Button wasd = this.FindName("WASDKeys") as Button;
+
+            if (!matchingButtonColour)
+            {
+                matchingButtonColour = true;
+                button.Content = "Cancel";
+                //Disable multikey buttons
+                disableMultiButtons();
+            }
+            else
+            {
+                matchingButtonColour = false;
+                button.Content = "Match a Colour";
+                //enable multikey buttons
+                enableMultiButtons();
+            }
         }
+
+        private void enableMultiButtons()
+        {
+            (this.FindName("WASDKeys") as Button).IsEnabled = true;
+            (this.FindName("IJKLKeys") as Button).IsEnabled = true;
+            (this.FindName("NumKeys") as Button).IsEnabled = true;
+            (this.FindName("AllKeys") as Button).IsEnabled = true;
+            (this.FindName("ModifierKeys") as Button).IsEnabled = true;
+        }
+
+        private void disableMultiButtons()
+        {
+            (this.FindName("WASDKeys") as Button).IsEnabled = false;
+            (this.FindName("IJKLKeys") as Button).IsEnabled = false;
+            (this.FindName("NumKeys") as Button).IsEnabled = false;
+            (this.FindName("AllKeys") as Button).IsEnabled = false;
+            (this.FindName("ModifierKeys") as Button).IsEnabled = false;
+        }
+
 
         private int ConvertColourToInt(Color colour)
         {
