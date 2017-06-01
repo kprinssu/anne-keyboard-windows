@@ -326,7 +326,7 @@
                         </StackPanel>
                         <Grid>
                             <Button x:Name="LightSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
-                            <StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="3">
+                            <StackPanel Orientation="Horizontal" Margin="5,0,0,0" Grid.Row="3">
                                 <Button x:Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
                                 <Button x:Name="WASDKeys" Content="WASD Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardWASDButton_Click" Height="32" Width="100" />
                                 <Button x:Name="IJKLKeys" Content="IJKL Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardIJKLButton_Click" Height="32" Width="100" />
