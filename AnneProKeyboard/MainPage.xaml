@@ -321,7 +321,7 @@
 
                             <StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
                                 <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:" Margin="0,16,0,-16"/>
-                                <xcp:Clr_Pckr SelectedColor="YellowGreen" x:Name="colourPicker" Margin="0,10,0,0" colorChanged="colourPicker_colourChanged" MaxHeight="175" MaxWidth="175"  HorizontalAlignment="Left"/>
+                                <xcp:Clr_Pckr SelectedColor="GreenYellow" x:Name="colourPicker" Margin="0,10,0,0" colorChanged="colourPicker_colourChanged" MaxHeight="175" MaxWidth="175"  HorizontalAlignment="Left"/>
                             </StackPanel>
                         </StackPanel>
                         <Grid>
@@ -335,7 +335,7 @@
                                     <Button x:Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="1">
-                                    <Button x:Name="ColourTool" Content="Pick a color" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="100" />
+                                    <Button x:Name="ColourTool" Content="Copy a Key" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="100" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

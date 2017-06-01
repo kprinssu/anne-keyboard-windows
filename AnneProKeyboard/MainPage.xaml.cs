@@ -414,6 +414,7 @@ namespace AnneProKeyboard
                 int colour_int = this.EditingProfile.KeyboardColours[button_index];
                 Color colour = ConvertIntToColour(colour_int);
                 this.SelectedColour = colour;
+                this.colourPicker.SelectedColor = colour;
             }
             matchingButtonColour = false;
         }
