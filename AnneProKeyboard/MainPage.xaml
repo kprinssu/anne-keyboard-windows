@@ -335,7 +335,7 @@
                                     <Button Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="1">
-                                    <Button Name="ColourTool" Content="Copy a Key" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="210" />
+                                    <Button Name="ColourTool" Content="Copy a Key Colour" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="210" />
                                 </StackPanel>
                             </StackPanel>
                         </Grid>

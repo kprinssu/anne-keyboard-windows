@@ -389,10 +389,11 @@ namespace AnneProKeyboard
                 button.Background = new SolidColorBrush(colour);
             }
 
+            //colour the multi selection buttons
             //check the WASD keys. If all same, color WASD button
             Color multi_colour = ConvertIntToColour(profile.KeyboardColours[16]); //W key idx
             Button multi_button = (this.FindName("WASDKeys") as Button);
-            Color default_colour = Color.FromArgb(255, 255, 255, 255);
+            Color default_colour = Color.FromArgb(255, 75, 75, 75);
             if (colour_wasd(profile))
             {
                 setButtonColour(multi_button, multi_colour);
@@ -437,6 +438,10 @@ namespace AnneProKeyboard
             {
                 setButtonColour(multi_button, default_colour);
             }
+
+            //set all buttons colour to default colour. Easy to see if all buttons are the same colour
+            multi_button = (this.FindName("AllKeys") as Button);
+            setButtonColour(multi_button, default_colour);
         }
 
         private Boolean colour_wasd(KeyboardProfileItem profile)
@@ -499,6 +504,14 @@ namespace AnneProKeyboard
                 button.BorderBrush = new SolidColorBrush(colour);
                 button.BorderThickness = new Thickness(1);
                 button.Background = new SolidColorBrush(colour);
+                if (Brightness(colour) > 200)
+                {
+                    button.Foreground = new SolidColorBrush(Color.FromArgb(255,75,75,75));
+                }
+                else
+                {
+                    button.Foreground = new SolidColorBrush(Color.FromArgb(255,255,255,255));
+                }
             }
             else if(button.Name.Length > 14)
             {
@@ -506,8 +519,16 @@ namespace AnneProKeyboard
                 int colour_int = this.EditingProfile.KeyboardColours[button_index];
                 this.SelectedColour = colour;
                 this.colourPicker.SelectedColor = colour;
+                matchingButtonColour = false;
             }
-            matchingButtonColour = false;
+        }
+
+        private int Brightness(Color c)
+        {
+            return (int)Math.Sqrt(
+               c.R * c.R * .241 +
+               c.G * c.G * .691 +
+               c.B * c.B * .068);
         }
 
         private void KeyboardColourButton_Click(object sender, RoutedEventArgs e)
