@@ -61,8 +61,6 @@ namespace AnneProKeyboard
         public List<KeyboardKey> NormalKeys { get; set; } // the normal keys, WE ***MUST*** ENSURE THAT FN and ANNE keys EXIST!!!
         [DataMember]
         public List<KeyboardKey> FnKeys { get; set; } // represents the Fn + x key combo
-       // [DataMember]
-       // public List<>
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged(string property)
         {
@@ -115,7 +113,6 @@ namespace AnneProKeyboard
 
             for (int i = 0; i < 70; i++)
             {
-                int j = 0; //????
                 if (!(i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65))
                 {
                     int colour = this.KeyboardColours[i];
@@ -124,7 +121,6 @@ namespace AnneProKeyboard
                     bluetooth_data[(i * 3) + 4] = (byte)((16711680 & colour) >> 16);
                     bluetooth_data[((i * 3) + 4) + 1] = green;
                     bluetooth_data[((i * 3) + 4) + 2] = blue;
-                    j++; //??????
                 }
             }
 
