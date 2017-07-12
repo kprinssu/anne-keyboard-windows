@@ -100,6 +100,9 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LightingPage.xaml.cs">
+      <DependentUpon>LightingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CRC16.cs" />
     <Compile Include="KeyboardKey.cs" />
     <Compile Include="KeyboardProfileItem.cs" />
@@ -131,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="LightingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
