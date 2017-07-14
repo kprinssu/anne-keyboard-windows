@@ -8,7 +8,7 @@
     xmlns:xcp="using:Color_Picker"
     mc:Ignorable="d" MinWidth="960" MinHeight="480">
 
-    <SplitView x:Name="splitView" PaneBackground="#FF2B2B2B" IsPaneOpen="True" OpenPaneLength="256" CompactPaneLength="48" DisplayMode="Inline">
+    <SplitView x:Name="splitView" PaneBackground="#FF36393e" IsPaneOpen="True" OpenPaneLength="256" CompactPaneLength="48" DisplayMode="Inline">
         <SplitView.Pane>
             <Grid>
                 <Grid.RowDefinitions>
@@ -49,7 +49,7 @@
             </Grid>
         </SplitView.Pane>
 
-        <Grid Background="#000">
+        <Grid Background="#36393E">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>

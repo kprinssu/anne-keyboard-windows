@@ -1,7 +1,10 @@
 ﻿{
   "dependencies": {
     "Color_Picker": "1.0.5",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2"
+    "FontAwesome.UWP": "4.7.0.9",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Microsoft.Toolkit.Uwp": "1.5.0",
+    "Microsoft.Toolkit.Uwp.UI.Controls": "1.5.0"
   },
   "frameworks": {
     "uap10.0": {}
