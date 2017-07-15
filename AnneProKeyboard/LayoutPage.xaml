@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xcp="using:Color_Picker"
     xmlns:fa="using:FontAwesome.UWP"
-    mc:Ignorable="d" MinWidth="960" MinHeight="480">
+    mc:Ignorable="d" MinWidth="1024" MinHeight="480">
 
     <Grid Background="#36393e">
             <Grid.RowDefinitions>
@@ -18,7 +18,30 @@
             </Grid.RowDefinitions>
                 
             <StackPanel Orientation="Vertical" Grid.Row="0">
-            <Pivot x:Name="rootPivot" Title="Layout Page">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,15,0" Canvas.ZIndex="1">
+                <ComboBox x:Name="FontsCombo" Height="44" Width="296" 
+                ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
+                                <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
+                                <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
+                                    <SymbolIcon Symbol="Edit" Foreground="White" />
+                                </Button>
+                                <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
+                                    <SymbolIcon Symbol="Delete" Foreground="White" />
+                                </Button>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
+                    <SymbolIcon Symbol="Add" Foreground="#FFB8B9BA" />
+                </Button>
+            </StackPanel>
+            
+            <Pivot x:Name="rootPivot" Margin="0,-37,0,0" Canvas.ZIndex="0">
                 <PivotItem Header="Base Layer">
                     <!--Standard Pivot-->
                     <Grid HorizontalAlignment="Center">
@@ -31,19 +54,19 @@
                         </Grid.RowDefinitions>
                         <Grid.Resources>
                             <Style TargetType="RelativePanel">
-                                <Setter Property="Margin" Value="0,-9,0,0" />
+                                <Setter Property="Margin" Value="0,-4,0,0" />
                             </Style>
                         </Grid.Resources>
                         <RelativePanel Height="70" Margin="0" Grid.Row="0">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Height" Value="60" />
-                                    <Setter Property="Width" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
                             <ComboBox Name="keyboardLayoutSelection" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left"  />
-                            <Button Name="keyboardStandardLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5"/>
+                            <Button Name="keyboardStandardLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" Height="65"/>
                             <Button Name="keyboardStandardLayoutButton1" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton0" />
                             <Button Name="keyboardStandardLayoutButton2" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton1"   />
                             <Button Name="keyboardStandardLayoutButton3" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton2"   />
@@ -62,11 +85,11 @@
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardStandardLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="90"  />
+                            <Button Name="keyboardStandardLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="95"/>
                             <Button Name="keyboardStandardLayoutButton15" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton14"   />
                             <Button Name="keyboardStandardLayoutButton16" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton15"   />
                             <Button Name="keyboardStandardLayoutButton17" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton16"   />
@@ -85,11 +108,11 @@
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardStandardLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="104"  />
+                            <Button Name="keyboardStandardLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="109"/>
                             <Button Name="keyboardStandardLayoutButton29" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton28"   />
                             <Button Name="keyboardStandardLayoutButton30" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton29"   />
                             <Button Name="keyboardStandardLayoutButton31" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton30"   />
@@ -101,17 +124,17 @@
                             <Button Name="keyboardStandardLayoutButton37" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton36"   />
                             <Button Name="keyboardStandardLayoutButton38" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton37"   />
                             <Button Name="keyboardStandardLayoutButton39" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton38"   />
-                            <Button Name="keyboardStandardLayoutButton40" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton39" Width="137"  />
+                            <Button Name="keyboardStandardLayoutButton40" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton39" Width="142"  />
                         </RelativePanel>
                         <RelativePanel Height="70" Grid.Row="3">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardStandardLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="132"   />
+                            <Button Name="keyboardStandardLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="140"/>
                             <Button Name="keyboardStandardLayoutButton42" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton41"     />
                             <Button Name="keyboardStandardLayoutButton43" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton42"   />
                             <Button Name="keyboardStandardLayoutButton44" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton43"    />
@@ -122,23 +145,24 @@
                             <Button Name="keyboardStandardLayoutButton49" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton48"    />
                             <Button Name="keyboardStandardLayoutButton50" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton49"    />
                             <Button Name="keyboardStandardLayoutButton51" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton50"    />
-                            <Button Name="keyboardStandardLayoutButton52" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton51" Width="170"   />
+                            <Button Name="keyboardStandardLayoutButton52" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton51" Width="177"   />
                         </RelativePanel>
                         <RelativePanel Height="70" Grid.Row="4">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="83" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardStandardLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton54" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton53" Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton55" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton54" Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton56" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton55" Width="370"   />
-                            <Button Name="keyboardStandardLayoutButton57" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton56" Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton58" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton57" Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton59" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton58" Width="76"   />
-                            <Button Name="keyboardStandardLayoutButton60" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton59" Width="80"  />
+                            <Button Name="keyboardStandardLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left" />
+                            <Button Name="keyboardStandardLayoutButton54" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton53" />
+                            <Button Name="keyboardStandardLayoutButton55" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton54" />
+                            <Button Name="keyboardStandardLayoutButton56" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton55" Width="390" />
+                            <Button Name="keyboardStandardLayoutButton57" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton56" />
+                            <Button Name="keyboardStandardLayoutButton58" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton57" />
+                            <Button Name="keyboardStandardLayoutButton59" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton58" />
+                            <Button Name="keyboardStandardLayoutButton60" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton59" />
                         </RelativePanel>
                     </Grid>
                 </PivotItem>
@@ -154,18 +178,18 @@
                         </Grid.RowDefinitions>
                         <Grid.Resources>
                             <Style TargetType="RelativePanel">
-                                <Setter Property="Margin" Value="0,-9,0,0" />
+                                <Setter Property="Margin" Value="0,-4,0,0" />
                             </Style>
                         </Grid.Resources>
                         <RelativePanel Height="70" Margin="0" Grid.Row="0">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Height" Value="60" />
-                                    <Setter Property="Width" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardFNLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5"/>
+                            <Button Name="keyboardFNLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" Height="65"/>
                             <Button Name="keyboardFNLayoutButton1" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton0" />
                             <Button Name="keyboardFNLayoutButton2" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton1"   />
                             <Button Name="keyboardFNLayoutButton3" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton2"   />
@@ -184,11 +208,11 @@
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardFNLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="90"  />
+                            <Button Name="keyboardFNLayoutButton14" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="95"/>
                             <Button Name="keyboardFNLayoutButton15" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton14"   />
                             <Button Name="keyboardFNLayoutButton16" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton15"   />
                             <Button Name="keyboardFNLayoutButton17" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton16"   />
@@ -207,11 +231,11 @@
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardFNLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="104"  />
+                            <Button Name="keyboardFNLayoutButton28" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="109"/>
                             <Button Name="keyboardFNLayoutButton29" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton28"   />
                             <Button Name="keyboardFNLayoutButton30" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton29"   />
                             <Button Name="keyboardFNLayoutButton31" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton30"   />
@@ -223,17 +247,17 @@
                             <Button Name="keyboardFNLayoutButton37" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton36"   />
                             <Button Name="keyboardFNLayoutButton38" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton37"   />
                             <Button Name="keyboardFNLayoutButton39" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton38"   />
-                            <Button Name="keyboardFNLayoutButton40" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton39" Width="137"  />
+                            <Button Name="keyboardFNLayoutButton40" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton39" Width="142"  />
                         </RelativePanel>
                         <RelativePanel Height="70" Grid.Row="3">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Width" Value="60" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="65" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardFNLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="132"   />
+                            <Button Name="keyboardFNLayoutButton41" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="140"/>
                             <Button Name="keyboardFNLayoutButton42" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton41"     />
                             <Button Name="keyboardFNLayoutButton43" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton42"   />
                             <Button Name="keyboardFNLayoutButton44" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton43"    />
@@ -244,36 +268,33 @@
                             <Button Name="keyboardFNLayoutButton49" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton48"    />
                             <Button Name="keyboardFNLayoutButton50" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton49"    />
                             <Button Name="keyboardFNLayoutButton51" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton50"    />
-                            <Button Name="keyboardFNLayoutButton52" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton51" Width="170"   />
+                            <Button Name="keyboardFNLayoutButton52" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton51" Width="177"   />
                         </RelativePanel>
                         <RelativePanel Height="70" Grid.Row="4">
                             <RelativePanel.Resources>
                                 <Style TargetType="Button">
                                     <Setter Property="Margin" Value="1,5,0,0" />
-                                    <Setter Property="Height" Value="60" />
+                                    <Setter Property="Height" Value="65" />
+                                    <Setter Property="Width" Value="83" />
                                 </Style>
                             </RelativePanel.Resources>
-                            <Button Name="keyboardFNLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="76"   />
-                            <Button Name="keyboardFNLayoutButton54" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton53" Width="76"   />
-                            <Button Name="keyboardFNLayoutButton55" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton54" Width="76"   />
-                            <Button Name="keyboardFNLayoutButton56" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton55" Width="370"   />
-                            <Button Name="keyboardFNLayoutButton57" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton56" Width="76"   />
-                            <Button Name="keyboardFNLayoutButton58" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton57" Width="76"   />
-                            <Button Name="keyboardFNLayoutButton59" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton58" Width="76"   />
-                            <Button Name="keyboardFNLayoutButton60" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton59" Width="80"  />
+                            <Button Name="keyboardFNLayoutButton53" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left" />
+                            <Button Name="keyboardFNLayoutButton54" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton53" />
+                            <Button Name="keyboardFNLayoutButton55" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton54" />
+                            <Button Name="keyboardFNLayoutButton56" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton55" Width="390" />
+                            <Button Name="keyboardFNLayoutButton57" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton56" />
+                            <Button Name="keyboardFNLayoutButton58" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton57" />
+                            <Button Name="keyboardFNLayoutButton59" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton58" />
+                            <Button Name="keyboardFNLayoutButton60" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardFNLayoutButton59" />
                         </RelativePanel>
                     </Grid>
                 </PivotItem>
             </Pivot>
         </StackPanel>
-            <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <TextBlock x:Name="PaneHeader" Foreground="White" Style="{StaticResource BaseTextBlockStyle}" Text="Profiles" FontSize="18"/>
-                <Button BorderThickness="0" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="10,0,0,0">
-                    <SymbolIcon Symbol="Add" Foreground="White" />
-                </Button>   
-            </StackPanel>
-        <StackPanel Grid.Row="2" Background="#FF2B2B2B" Grid.RowSpan="2" Height="137">
-                <ListView x:Name="keyboardProfilesList" SelectionMode="None"  VerticalAlignment="Stretch" 
+            
+        <!--<StackPanel Grid.Row="2" Background="#FF2B2B2B" Grid.RowSpan="2" Height="137">
+            
+            --><!--<ListView x:Name="keyboardProfilesList" SelectionMode="None"  VerticalAlignment="Stretch" 
                            ItemClick="KeyboardProfiles_ItemClick" IsItemClickEnabled="True"
                             ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.HorizontalScrollMode="Enabled"                  
@@ -298,8 +319,8 @@
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>
+                </ListView>--><!--
+            </StackPanel>-->
             <StackPanel Grid.Row="3" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="32px" >
                 <!--<TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />-->

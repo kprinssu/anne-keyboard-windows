@@ -8,7 +8,7 @@
     xmlns:fa="using:FontAwesome.UWP"
     mc:Ignorable="d" MinWidth="960" MinHeight="480">
 
-    <SplitView x:Name="splitView" DisplayMode="CompactOverlay"  IsPaneOpen="False" CompactPaneLength="48" OpenPaneLength="256">
+    <SplitView x:Name="splitView" DisplayMode="CompactOverlay"  IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="256">
         <SplitView.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.ThemeDictionaries>
@@ -20,14 +20,17 @@
             </ResourceDictionary>
         </SplitView.Resources>
         <SplitView.Pane>
-            <Grid Name="navPane" Background="#FF1f1f1d">
+            <Grid Name="navPane" Background="#1e2124">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="0">
-                    <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;"
-                    Width="48" Height="50" Background="{ThemeResource SystemAccentColor}" Click="HamburgerButton_Click" BorderThickness="0"/>
+                    <StackPanel Orientation="Horizontal" Background="{ThemeResource SystemAccentColor}">
+                        <Button x:Name="HamburgerButton" FontFamily="Segoe MDL2 Assets" Content="&#xE700;" 
+                                Width="50" Height="50" Click="HamburgerButton_Click" BorderThickness="0"
+                                PointerEntered="hamburgerHover"/>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name="LayoutMenuButton" 
                             Width="255" Height="50" Background="Transparent" FontSize="24" Click="LayoutNav_Clicked" BorderThickness="0">
@@ -73,11 +76,16 @@
         <SplitView.Content>
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="50" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <Frame Name="_frame" Grid.Row="0"/>
-                <StackPanel Grid.Row="1" Background="#2f3136" Height="32">
+                <StackPanel Grid.Row="0" Background="{ThemeResource SystemAccentColor}" Height="50" VerticalAlignment="Center" Name="MainTitleBar">
+                    
+                    <TextBlock Name="pageHeader" Text="Layers" VerticalAlignment="Top" Margin="15,8,0,0" FontSize="24" SelectionChanged="pageHeader_SelectionChanged"/>
+                </StackPanel>
+                <Frame Name="_frame" Grid.Row="1"/>
+                <StackPanel Grid.Row="2" Background="#2a2c31" Height="32">
                     
                 </StackPanel>
             </Grid>
