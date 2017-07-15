@@ -8,160 +8,187 @@
     xmlns:xcp="using:Color_Picker"
     mc:Ignorable="d" MinWidth="960" MinHeight="480">
 
-    <SplitView x:Name="splitView" PaneBackground="#FF36393e" IsPaneOpen="True" OpenPaneLength="256" CompactPaneLength="48" DisplayMode="Inline">
-        <SplitView.Pane>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Grid>
-                    <TextBlock x:Name="PaneHeader" Foreground="White" Margin="10,12,0,0" Style="{StaticResource BaseTextBlockStyle}" Text="Profiles" FontSize="18"/>
-                    <Button BorderThickness="0" Click="ProfileAddButton_Click" Margin="210,12,0,0">
-                        <SymbolIcon Symbol="Add" Foreground="White" />
-                    </Button>
-                </Grid>
-
-                <ListView x:Name="keyboardProfilesList" Margin="0,12,0,0" SelectionMode="None" Grid.Row="1" VerticalAlignment="Stretch" 
-                           ItemClick="KeyboardProfiles_ItemClick" IsItemClickEnabled="True" 
-                           ItemsSource="{x:Bind KeyboardProfiles}" >
-                    <ListView.ItemTemplate>
+        <Grid Background="#36393E">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,22,0" Canvas.ZIndex="1">
+                <ComboBox x:Name="FontsCombo" Height="44" Width="296" 
+                        ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0">
+                    <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" Grid.Row="3">
-                                <TextBlock Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
-                                <TextBox Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
+                                <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
+                                <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
                                 <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
                                     <SymbolIcon Symbol="Edit" Foreground="White" />
                                 </Button>
-                                <Button Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
+                                <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
                                     <SymbolIcon Symbol="Delete" Foreground="White" />
                                 </Button>
                             </StackPanel>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-                <StackPanel Background="#303030" Orientation="Horizontal" Grid.Row="3" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="30px" >
-                    <SymbolIcon Symbol="Remote" Margin="6,0,0,0" Foreground="White" />
-                    <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
-                    <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
-                </StackPanel>
-            </Grid>
-        </SplitView.Pane>
-
-        <Grid Background="#36393E">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-                    <StackPanel Orientation="Vertical" Grid.Row="2" Margin="0">
-                        <StackPanel Orientation="Horizontal" Grid.Row="2" Height="250" Margin="10,0,0,0">
-                            <Grid>
-                                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Margin="0,15,0,0">
-                                    <Run Text="Keyboard"/>
-                                    <Run Text="Lights"/>
-                                    <Run Text=":"/>
-                                </TextBlock>
-                                <RelativePanel Height="40" Margin="0,38,2,172">
-                                    <Button Name="keyboardButton0" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton1" Click="KeyboardColourButton_Click" Margin="33,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton2" Click="KeyboardColourButton_Click" Margin="64,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton3" Click="KeyboardColourButton_Click" Margin="95,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton4" Click="KeyboardColourButton_Click" Margin="126,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton5" Click="KeyboardColourButton_Click" Margin="157,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton6" Click="KeyboardColourButton_Click" Margin="188,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton7" Click="KeyboardColourButton_Click" Margin="219,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton8" Click="KeyboardColourButton_Click" Margin="250,5,-5,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton9" Click="KeyboardColourButton_Click" Margin="281,5,-7,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton10" Click="KeyboardColourButton_Click" Margin="312,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton11" Click="KeyboardColourButton_Click" Margin="343,5,-9,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton12" Click="KeyboardColourButton_Click" Margin="374,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton13" Click="KeyboardColourButton_Click" Margin="405,5,0,5" HorizontalAlignment="Left" Width="60" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,69,0,142">
-                                    <Button Name="keyboardButton14" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="45" Height="30" />
-                                    <Button Name="keyboardButton15" Click="KeyboardColourButton_Click" Margin="48,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton16" Click="KeyboardColourButton_Click" Margin="79,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton17" Click="KeyboardColourButton_Click" Margin="110,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton18" Click="KeyboardColourButton_Click" Margin="141,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton19" Click="KeyboardColourButton_Click" Margin="172,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton20" Click="KeyboardColourButton_Click" Margin="203,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton21" Click="KeyboardColourButton_Click" Margin="234,5,-6,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton22" Click="KeyboardColourButton_Click" Margin="265,5,-8,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton23" Click="KeyboardColourButton_Click" Margin="296,5,-10,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton24" Click="KeyboardColourButton_Click" Margin="327,5,-12,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton25" Click="KeyboardColourButton_Click" Margin="358,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton26" Click="KeyboardColourButton_Click" Margin="389,5,-14,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton27" Click="KeyboardColourButton_Click" Margin="420,5,-16,5" HorizontalAlignment="Left"  Width="45" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,99,0,109" >
-                                    <Button Name="keyboardButton28" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="52" Height="30" />
-                                    <Button Name="keyboardButton29" Click="KeyboardColourButton_Click" Margin="55,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton30" Click="KeyboardColourButton_Click" Margin="86,5,-2,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton31" Click="KeyboardColourButton_Click" Margin="117,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton32" Click="KeyboardColourButton_Click" Margin="148,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton33" Click="KeyboardColourButton_Click" Margin="179,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton34" Click="KeyboardColourButton_Click" Margin="210,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton35" Click="KeyboardColourButton_Click" Margin="241,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton36" Click="KeyboardColourButton_Click" Margin="272,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton37" Click="KeyboardColourButton_Click" Margin="303,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton38" Click="KeyboardColourButton_Click" Margin="334,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton39" Click="KeyboardColourButton_Click" Margin="365,5,0,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton41" Click="KeyboardColourButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Width="69" Height="30" />
-
-                                    <!-- Hack to get app to build properly -->
-                                    <Button Name="keyboardButton40" Click="KeyboardColourButton_Click" Margin="396,5,-9.333,5" HorizontalAlignment="Left"  Visibility="Collapsed" Width="69" Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,131,0,80">
-                                    <Button Name="keyboardButton42" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="67"  Height="30" />
-                                    <Button Name="keyboardButton43" Click="KeyboardColourButton_Click" Margin="70,5,-4,5" HorizontalAlignment="Left"  Width="30"   Height="30" />
-                                    <Button Name="keyboardButton44" Click="KeyboardColourButton_Click" Margin="101,5,-4,5" HorizontalAlignment="Left"  Width="30" Height="30" />
-                                    <Button Name="keyboardButton45" Click="KeyboardColourButton_Click" Margin="132,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton46" Click="KeyboardColourButton_Click" Margin="163,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton47" Click="KeyboardColourButton_Click" Margin="194,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton48" Click="KeyboardColourButton_Click" Margin="225,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton49" Click="KeyboardColourButton_Click" Margin="256,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton50" Click="KeyboardColourButton_Click" Margin="287,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton51" Click="KeyboardColourButton_Click" Margin="318,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton52" Click="KeyboardColourButton_Click" Margin="349,5,0,5" HorizontalAlignment="Left"  Width="30"  Height="30" />
-                                    <Button Name="keyboardButton55" Click="KeyboardColourButton_Click" Margin="380,5,-2,5" HorizontalAlignment="Left"  Width="85"  Height="30" />
-                                </RelativePanel>
-                                <RelativePanel Height="40" Margin="0,154,0,40">
-                                    <Button Name="keyboardButton56" Click="KeyboardColourButton_Click" Margin="2,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton57" Click="KeyboardColourButton_Click" Margin="41,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton58" Click="KeyboardColourButton_Click" Margin="80,5,0,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" Margin="119,5,-10,5" HorizontalAlignment="Left"  Width="188"  Height="30" />
-                                    <Button Name="keyboardButton66" Click="KeyboardColourButton_Click" Margin="308,5,-12,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton67" Click="KeyboardColourButton_Click" Margin="347,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton68" Click="KeyboardColourButton_Click" Margin="386,5,-10,5" HorizontalAlignment="Left"  Width="38"  Height="30" />
-                                    <Button Name="keyboardButton69" Click="KeyboardColourButton_Click" Margin="425,5,-12,5" HorizontalAlignment="Left"  Width="40" Height="30" />
-                                </RelativePanel>
-                            </Grid>
-
-                            <StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
-                                <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:" Margin="0,16,0,-16"/>
-                                <xcp:Clr_Pckr SelectedColor="GreenYellow" x:Name="colourPicker" Margin="0,10,0,0" colorChanged="colourPicker_colourChanged" MaxHeight="175" MaxWidth="175"  HorizontalAlignment="Left"/>
-                    </StackPanel>
-                        </StackPanel>
-                        <Grid>
-                            <Button x:Name="LightSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
-                            <StackPanel Orientation="Vertical">
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="3">
-                                    <Button Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
-                                    <Button Name="WASDKeys" Content="WASD Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardWASDButton_Click" Height="32" Width="100" />
-                                    <Button Name="IJKLKeys" Content="IJKL Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardIJKLButton_Click" Height="32" Width="100" />
-                                    <Button Name="NumKeys" Content="Num Row" Margin="10,0, 0, 0" IsEnabled="True" Click="KeyboardNumRowButton_Click" Height="32" Width="100" />
-                                    <Button Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="1">
-                                    <Button Name="ColourTool" Content="Match a Colour" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="210" />
-                                </StackPanel>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
+                    <SymbolIcon Symbol="Add" Foreground="#FFB8B9BA" />
+                </Button>
+            </StackPanel>
+        <!-- KeyboardColourButton_Click -->
+            <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0">
+                <Grid HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="RelativePanel">
+                            <Setter Property="Margin" Value="0,-4,0,0" />
+                        </Style>
+                    </Grid.Resources>
+                    <RelativePanel Height="70" Margin="0" Grid.Row="0">
+                        <RelativePanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="1,5,0,0" />
+                                <Setter Property="Height" Value="65" />
+                                <Setter Property="Width" Value="65" />
+                            </Style>
+                        </RelativePanel.Resources>
+                        <ComboBox Name="keyboardLayoutSelection" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left"  />
+                        <Button Name="keyboardButton0" Click="KeyboardColourButton_Click" Margin="2,5,0,0" Height="65"/>
+                        <Button Name="keyboardButton1" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton0" />
+                        <Button Name="keyboardButton2" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton1"   />
+                        <Button Name="keyboardButton3" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton2"   />
+                        <Button Name="keyboardButton4" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton3"   />
+                        <Button Name="keyboardButton5" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton4"   />
+                        <Button Name="keyboardButton6" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton5"   />
+                        <Button Name="keyboardButton7" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton6"   />
+                        <Button Name="keyboardButton8" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton7"   />
+                        <Button Name="keyboardButton9" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton8"   />
+                        <Button Name="keyboardButton10" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton9"   />
+                        <Button Name="keyboardButton11" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton10"   />
+                        <Button Name="keyboardButton12" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton11"   />
+                        <Button Name="keyboardButton13" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton12" Width="120"  />
+                    </RelativePanel>
+                    <RelativePanel Height="70" Grid.Row="1">
+                        <RelativePanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="1,5,0,0" />
+                                <Setter Property="Height" Value="65" />
+                                <Setter Property="Width" Value="65" />
+                            </Style>
+                        </RelativePanel.Resources>
+                        <Button Name="keyboardButton14" Click="KeyboardColourButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="95"/>
+                        <Button Name="keyboardButton15" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton14"   />
+                        <Button Name="keyboardButton16" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton15"   />
+                        <Button Name="keyboardButton17" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton16"   />
+                        <Button Name="keyboardButton18" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton17"   />
+                        <Button Name="keyboardButton19" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton18"   />
+                        <Button Name="keyboardButton20" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton19"   />
+                        <Button Name="keyboardButton21" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton20"   />
+                        <Button Name="keyboardButton22" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton21"   />
+                        <Button Name="keyboardButton23" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton22"   />
+                        <Button Name="keyboardButton24" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton23"   />
+                        <Button Name="keyboardButton25" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton24"   />
+                        <Button Name="keyboardButton26" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton25"   />
+                        <Button Name="keyboardButton27" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton26" Width="90"  />
+                    </RelativePanel>
+                    <RelativePanel Height="70" Grid.Row="2">
+                        <RelativePanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="1,5,0,0" />
+                                <Setter Property="Height" Value="65" />
+                                <Setter Property="Width" Value="65" />
+                            </Style>
+                        </RelativePanel.Resources>
+                        <Button Name="keyboardButton28" Click="KeyboardColourButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="109"/>
+                        <Button Name="keyboardButton29" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton28"   />
+                        <Button Name="keyboardButton30" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton29"   />
+                        <Button Name="keyboardButton31" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton30"   />
+                        <Button Name="keyboardButton32" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton31"   />
+                        <Button Name="keyboardButton33" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton32"   />
+                        <Button Name="keyboardButton34" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton33"   />
+                        <Button Name="keyboardButton35" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton34"   />
+                        <Button Name="keyboardButton36" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton35"   />
+                        <Button Name="keyboardButton37" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton36"   />
+                        <Button Name="keyboardButton38" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton37"   />
+                        <Button Name="keyboardButton39" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton38"   />
+                        <Button Name="keyboardButton41" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton39" Width="142"  />
+                    </RelativePanel>
+                    <RelativePanel Height="70" Grid.Row="3">
+                        <RelativePanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="1,5,0,0" />
+                                <Setter Property="Height" Value="65" />
+                                <Setter Property="Width" Value="65" />
+                            </Style>
+                        </RelativePanel.Resources>
+                        <Button Name="keyboardButton42" Click="KeyboardColourButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left"  Width="140"/>
+                        <Button Name="keyboardButton43" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton42"     />
+                        <Button Name="keyboardButton44" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton43"   />
+                        <Button Name="keyboardButton45" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton44"    />
+                        <Button Name="keyboardButton46" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton45"    />
+                        <Button Name="keyboardButton47" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton46"    />
+                        <Button Name="keyboardButton48" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton47"    />
+                        <Button Name="keyboardButton49" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton48"    />
+                        <Button Name="keyboardButton50" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton49"    />
+                        <Button Name="keyboardButton51" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton50"    />
+                        <Button Name="keyboardButton52" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton51"    />
+                        <Button Name="keyboardButton55" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton52" Width="177"   />
+                    </RelativePanel>
+                    <RelativePanel Height="70" Grid.Row="4">
+                        <RelativePanel.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="Margin" Value="1,5,0,0" />
+                                <Setter Property="Height" Value="65" />
+                                <Setter Property="Width" Value="83" />
+                            </Style>
+                        </RelativePanel.Resources>
+                        <Button Name="keyboardButton56" Click="KeyboardColourButton_Click" Margin="2,5,0,0" HorizontalAlignment="Left" />
+                        <Button Name="keyboardButton57" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton56" />
+                        <Button Name="keyboardButton58" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton57" />
+                        <Button Name="keyboardButton61" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton58" Width="390" />
+                        <Button Name="keyboardButton66" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton61" />
+                        <Button Name="keyboardButton67" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton66" />
+                        <Button Name="keyboardButton68" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton67" />
+                        <Button Name="keyboardButton69" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton68" />
+                    </RelativePanel>
+                </Grid>
+                <StackPanel Orientation="Horizontal">
+                    <Grid>
+                        <Button x:Name="LightSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="3">
+                                <Button Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
+                                <Button Name="WASDKeys" Content="WASD Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardWASDButton_Click" Height="32" Width="100" />
+                                <Button Name="IJKLKeys" Content="IJKL Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardIJKLButton_Click" Height="32" Width="100" />
+                                <Button Name="NumKeys" Content="Num Row" Margin="10,0, 0, 0" IsEnabled="True" Click="KeyboardNumRowButton_Click" Height="32" Width="100" />
+                                <Button Name="ModifierKeys" Content="Modifiers" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardModifiersButton_Click" Height="32" Width="100" />
                             </StackPanel>
-                        </Grid>
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="1">
+                                <Button Name="ColourTool" Content="Match a Colour" Margin="10,0, 0, 0" IsEnabled='True' Click="KeyboardColourPickerButton_Click" Height="32" Width="210" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <!--<StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
+                        <TextBlock HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="138" FontSize="14" Text="Colour Picker:" Margin="0,16,0,-16"/>-->
+                    <xcp:Clr_Pckr SelectedColor="GreenYellow" x:Name="colourPicker" Margin="0,10,0,0" colorChanged="colourPicker_colourChanged" MaxHeight="175" MaxWidth="175"  HorizontalAlignment="Left"/>
+                    <!--</StackPanel>-->
+                </StackPanel>
+        </StackPanel>
             <StackPanel Background="Green" Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="30px" >
-                <TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
+            <StackPanel Background="#303030" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
+                <SymbolIcon Symbol="Remote" Foreground="White" />
+                <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
+            </StackPanel>
+            <TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />
             </StackPanel>
         </Grid>
-    </SplitView>
 </Page>

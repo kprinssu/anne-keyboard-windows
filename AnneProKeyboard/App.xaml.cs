@@ -35,6 +35,9 @@ namespace AnneProKeyboard
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
             Frame rootFrame = Window.Current.Content as Frame;
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.PreferredLaunchViewSize = new Size(1074, 800);
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(1024, 604));
 
             // Do not repeat app initialization when the Window already has content,
             // just ensure that the window is active

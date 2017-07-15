@@ -562,7 +562,7 @@ namespace AnneProKeyboard
 
             for (int i = 0; i < 70; i++)
             {
-                if (i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65)
+                if (i == 40 || i == 53 || i == 54 || i == 59 || i == 60 || i == 62 || i == 63 || i == 64 || i == 65)
                 {
                     continue;
                 }
