@@ -85,8 +85,15 @@
                     <TextBlock Name="pageHeader" Text="Layers" VerticalAlignment="Top" Margin="15,8,0,0" FontSize="24" SelectionChanged="pageHeader_SelectionChanged"/>
                 </StackPanel>
                 <Frame Name="_frame" Grid.Row="1"/>
-                <StackPanel Grid.Row="2" Background="#2a2c31" Height="32">
-                    
+                <StackPanel Grid.Row="2" Background="#2a2c31" Height="30">
+                    <StackPanel Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}" Height="30px" >
+                        <StackPanel Background="#2a2c31" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
+                            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE702;" Foreground="White" VerticalAlignment="Center" FontSize="20" />
+                            <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
+                        </StackPanel>
+                        
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </SplitView.Content>

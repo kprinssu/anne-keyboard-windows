@@ -191,8 +191,8 @@ namespace AnneProKeyboard
                     await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
                     {
                         KeyboardDeviceInformation = null;
-                        connectionStatusLabel.Text = "Not Connected";
-                        connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
+                        //connectionStatusLabel.Text = "Not Connected";
+                        //connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
                         LightSyncButton.IsEnabled = false;
                         //LayoutSyncbutton.IsEnabled = false;
                     });
@@ -330,8 +330,8 @@ namespace AnneProKeyboard
         {
             await Dispatcher.RunAsync(CoreDispatcherPriority.High, () =>
             {
-                this.connectionStatusLabel.Text = "Connected";
-                this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
+                //this.connectionStatusLabel.Text = "Connected";
+                //this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
                 this.LightSyncButton.IsEnabled = true;
                 //this.LayoutSyncButton.IsEnabled = true;
             });
@@ -938,6 +938,11 @@ namespace AnneProKeyboard
             }
 
             //this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
+        }
+
+        private void TextBlock_ContextCanceled(UIElement sender, RoutedEventArgs args)
+        {
+
         }
     }
 }
