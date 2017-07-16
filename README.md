@@ -1,3 +1,8 @@
+# To-do list
+* Move connection logic away from individual pages and into the mainpage
+* Load profiles when selecting from the dropdown
+* Etc.
+
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
 
