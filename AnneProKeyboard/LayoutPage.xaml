@@ -293,12 +293,8 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="32px" >
                 <!--<TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />-->
-                    <StackPanel Background="#303030" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
-                        <SymbolIcon Symbol="Remote" Foreground="White" />
-                        <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
-                        <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
-                    </StackPanel>
-                    <Button x:Name="LayoutSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
+                    
+                <Button x:FieldModifier="public"  x:Name="LayoutSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
             </StackPanel>
         </Grid>
 </Page>

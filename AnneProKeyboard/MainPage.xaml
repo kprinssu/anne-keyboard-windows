@@ -52,20 +52,20 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="AboutMenuButton" 
-                            Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-114,0,0,0">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE897;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Text="About" FontSize="18" VerticalAlignment="Center" Margin="13,0,0,0" />
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
                         <Button x:Name="SettingsMenuButton" 
                             Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-114,0,0,0">
                                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Text="Settings" FontSize="18" VerticalAlignment="Center" Margin="13,0,0,0" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="AboutMenuButton" 
+                            Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-114,0,0,0">
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE897;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                                <TextBlock Text="About" FontSize="18" VerticalAlignment="Center" Margin="13,0,0,0" />
                             </StackPanel>
                         </Button>
                     </StackPanel>
