@@ -1,5 +1,6 @@
 # To-do list
-* Move connection logic away from individual pages and into the mainpage
+* ~~Move connection logic away from individual pages and into the mainpage~~
+* Save/sync profiles from child page (Logic to save in parent)
 * Load profiles when selecting from the dropdown
 * Etc.
 
