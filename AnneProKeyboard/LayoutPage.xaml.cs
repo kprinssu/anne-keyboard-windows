@@ -32,8 +32,8 @@ namespace AnneProKeyboard
         //public MainPage ParentWindow { get; set; }
 
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
-        private KeyboardProfileItem EditingProfile;
-        private KeyboardProfileItem RenamingProfile;
+        public KeyboardProfileItem EditingProfile;
+        public KeyboardProfileItem RenamingProfile;
 
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -68,7 +68,7 @@ namespace AnneProKeyboard
 
 
 
-        private async void SaveProfiles()
+        public async void SaveProfiles()
         {
             MemoryStream memory_stream = new MemoryStream();
             DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
@@ -231,30 +231,6 @@ namespace AnneProKeyboard
             ChangeSelectedProfile(this._keyboardProfiles[0]);
 
             this.SaveProfiles();
-        }
-
-        private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
-        {
-            if(!this.EditingProfile.ValidateKeyboardKeys())
-            {
-                //this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
-                return;
-            }
-            
-            this.SaveProfiles();
-
-            this.LayoutSyncButton.IsEnabled = false;
-
-            mainPage.SyncProfile(this.EditingProfile);
-            this.EditingProfile.SyncStatusNotify += async (object_s, events) =>
-            {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    //this.SyncStatus.Text = (string)object_s;
-
-                    this.LayoutSyncButton.IsEnabled = true;
-                });
-            };
         }
         
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)

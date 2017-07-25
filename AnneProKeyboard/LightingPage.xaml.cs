@@ -27,15 +27,11 @@ namespace AnneProKeyboard
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LightingPage : Page
+    public partial class LightingPage : Page
     {
-        private readonly Guid OAD_GUID = new Guid("f000ffc0-0451-4000-b000-000000000000");
-        private readonly Guid WRITE_GATT_GUID = new Guid("f000ffc2-0451-4000-b000-000000000000");
-        private readonly Guid READ_GATT_GUID = new Guid("f000ffc1-0451-4000-b000-000000000000");
-
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
-        private KeyboardProfileItem EditingProfile;
-        private KeyboardProfileItem RenamingProfile;
+        public KeyboardProfileItem EditingProfile;
+        public KeyboardProfileItem RenamingProfile;
 
         private Color SelectedColour;
         private Boolean matchingButtonColour = false;
@@ -46,11 +42,7 @@ namespace AnneProKeyboard
             set { }
         }
 
-        public ObservableCollection<String> KeyboardKeyLabels = new ObservableCollection<String>();
-        private Dictionary<String, String> KeyboardKeyLabelTranslation = new Dictionary<String, String>();
-
-        private Button CurrentlyEditingStandardKey;
-        private Button CurrentlyEditingFnKey;
+   
 
         private MainPage mainPage;
 
@@ -60,11 +52,7 @@ namespace AnneProKeyboard
 
         public LightingPage()
         {
-            foreach (KeyboardKey key in KeyboardKey.StringKeyboardKeys.Values)
-            {
-                KeyboardKeyLabels.Add(key.KeyShortLabel);
-                KeyboardKeyLabelTranslation[key.KeyShortLabel] = key.KeyLabel;
-            }
+            
 
             this.InitializeComponent();
 
@@ -75,7 +63,7 @@ namespace AnneProKeyboard
             mainPage = VisualTreeHelper.GetParent(this) as MainPage;
         }
 
-        private async void SaveProfiles()
+        public async void SaveProfiles()
         {
             MemoryStream memory_stream = new MemoryStream();
             DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
@@ -555,32 +543,6 @@ namespace AnneProKeyboard
             this.SaveProfiles();
         }
 
-        private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!this.EditingProfile.ValidateKeyboardKeys())
-            {
-                this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
-                return;
-            }
-
-            this.SaveProfiles();
-
-            //this.LayoutSyncButton.IsEnabled = false;
-            this.LightSyncButton.IsEnabled = false;
-
-            mainPage.SyncProfile(this.EditingProfile);
-            this.EditingProfile.SyncStatusNotify += async (object_s, events) =>
-            {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
-                {
-                    this.SyncStatus.Text = (string)object_s;
-
-                    //this.LayoutSyncButton.IsEnabled = true;
-                    this.LightSyncButton.IsEnabled = true;
-                });
-            };
-        }
-
         private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
         {
             this.SaveProfiles();
@@ -612,119 +574,6 @@ namespace AnneProKeyboard
                     profile.ID = i;
                 }
             }
-        }
-
-        private async void KeyboardLayoutButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.CurrentlyEditingFnKey != null)
-            {
-                this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
-                this.CurrentlyEditingFnKey = null;
-            }
-
-            if (this.CurrentlyEditingStandardKey != null)
-            {
-                this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
-                this.CurrentlyEditingStandardKey = null;
-            }
-
-            Button button = (Button)sender;
-
-            bool fn_mode = button.Name.StartsWith("keyboardFNLayoutButton");
-
-            if (fn_mode)
-            {
-                this.CurrentlyEditingFnKey = button;
-            }
-            else
-            {
-                this.CurrentlyEditingStandardKey = button;
-            }
-
-            // Switch parents
-            //RelativePanel selector_parent = (RelativePanel)keyboardLayoutSelection.Parent;
-            //selector_parent.Children.Remove(keyboardLayoutSelection);
-
-            RelativePanel parent = (RelativePanel)button.Parent;
-            //parent.Children.Add(keyboardLayoutSelection);
-
-            //keyboardLayoutSelection.Margin = button.Margin;
-            //keyboardLayoutSelection.Width = button.Width;
-            //keyboardLayoutSelection.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
-
-            button.Visibility = Visibility.Collapsed;
-            //keyboardLayoutSelection.Visibility = Visibility.Visible;
-
-            await Task.Delay(1);
-
-            //keyboardLayoutSelection.IsDropDownOpen = true;
-        }
-
-        private void KeyboardStandardLayout_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //string label = keyboardLayoutSelection.SelectedItem as string;
-
-            //if (String.IsNullOrEmpty(label))
-            //{
-            //    label = KeyboardKey.IntKeyboardKeys[0].KeyShortLabel;
-            //}
-
-            //Button button = (this.CurrentlyEditingStandardKey != null) ? this.CurrentlyEditingStandardKey : this.CurrentlyEditingFnKey;
-            //int length = (this.CurrentlyEditingStandardKey != null) ? 28 : 22; // special constants 
-
-            //int index = -1;
-
-            //try
-            //{
-            //    Int32.TryParse(button.Name.Substring(length), out index);
-            //}
-            //catch
-            //{
-            //}
-
-            //if (index >= 0)
-            //{
-            //    string full_label = this.KeyboardKeyLabelTranslation[label];
-
-            //    if (this.CurrentlyEditingFnKey != null)
-            //    {
-            //        this.EditingProfile.FnKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
-
-
-            //        this.CurrentlyEditingFnKey.Content = label;
-            //        this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
-            //    }
-            //    else
-            //    {
-            //        this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
-
-            //        this.CurrentlyEditingStandardKey.Content = label;
-            //        this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
-            //    }
-            //}
-
-            //this.SaveProfiles();
-        }
-
-        private void KeyboardStandardLayout_DropDownClosed(object sender, object e)
-        {
-
-            if (this.CurrentlyEditingFnKey != null)
-            {
-                this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
-            }
-
-            if (this.CurrentlyEditingStandardKey != null)
-            {
-                this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
-            }
-
-            //this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
-        }
-
-        private void TextBlock_ContextCanceled(UIElement sender, RoutedEventArgs args)
-        {
-
         }
     }
 }

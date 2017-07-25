@@ -138,16 +138,7 @@ namespace AnneProKeyboard
                         KeyboardDeviceInformation = null;
                         connectionStatusLabel.Text = "Not Connected";
                         connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Red);
-                        if (Frame.Content.GetType() == typeof(LayoutPage))
-                        {
-                            LayoutPage child = this.Frame.Content as LayoutPage;
-                            child.LayoutSyncButton.IsEnabled = false;
-                        }
-                        if (Frame.Content.GetType() == typeof(LightingPage))
-                        {
-                            LightingPage child = this.Frame.Content as LightingPage;
-                            child.LightSyncButton.IsEnabled = false;
-                        }
+                        ProfileSyncButton.IsEnabled = true;
                     });
                 }
             }
@@ -285,16 +276,7 @@ namespace AnneProKeyboard
             {
                 this.connectionStatusLabel.Text = "Connected";
                 this.connectionStatusLabel.Foreground = new SolidColorBrush(Colors.Green);
-                if (_frame.Content.GetType() == typeof(LayoutPage))
-                {
-                    LayoutPage child = _frame.Content as LayoutPage;
-                    child.LayoutSyncButton.IsEnabled = true;
-                }
-                if (_frame.Content.GetType() == typeof(LightingPage))
-                {
-                    LightingPage child = _frame.Content as LightingPage;
-                    child.LightSyncButton.IsEnabled = true;
-                }
+                ProfileSyncButton.IsEnabled = true;
             });
         }
 
@@ -334,6 +316,67 @@ namespace AnneProKeyboard
             }
         }
 
+        private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(_frame.Content.GetType() == typeof(LayoutPage))
+            {
+                LayoutSyncButton(_frame.Content as LayoutPage);
+            }
+
+            else if (_frame.Content.GetType() == typeof(LightingPage))
+            {
+                LightingSyncButton(_frame.Content as LightingPage);
+            }
+        }
+
+        private void LightingSyncButton(LightingPage child)
+        {
+            if (!child.EditingProfile.ValidateKeyboardKeys())
+            {
+                //this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
+                return;
+            }
+
+            child.SaveProfiles();
+
+            ProfileSyncButton.IsEnabled = false;
+
+            this.SyncProfile(child.EditingProfile);
+            child.EditingProfile.SyncStatusNotify += async (object_s, events) =>
+            {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //this.SyncStatus.Text = (string)object_s;
+
+                    this.ProfileSyncButton.IsEnabled = true;
+                });
+            };
+        }
+
+        private void LayoutSyncButton(LayoutPage child)
+        {
+            if (!child.EditingProfile.ValidateKeyboardKeys())
+            {
+                //this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
+                return;
+            }
+
+            child.SaveProfiles();
+
+            ProfileSyncButton.IsEnabled = false;
+
+            this.SyncProfile(child.EditingProfile);
+            child.EditingProfile.SyncStatusNotify += async (object_s, events) =>
+            {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //this.SyncStatus.Text = (string)object_s;
+
+                    this.ProfileSyncButton.IsEnabled = true;
+                });
+            };
+        }
+
         private void HamburgerButton_Click(object sender, RoutedEventArgs e)
         {
             splitView.IsPaneOpen = !splitView.IsPaneOpen;
@@ -346,8 +389,7 @@ namespace AnneProKeyboard
                 _frame.Content = new LightingPage();
                 if (connectionStatusLabel.Text == "Connected")
                 {
-                    LightingPage child = _frame.Content as LightingPage;
-                    child.LightSyncButton.IsEnabled = true;
+                    ProfileSyncButton.IsEnabled = true;
                 }
                 pageHeader.Text = "Lighting";
                 LightingMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
@@ -361,8 +403,7 @@ namespace AnneProKeyboard
                 _frame.Content = new LayoutPage();
                 if(connectionStatusLabel.Text == "Connected")
                 {
-                    LayoutPage child = _frame.Content as LayoutPage;
-                    child.LayoutSyncButton.IsEnabled = true;
+                    ProfileSyncButton.IsEnabled = true;
                 }
                 pageHeader.Text = "Layers";
                 LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));

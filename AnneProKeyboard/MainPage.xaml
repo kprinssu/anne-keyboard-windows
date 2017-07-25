@@ -92,7 +92,7 @@
                             <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
                             <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
                         </StackPanel>
-                        
+                        <Button x:FieldModifier="public" x:Name="ProfileSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
                     </StackPanel>
                 </StackPanel>
             </Grid>

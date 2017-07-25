@@ -289,12 +289,5 @@
                     </PivotItem>
                 </Pivot>
             </StackPanel>
-
-        <StackPanel Grid.Row="2" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Margin="0,21,0,0" Height="32px" >
-                <!--<TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
-                <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />-->
-                    
-                <Button x:FieldModifier="public"  x:Name="LayoutSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
-            </StackPanel>
         </Grid>
 </Page>

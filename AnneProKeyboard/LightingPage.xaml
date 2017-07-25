@@ -59,7 +59,6 @@
                             <Setter Property="Width" Value="65" />
                         </Style>
                     </RelativePanel.Resources>
-                    <ComboBox Name="keyboardLayoutSelection" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left"  />
                     <Button Name="keyboardButton0" Click="KeyboardColourButton_Click" Margin="2,5,0,0" Height="65"/>
                     <Button Name="keyboardButton1" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton0" />
                     <Button Name="keyboardButton2" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton1"   />
@@ -161,7 +160,6 @@
             </Grid>
             <StackPanel Orientation="Horizontal">
                 <Grid>
-                    <Button x:FieldModifier="public" x:Name="LightSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0, 0, 10, 0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />
                     <StackPanel Orientation="Vertical" Margin="0,0,0,37">
                         <StackPanel Orientation="Horizontal" Margin="0,8,0,0" Grid.Row="3">
                             <Button Name="AllKeys" Content="All Keys" VerticalAlignment="Bottom" Margin="10, 0, 0, 0" IsEnabled="True" Click="KeyboardAllButton_Click" Height="32" Width="100" />
