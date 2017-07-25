@@ -1,3 +1,9 @@
+# To-do list
+* ~~Move connection logic away from individual pages and into the mainpage~~
+* Save/sync profiles from child page (Logic to save in parent)
+* Load profiles when selecting from the dropdown
+* Etc.
+
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
 
