@@ -42,25 +42,16 @@ namespace AnneProKeyboard
             set { }
         }
 
-   
-
-        private MainPage mainPage;
-
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
         }
 
         public LightingPage()
         {
-            
-
             this.InitializeComponent();
-
             LoadProfiles();
             SelectedColour = colourPicker.SelectedColor;
-
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
-            mainPage = VisualTreeHelper.GetParent(this) as MainPage;
         }
 
         public async void SaveProfiles()
@@ -574,6 +565,18 @@ namespace AnneProKeyboard
                     profile.ID = i;
                 }
             }
+        }
+
+        private void LightingProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LightingProfilesCombo == null) return;
+            var combo = (ComboBox)sender;
+            var item = (KeyboardProfileItem)combo.SelectedItem;
+            ChangeSelectedProfile(item);
+        }
+
+        private void LightingProfilesCombo_Loaded(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

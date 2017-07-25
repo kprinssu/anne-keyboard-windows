@@ -47,8 +47,6 @@ namespace AnneProKeyboard
         private Button CurrentlyEditingStandardKey;
         private Button CurrentlyEditingFnKey;
 
-        private MainPage mainPage;
-
         public LayoutPage()
         {
             foreach(KeyboardKey key in KeyboardKey.StringKeyboardKeys.Values)
@@ -62,11 +60,7 @@ namespace AnneProKeyboard
             LoadProfiles();
 
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
-            mainPage = VisualTreeHelper.GetParent(this) as MainPage;
-
         }
-
-
 
         public async void SaveProfiles()
         {
@@ -160,19 +154,15 @@ namespace AnneProKeyboard
                 {
                     continue;
                 }
-
                 int coloured_int = profile.KeyboardColours[i];
-
             }
-
-            
         }
 
-        private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
-            ChangeSelectedProfile(profile);
-        }
+        //private void KeyboardProfiles_ItemClick(object sender, EventArgs e)
+        //{
+        //    KeyboardProfileItem profile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+        //    ChangeSelectedProfile(profile);
+        //}
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -369,6 +359,19 @@ namespace AnneProKeyboard
             }
 
             this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
+        }
+
+        private void LayoutProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (LayoutProfilesCombo == null) return;
+            var combo = (ComboBox) sender;
+            var item = (KeyboardProfileItem) combo.SelectedItem;
+            ChangeSelectedProfile(item);
+        }
+
+        private void LayoutProfilesCombo_Loaded(object sender, RoutedEventArgs e)
+        {
+            var combo = (ComboBox)sender;
         }
     }
 }
