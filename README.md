@@ -1,8 +1,8 @@
 # To-do list
 * ~~Move connection logic away from individual pages and into the mainpage~~
-* Save/sync profiles from child page (Logic to save in parent)
-* Load profiles when selecting from the dropdown
-* Etc.
+* ~~Save/sync profiles from child page (Logic to save in parent)~~
+* ~~Load profiles when selecting from the dropdown~~
+* Split the profiles between Lighting and Layout
 
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
