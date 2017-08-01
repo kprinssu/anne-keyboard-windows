@@ -298,9 +298,9 @@ namespace AnneProKeyboard
                 Button button = (Button)sender;
                 int btn_int = Int32.Parse(button.Name.Remove(0, 14));
                 btn_int = this.EditingProfile.KeyboardColours[btn_int];
-                this.SelectedColour = ConvertIntToColour(btn_int);
                 colourPicker.PreviousSelectedColor = colourPicker.SelectedColor;
                 colourPicker.SelectedColor = new SolidColorBrush(ConvertIntToColour(btn_int));
+                this.SelectedColour = ConvertIntToColour(btn_int);
                 //enable multikey buttons
                 enableMultiButtons();
             }
@@ -575,11 +575,12 @@ namespace AnneProKeyboard
 
         private void LightingProfilesCombo_Loaded(object sender, RoutedEventArgs e)
         {
+            LightingProfilesCombo.SelectedIndex = 0;
         }
 
         private void colourPicker_SelectedColorChanged(object sender, EventArgs e)
         {
-            this.SelectedColour = (sender as ColorPicker.ColorPicker).SelectedColor.Color;
+            this.SelectedColour = colourPicker.SelectedColor.Color;
         }
     }
 }

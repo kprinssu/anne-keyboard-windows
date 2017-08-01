@@ -371,7 +371,7 @@ namespace AnneProKeyboard
 
         private void LayoutProfilesCombo_Loaded(object sender, RoutedEventArgs e)
         {
-            var combo = (ComboBox)sender;
+            LayoutProfilesCombo.SelectedIndex = 0;
         }
     }
 }

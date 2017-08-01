@@ -165,7 +165,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="0">
-                    <StackPanel Orientation="Vertical" Margin="0,8,0,0">
+                    <StackPanel Orientation="Vertical" Margin="0">
                         <StackPanel.Resources>
                             <Style TargetType="Button">
                                 <Setter Property="Margin" Value="10,5,0,5" />
@@ -192,7 +192,7 @@
                         <Button x:Name="ColourTool" Content="Match a Colour" IsEnabled='True' Click="KeyboardColourPickerButton_Click"/>
                     </StackPanel>
                 </Grid>
-                <my:ColorPicker x:Name="colourPicker" Grid.Column="1" Background="#ffffff" RequestedTheme="Light" Margin="8,0,0,0" Height="280" SelectedColorChanged="colourPicker_SelectedColorChanged" Foreground="#FF36393E"/>
+                <my:ColorPicker x:Name="colourPicker" Grid.Column="1" Background="#FF36393E" Margin="8,0,0,0" Height="280" SelectedColorChanged="colourPicker_SelectedColorChanged" Foreground="#FF36393E"/>
 
                 <!--<Controls:ColorPicker Grid.Column="1" x:Name="colourPicker" Margin="10,5,0,15" Visibility="Visible" ColorChanged="colourPicker_colourChanged" Width="374" Height="358" SizeChanged="colourPicker_SizeChanged"/>-->
                 <!--<StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
