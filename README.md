@@ -2,7 +2,12 @@
 * ~~Move connection logic away from individual pages and into the mainpage~~
 * ~~Save/sync profiles from child page (Logic to save in parent)~~
 * ~~Load profiles when selecting from the dropdown~~
-* Split the profiles between Lighting and Layout
+* Split the profiles between Lighting and Layout (second guessing)
+* There is the slightest shift of layout from layoutpage to lightingpage
+* ~~Loading profile first in dropown~~
+* Match theme of colorpicker to app
+* Manual testing
+* Commit, push, PR
 
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
@@ -25,7 +30,7 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 ## Planned Features
 * Support for changing keyboard layouts
 * Implement keyboard macros
-* Improve changing multiple button keyboard light colours
+* ~~Improve changing multiple button keyboard light colours~~
 
 ## Known Bugs
 * None so far. 
