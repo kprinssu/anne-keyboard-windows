@@ -2,8 +2,9 @@
 * ~~Move connection logic away from individual pages and into the mainpage~~
 * ~~Save/sync profiles from child page (Logic to save in parent)~~
 * ~~Load profiles when selecting from the dropdown~~
-* Split the profiles between Lighting and Layout
-* Loading profile first in dropown
+* Split the profiles between Lighting and Layout (second guessing)
+* There is the slightest shift of layout from layoutpage to lightingpage
+* ~~Loading profile first in dropown~~
 * Match theme of colorpicker to app
 * Manual testing
 * Commit, push, PR
