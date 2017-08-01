@@ -45,11 +45,15 @@ namespace AnneProKeyboard
         private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
         private MainPage mainPage;
+        private AboutPage aboutPage;
+        private LayoutPage layoutPage;
+        private LightingPage lightingPage;
 
         public MainPage()
         {
             this.InitializeComponent();
-            _frame.Content = new LayoutPage();
+            initPages();
+            _frame.Content = layoutPage;
             // Start up the background thread to find the keyboard
             FindKeyboard();
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
@@ -59,6 +63,13 @@ namespace AnneProKeyboard
             Window.Current.SetTitleBar(MainTitleBar);
             Window.Current.Activated += Current_Activated;
             Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
+        }
+
+        private void initPages()
+        {
+            layoutPage = new LayoutPage();
+            aboutPage = new AboutPage();
+            lightingPage = new LightingPage();
         }
 
         private async void FindKeyboard()
@@ -386,7 +397,7 @@ namespace AnneProKeyboard
         {
             if (!(_frame.Content.GetType() == typeof(LightingPage)))
             {
-                _frame.Content = new LightingPage();
+                _frame.Content = lightingPage;
                 if (connectionStatusLabel.Text == "Connected")
                 {
                     ProfileSyncButton.IsEnabled = true;
@@ -400,12 +411,26 @@ namespace AnneProKeyboard
         {
             if (!(_frame.Content.GetType() == typeof(LayoutPage)))
             {
-                _frame.Content = new LayoutPage();
+                _frame.Content = layoutPage;
                 if(connectionStatusLabel.Text == "Connected")
                 {
                     ProfileSyncButton.IsEnabled = true;
                 }
                 pageHeader.Text = "Layers";
+                LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
+            }
+        }
+
+        private void AboutNav_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (!(_frame.Content.GetType() == typeof(AboutPage)))
+            {
+                _frame.Content = aboutPage;
+                if (connectionStatusLabel.Text == "Connected")
+                {
+                    ProfileSyncButton.IsEnabled = false;
+                }
+                pageHeader.Text = "About";
                 LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }

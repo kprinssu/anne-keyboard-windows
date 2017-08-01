@@ -52,17 +52,8 @@
                 </StackPanel>
                 <StackPanel Grid.Row="1">
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="SettingsMenuButton" 
-                            Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-114,0,0,0">
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE713;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
-                                <TextBlock Text="Settings" FontSize="18" VerticalAlignment="Center" Margin="13,0,0,0" />
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
                         <Button x:Name="AboutMenuButton" 
-                            Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0">
+                            Width="255" Height="50" Background="Transparent" FontSize="24" BorderThickness="0" Click="AboutNav_Clicked">
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="-114,0,0,0">
                                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE897;" HorizontalAlignment="Left" VerticalAlignment="Center"/>
                                 <TextBlock Text="About" FontSize="18" VerticalAlignment="Center" Margin="13,0,0,0" />
@@ -84,13 +75,12 @@
                     
                     <TextBlock Name="pageHeader" Text="Layers" VerticalAlignment="Top" Margin="15,8,0,0" FontSize="24" SelectionChanged="pageHeader_SelectionChanged"/>
                 </StackPanel>
-                <Frame Name="_frame" Grid.Row="1"/>
+                <Frame Name="_frame" Grid.Row="1" Margin="0"/>
                 <Grid Grid.Row="2" Background="#2a2c31" Height="30">
                     <StackPanel Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}" Height="30px" >
                         <StackPanel Background="#2a2c31" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE702;" Foreground="White" VerticalAlignment="Center" FontSize="20" />
-                            <TextBlock Text="Status: " Foreground="White" Margin="24,0,0,0" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" Margin="24,0,0,0" VerticalAlignment="Center" Foreground="Red" />
+                            <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" VerticalAlignment="Center" Foreground="Red" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Height="30" VerticalAlignment="Center">
