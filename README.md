@@ -3,6 +3,10 @@
 * ~~Save/sync profiles from child page (Logic to save in parent)~~
 * ~~Load profiles when selecting from the dropdown~~
 * Split the profiles between Lighting and Layout
+* Loading profile first in dropown
+* Match theme of colorpicker to app
+* Manual testing
+* Commit, push, PR
 
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
