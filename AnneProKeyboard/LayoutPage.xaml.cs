@@ -19,6 +19,7 @@ using Windows.UI.Xaml.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Navigation;
+using Windows.Foundation;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -284,14 +285,16 @@ namespace AnneProKeyboard
             RelativePanel selector_parent = (RelativePanel)keyboardLayoutSelection.Parent;
             selector_parent.Children.Remove(keyboardLayoutSelection);
 
+            //add the combobox to relative panel and place it into the correct position
             RelativePanel parent = (RelativePanel)button.Parent;
             parent.Children.Add(keyboardLayoutSelection);
-            
-            keyboardLayoutSelection.Margin = button.Margin;
-            keyboardLayoutSelection.Width = button.Width;
+            RelativePanel.SetRightOf(keyboardLayoutSelection, parent.Children[parent.Children.IndexOf(button) - 1]);
+            RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(button) + 1], keyboardLayoutSelection);
+            keyboardLayoutSelection.Width = button.Width+1; //account for 1px between buttons
             keyboardLayoutSelection.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
             
             button.Visibility = Visibility.Collapsed;
+            
             keyboardLayoutSelection.Visibility = Visibility.Visible;
 
             await Task.Delay(1);
@@ -350,11 +353,17 @@ namespace AnneProKeyboard
 
             if (this.CurrentlyEditingFnKey != null)
             {
+                RelativePanel parent = (RelativePanel)CurrentlyEditingFnKey.Parent;
+                RelativePanel.SetRightOf(CurrentlyEditingFnKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) - 1]);
+                RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) + 1], CurrentlyEditingFnKey);
                 this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
             }
 
             if (this.CurrentlyEditingStandardKey != null)
             {
+                RelativePanel parent = (RelativePanel)CurrentlyEditingStandardKey.Parent;
+                RelativePanel.SetRightOf(CurrentlyEditingStandardKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) - 1]);
+                RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) + 1], CurrentlyEditingStandardKey);
                 this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
             }
 

@@ -42,7 +42,7 @@
                 <Pivot x:Name="rootPivot" Margin="0,-37,0,0" Canvas.ZIndex="0">
                     <PivotItem Header="Base Layer">
                         <!--Standard Pivot-->
-                        <Grid HorizontalAlignment="Center">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridStd">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -63,7 +63,7 @@
                                         <Setter Property="Width" Value="65" />
                                     </Style>
                                 </RelativePanel.Resources>
-                                <ComboBox Name="keyboardLayoutSelection" Margin="0,0,0,0" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" HorizontalAlignment="Left"  />
+                                <ComboBox Name="keyboardLayoutSelection" SelectionChanged="KeyboardStandardLayout_SelectionChanged" DropDownClosed="KeyboardStandardLayout_DropDownClosed" ItemsSource="{x:Bind KeyboardKeyLabels}" Visibility="Collapsed" />
                                 <Button Name="keyboardStandardLayoutButton0" Click="KeyboardLayoutButton_Click" Margin="2,5,0,0" Height="65"/>
                                 <Button Name="keyboardStandardLayoutButton1" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton0" />
                                 <Button Name="keyboardStandardLayoutButton2" Click="KeyboardLayoutButton_Click" RelativePanel.RightOf="keyboardStandardLayoutButton1"   />
@@ -166,7 +166,7 @@
                     </PivotItem>
                     <PivotItem Header="Fn Layer">
                         <!--Fn Pivot-->
-                        <Grid HorizontalAlignment="Center">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridFn">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
