@@ -81,7 +81,10 @@ namespace AnneProKeyboard
 
                     foreach (KeyboardProfileItem profile in saved_profiles)
                     {
-                        this._keyboardProfiles.Add(profile);
+                        if(!_keyboardProfiles.Contains(profile))
+                        {
+                            this._keyboardProfiles.Add(profile);
+                        }
                     }
                 }
             }

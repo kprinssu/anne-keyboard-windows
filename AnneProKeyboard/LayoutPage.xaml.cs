@@ -88,9 +88,12 @@ namespace AnneProKeyboard
                     DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
                     ObservableCollection <KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
 
-                    foreach(KeyboardProfileItem profile in saved_profiles)
+                    foreach (KeyboardProfileItem profile in saved_profiles)
                     {
-                        this._keyboardProfiles.Add(profile);
+                        if (!_keyboardProfiles.Contains(profile))
+                        {
+                            this._keyboardProfiles.Add(profile);
+                        }
                     }
                 }
             }
