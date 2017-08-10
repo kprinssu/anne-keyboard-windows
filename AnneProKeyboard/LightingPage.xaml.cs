@@ -566,7 +566,11 @@ namespace AnneProKeyboard
             if (LightingProfilesCombo == null) return;
             var combo = (ComboBox)sender;
             var item = (KeyboardProfileItem)combo.SelectedItem;
-            ChangeSelectedProfile(item);
+            if (item == null)
+            {
+                this.CreateNewKeyboardProfile();
+            }
+            ChangeSelectedProfile(_keyboardProfiles[0]);
         }
 
         private void LightingProfilesCombo_Loaded(object sender, RoutedEventArgs e)
