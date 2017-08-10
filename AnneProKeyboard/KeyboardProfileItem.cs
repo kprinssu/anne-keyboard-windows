@@ -232,7 +232,7 @@ namespace AnneProKeyboard
                 return false;
             }
 
-            if (obj.GetType() == this.GetType())
+            if (obj.GetType() == typeof(KeyboardProfileItem))
             {
                 KeyboardProfileItem that = obj as KeyboardProfileItem;
                 return (this.ID == that.ID && this.Label == that.Label);
@@ -243,6 +243,10 @@ namespace AnneProKeyboard
 
         public static bool operator ==(KeyboardProfileItem a, KeyboardProfileItem b)
         {
+            if (object.ReferenceEquals(a, null))
+            {
+                return object.ReferenceEquals(b, null);
+            }
             return a.Equals(b);
         }
 
