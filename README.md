@@ -1,20 +1,5 @@
-# To-do list
-* ~~Move connection logic away from individual pages and into the mainpage~~
-* ~~Save/sync profiles from child page (Logic to save in parent)~~
-* ~~Load profiles when selecting from the dropdown~~
-* Split the profiles between Lighting and Layout (second guessing)
-* There is the slightest shift of layout from layoutpage to lightingpage
-* ~~Loading profile first in dropown~~
-* Match theme of colorpicker to app
-* Manual testing
-* Commit, push, PR
-
 # Anne Keyboard Windows
 A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.  
-Screenshots:  
-* [1](https://i.imgur.com/oJv5uQu.png)
-* [2](https://i.imgur.com/EHNpCav.png)
-* [3](https://i.imgur.com/Qchd8xw.png)
 
 ## Requirements
 This app has been tested against Windows 10. Other version of Windows is not supported due to Universal Windows App (UWP) platform only supporting Windows 10.
@@ -30,6 +15,11 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 * Automatic keyboard pairing (launch the app, and it should start scanning for the keyboard)
 * Create and manage profiles
 * Set keyboard backlight colours
+
+### Screenshots:  
+<img src="https://i.imgur.com/oJv5uQu.png" />
+<img src="https://i.imgur.com/EHNpCav.png" />
+<img src="https://i.imgur.com/Qchd8xw.png" />
 
 ## Planned Features
 * Support for changing keyboard layouts
