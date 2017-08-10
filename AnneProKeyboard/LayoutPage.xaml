@@ -34,7 +34,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
+                    <Button Name="ProfileAddButton"  BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
                         <SymbolIcon Symbol="Add" Foreground="#FFB8B9BA" />
                     </Button>
                 </StackPanel>

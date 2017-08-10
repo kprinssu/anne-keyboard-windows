@@ -78,7 +78,7 @@ namespace AnneProKeyboard
             }
         }
 
-        private async void LoadProfiles()
+        public async void LoadProfiles()
         {
             try
             {
@@ -115,6 +115,10 @@ namespace AnneProKeyboard
 
         private void ChangeSelectedProfile(KeyboardProfileItem profile)
         {
+            if(profile == null)
+            {
+                return;
+            }
             this.EditingProfile = profile;
 
             // set up the background colours for the keyboard lights
@@ -182,8 +186,9 @@ namespace AnneProKeyboard
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
-
             this.SaveProfiles();
+            this.ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
+            this.LayoutProfilesCombo.SelectedIndex = this.LayoutProfilesCombo.Items.Count - 1;
         }
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
@@ -211,6 +216,7 @@ namespace AnneProKeyboard
             KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
 
             this._keyboardProfiles.Remove(selected_profile);
+            //this.LayoutProfilesCombo.Items.Remove(selected_profile);
 
             // always make sure that the keyboard profiles list has 1 element in it
             if (this._keyboardProfiles.Count == 0)
@@ -220,7 +226,8 @@ namespace AnneProKeyboard
 
             // Change the chosen profile to the first element
             ChangeSelectedProfile(this._keyboardProfiles[0]);
-
+            LayoutProfilesCombo.SelectedIndex = 0;
+            LayoutProfilesCombo.IsDropDownOpen = false;
             this.SaveProfiles();
         }
         
@@ -229,18 +236,10 @@ namespace AnneProKeyboard
             this.SaveProfiles();
 
             TextBox textbox = (TextBox)sender;
-            textbox.IsEnabled = false;
-            textbox.Visibility = Visibility.Collapsed;
-
-            FrameworkElement parent = (FrameworkElement)textbox.Parent;
-            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            textblock.Visibility = Visibility.Visible;
 
             this.RenamingProfile = null;
         }
-
-     
-        
+  
         private void KeyboardProfiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if(e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
@@ -288,9 +287,21 @@ namespace AnneProKeyboard
             //add the combobox to relative panel and place it into the correct position
             RelativePanel parent = (RelativePanel)button.Parent;
             parent.Children.Add(keyboardLayoutSelection);
-            RelativePanel.SetRightOf(keyboardLayoutSelection, parent.Children[parent.Children.IndexOf(button) - 1]);
-            RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(button) + 1], keyboardLayoutSelection);
-            keyboardLayoutSelection.Width = button.Width+1; //account for 1px between buttons
+            var button_idx = parent.Children.IndexOf(button);
+            var width = button.Width + 1;
+            if (button_idx != 0)
+            {
+                RelativePanel.SetRightOf(keyboardLayoutSelection, parent.Children[parent.Children.IndexOf(button) - 1]);
+            } else
+            {
+                RelativePanel.SetRightOf(keyboardLayoutSelection, null);
+                width += 1;
+            }
+            if (button_idx != parent.Children.Count - 2) //added combobox, account for it here
+            {
+                RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(button) + 1], keyboardLayoutSelection);
+            }
+            keyboardLayoutSelection.Width = width; //account for 1px between buttons
             keyboardLayoutSelection.SelectedIndex = this.KeyboardKeyLabels.IndexOf((string)button.Content);
             
             button.Visibility = Visibility.Collapsed;
@@ -353,18 +364,32 @@ namespace AnneProKeyboard
 
             if (this.CurrentlyEditingFnKey != null)
             {
-                RelativePanel parent = (RelativePanel)CurrentlyEditingFnKey.Parent;
-                RelativePanel.SetRightOf(CurrentlyEditingFnKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) - 1]);
-                RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) + 1], CurrentlyEditingFnKey);
                 this.CurrentlyEditingFnKey.Visibility = Visibility.Visible;
+                RelativePanel parent = (RelativePanel)CurrentlyEditingFnKey.Parent;
+                var button_idx = parent.Children.IndexOf(CurrentlyEditingFnKey);
+                if (button_idx != 0)
+                {
+                    RelativePanel.SetRightOf(CurrentlyEditingFnKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) - 1]);
+                }
+                if (button_idx != parent.Children.Count - 2)
+                {
+                    RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingFnKey) + 1], CurrentlyEditingFnKey);
+                }
             }
 
             if (this.CurrentlyEditingStandardKey != null)
             {
-                RelativePanel parent = (RelativePanel)CurrentlyEditingStandardKey.Parent;
-                RelativePanel.SetRightOf(CurrentlyEditingStandardKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) - 1]);
-                RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) + 1], CurrentlyEditingStandardKey);
                 this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
+                RelativePanel parent = (RelativePanel)CurrentlyEditingStandardKey.Parent;
+                var button_idx = parent.Children.IndexOf(CurrentlyEditingStandardKey);
+                if (button_idx != 0)
+                {
+                    RelativePanel.SetRightOf(CurrentlyEditingStandardKey, parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) - 1]);
+                }
+                if (button_idx != parent.Children.Count - 2)
+                {
+                    RelativePanel.SetRightOf(parent.Children[parent.Children.IndexOf(CurrentlyEditingStandardKey) + 1], CurrentlyEditingStandardKey);
+                }
             }
 
             this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
@@ -380,7 +405,14 @@ namespace AnneProKeyboard
 
         private void LayoutProfilesCombo_Loaded(object sender, RoutedEventArgs e)
         {
-            LayoutProfilesCombo.SelectedIndex = 0;
+            try
+            {
+                LayoutProfilesCombo.SelectedIndex = 0;
+            } catch
+            {
+                //some occassions the load doesn't load correctly
+                //dont set any in combobox
+            }
         }
     }
 }

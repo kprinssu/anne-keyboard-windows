@@ -357,7 +357,7 @@ namespace AnneProKeyboard
             {
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    //this.SyncStatus.Text = (string)object_s;
+                    this.SyncStatus.Text = (string)object_s;
 
                     this.ProfileSyncButton.IsEnabled = true;
                 });
@@ -368,7 +368,7 @@ namespace AnneProKeyboard
         {
             if (!child.EditingProfile.ValidateKeyboardKeys())
             {
-                //this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
+                this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
                 return;
             }
 
@@ -381,7 +381,7 @@ namespace AnneProKeyboard
             {
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
-                    //this.SyncStatus.Text = (string)object_s;
+                    this.SyncStatus.Text = (string)object_s;
 
                     this.ProfileSyncButton.IsEnabled = true;
                 });
@@ -398,6 +398,7 @@ namespace AnneProKeyboard
             if (!(_frame.Content.GetType() == typeof(LightingPage)))
             {
                 _frame.Content = lightingPage;
+                lightingPage.LoadProfiles();
                 if (connectionStatusLabel.Text == "Connected")
                 {
                     ProfileSyncButton.IsEnabled = true;
@@ -412,6 +413,7 @@ namespace AnneProKeyboard
             if (!(_frame.Content.GetType() == typeof(LayoutPage)))
             {
                 _frame.Content = layoutPage;
+                layoutPage.LoadProfiles();
                 if(connectionStatusLabel.Text == "Connected")
                 {
                     ProfileSyncButton.IsEnabled = true;

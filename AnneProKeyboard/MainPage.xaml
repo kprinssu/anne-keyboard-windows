@@ -82,6 +82,7 @@
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE702;" Foreground="White" VerticalAlignment="Center" FontSize="20" />
                             <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" VerticalAlignment="Center" Foreground="Red" />
                         </StackPanel>
+                        <TextBlock Name="SyncStatus" Text="Waiting for sync..." VerticalAlignment="Center" Margin="26,0,0,0"></TextBlock>
                     </StackPanel>
                     <StackPanel HorizontalAlignment="Right" Height="30" VerticalAlignment="Center">
                         <Button x:FieldModifier="public" x:Name="ProfileSyncButton" Content="Sync Profile" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0" IsEnabled="False" Click="KeyboardSyncButton_Click" Height="32" Width="100" />

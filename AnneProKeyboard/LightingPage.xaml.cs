@@ -69,7 +69,7 @@ namespace AnneProKeyboard
             }
         }
 
-        private async void LoadProfiles()
+        public async void LoadProfiles()
         {
             try
             {
@@ -495,8 +495,9 @@ namespace AnneProKeyboard
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
-
             this.SaveProfiles();
+            this.ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
+            this.LightingProfilesCombo.SelectedIndex = this.LightingProfilesCombo.Items.Count - 1;
         }
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
@@ -533,6 +534,7 @@ namespace AnneProKeyboard
 
             // Change the chosen profile to the first element
             ChangeSelectedProfile(this._keyboardProfiles[0]);
+            LightingProfilesCombo.SelectedIndex = 0;
 
             this.SaveProfiles();
         }
@@ -542,12 +544,6 @@ namespace AnneProKeyboard
             this.SaveProfiles();
 
             TextBox textbox = (TextBox)sender;
-            textbox.IsEnabled = false;
-            textbox.Visibility = Visibility.Collapsed;
-
-            FrameworkElement parent = (FrameworkElement)textbox.Parent;
-            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            textblock.Visibility = Visibility.Visible;
 
             this.RenamingProfile = null;
         }
@@ -575,7 +571,13 @@ namespace AnneProKeyboard
 
         private void LightingProfilesCombo_Loaded(object sender, RoutedEventArgs e)
         {
-            LightingProfilesCombo.SelectedIndex = 0;
+            try
+            {
+                LightingProfilesCombo.SelectedIndex = 0;
+            } catch
+            {
+
+            }
         }
 
         private void colourPicker_SelectedColorChanged(object sender, EventArgs e)
