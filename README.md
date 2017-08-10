@@ -10,7 +10,11 @@
 * Commit, push, PR
 
 # Anne Keyboard Windows
-A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
+A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.  
+Screenshots:  
+* [1](https://i.imgur.com/oJv5uQu.png)
+* [2](https://i.imgur.com/EHNpCav.png)
+* [3](https://i.imgur.com/Qchd8xw.png)
 
 ## Requirements
 This app has been tested against Windows 10. Other version of Windows is not supported due to Universal Windows App (UWP) platform only supporting Windows 10.
