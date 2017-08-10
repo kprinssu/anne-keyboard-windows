@@ -68,13 +68,18 @@ namespace AnneProKeyboard
             MemoryStream memory_stream = new MemoryStream();
             DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
             serialiser.WriteObject(memory_stream, this._keyboardProfiles);
-            
-            StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
-            using (Stream file_stream = await file.OpenStreamForWriteAsync())
+            try
             {
-                memory_stream.Seek(0, SeekOrigin.Begin);
-                await memory_stream.CopyToAsync(file_stream);
-                await file_stream.FlushAsync();
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
+                using (Stream file_stream = await file.OpenStreamForWriteAsync())
+                {
+                    memory_stream.Seek(0, SeekOrigin.Begin);
+                    await memory_stream.CopyToAsync(file_stream);
+                    await file_stream.FlushAsync();
+                }
+            } catch(UnauthorizedAccessException)
+            {
+                throw new UnauthorizedAccessException();
             }
         }
 

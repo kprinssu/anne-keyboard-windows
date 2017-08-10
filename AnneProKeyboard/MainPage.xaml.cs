@@ -44,7 +44,6 @@ namespace AnneProKeyboard
 
         private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
-        private MainPage mainPage;
         private AboutPage aboutPage;
         private LayoutPage layoutPage;
         private LightingPage lightingPage;
@@ -348,7 +347,14 @@ namespace AnneProKeyboard
                 return;
             }
 
-            child.SaveProfiles();
+            try
+            {
+                child.SaveProfiles();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                SyncStatus.Text = "UnAuthorizedAccessException: Unable to access file. ";
+            }
 
             ProfileSyncButton.IsEnabled = false;
 
@@ -372,8 +378,14 @@ namespace AnneProKeyboard
                 return;
             }
 
-            child.SaveProfiles();
-
+            try
+            {
+                child.SaveProfiles();
+            }
+            catch (UnauthorizedAccessException)
+            {
+                SyncStatus.Text = "UnAuthorizedAccessException: Unable to access file. ";
+            }
             ProfileSyncButton.IsEnabled = false;
 
             this.SyncProfile(child.EditingProfile);
