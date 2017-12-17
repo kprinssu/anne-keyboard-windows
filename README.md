@@ -1,5 +1,5 @@
 # Anne Keyboard Windows
-A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.
+A Universal Windows App for controlling the an Anne Pro keyboard over Bluetooth Low Energy.  
 
 ## Requirements
 This app has been tested against Windows 10. Other version of Windows is not supported due to Universal Windows App (UWP) platform only supporting Windows 10.
@@ -16,10 +16,15 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 * Create and manage profiles
 * Set keyboard backlight colours
 
+### Screenshots:  
+<img src="https://i.imgur.com/oJv5uQu.png" />
+<img src="https://i.imgur.com/EHNpCav.png" />
+<img src="https://i.imgur.com/Qchd8xw.png" />
+
 ## Planned Features
 * Support for changing keyboard layouts
 * Implement keyboard macros
-* Improve changing multiple button keyboard light colours
+* ~~Improve changing multiple button keyboard light colours~~
 
 ## Known Bugs
 * None so far. 

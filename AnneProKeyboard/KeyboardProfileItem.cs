@@ -43,7 +43,7 @@ namespace AnneProKeyboard
         {
             this.ID = ID;
             this.Label = Label;
-            
+
             this.KeyboardColours = new List<int>();
 
             // We only need 70 values to represent the 61 keys (70 is needed for some reason by the keyboard..)
@@ -176,7 +176,7 @@ namespace AnneProKeyboard
         {
             this.SyncProfilePhase1(gatt);
         }
-		
+
         // send the backlight first data, should cause a waterfall effect on syncing up the profile
         private void SyncProfilePhase1(GattCharacteristic gatt)
         {
@@ -190,7 +190,7 @@ namespace AnneProKeyboard
             KeyboardWriter keyboard_writer = new KeyboardWriter(gatt, lighting_meta_data, light_data);
             keyboard_writer.WriteToKeyboard();
 
-            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(gatt); NotifyStatus("Keyboard light has been synced");  }; // we need to do this because of async calls, threading is fun!
+            keyboard_writer.OnWriteFinished += (object_s, events) => { SyncProfilePhase2(gatt); NotifyStatus("Keyboard light has been synced"); }; // we need to do this because of async calls, threading is fun!
             keyboard_writer.OnWriteFailed += (object_s, events) => { NotifyStatus("Failed to sync profile (light): exception handled"); };
         }
 
@@ -223,6 +223,41 @@ namespace AnneProKeyboard
             {
                 handler(status, EventArgs.Empty);
             }
+        }
+
+        public override Boolean Equals(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            if (obj.GetType() == typeof(KeyboardProfileItem))
+            {
+                KeyboardProfileItem that = obj as KeyboardProfileItem;
+                return (this.ID == that.ID && this.Label == that.Label);
+            }
+
+            return false;
+        }
+
+        public static bool operator ==(KeyboardProfileItem a, KeyboardProfileItem b)
+        {
+            if (object.ReferenceEquals(a, null))
+            {
+                return object.ReferenceEquals(b, null);
+            }
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(KeyboardProfileItem a, KeyboardProfileItem b)
+        {
+            return !(a == b);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
