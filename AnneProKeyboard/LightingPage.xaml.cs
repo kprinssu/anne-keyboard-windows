@@ -50,7 +50,7 @@ namespace AnneProKeyboard
         {
             this.InitializeComponent();
             LoadProfiles();
-            SelectedColour = colourPicker.SelectedColor.Color;
+            SelectedColour = colourPicker.Color;
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
         }
 
@@ -88,7 +88,7 @@ namespace AnneProKeyboard
 
                     foreach (KeyboardProfileItem profile in saved_profiles)
                     {
-                        if(!_keyboardProfiles.Contains(profile))
+                        if (!_keyboardProfiles.Contains(profile))
                         {
                             this._keyboardProfiles.Add(profile);
                         }
@@ -160,7 +160,7 @@ namespace AnneProKeyboard
             //check the WASD keys. If all same, color WASD button
             Color multi_colour = ConvertIntToColour(profile.KeyboardColours[16]); //W key idx
             Button multi_button = (this.FindName("WASDKeys") as Button);
-            Color default_colour = Color.FromArgb(255,94,97,102);
+            Color default_colour = Color.FromArgb(255, 94, 97, 102);
             if (colour_wasd(profile))
             {
                 setButtonColour(multi_button, multi_colour);
@@ -286,7 +286,7 @@ namespace AnneProKeyboard
                 int button_index = Int32.Parse(button.Name.Remove(0, 14));
                 int colour_int = this.EditingProfile.KeyboardColours[button_index];
                 this.SelectedColour = colour;
-                colourPicker.SelectedColor = new SolidColorBrush(colour);
+                colourPicker.Color = colour;
                 matchingButtonColour = false;
             }
         }
@@ -308,8 +308,7 @@ namespace AnneProKeyboard
                 Button button = (Button)sender;
                 int btn_int = Int32.Parse(button.Name.Remove(0, 14));
                 btn_int = this.EditingProfile.KeyboardColours[btn_int];
-                colourPicker.PreviousSelectedColor = colourPicker.SelectedColor;
-                colourPicker.SelectedColor = new SolidColorBrush(ConvertIntToColour(btn_int));
+                colourPicker.Color = ConvertIntToColour(btn_int);
                 this.SelectedColour = ConvertIntToColour(btn_int);
                 //enable multikey buttons
                 enableMultiButtons();
@@ -597,9 +596,9 @@ namespace AnneProKeyboard
             }
         }
 
-        private void colourPicker_SelectedColorChanged(object sender, EventArgs e)
+        private void colourPicker_ColorChanged(Windows.UI.Xaml.Controls.ColorPicker sender, ColorChangedEventArgs args)
         {
-            this.SelectedColour = colourPicker.SelectedColor.Color;
+            this.SelectedColour = sender.Color;
         }
     }
 }

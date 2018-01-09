@@ -7,14 +7,14 @@
     xmlns:xcp="using:Color_Picker"
     xmlns:Controls="using:Coding4Fun.Toolkit.Controls"
     x:Class="AnneProKeyboard.LightingPage"
-    mc:Ignorable="d" MinWidth="960" MinHeight="480" Height="754" Width="1025">
+    mc:Ignorable="d" >
 
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
     <Grid Background="#36393E">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,22,0" Canvas.ZIndex="1">
             <ComboBox x:Name="LightingProfilesCombo" Height="44" Width="296" 
                     ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="LightingProfilesCombo_SelectionChanged" Loaded="LightingProfilesCombo_Loaded">
@@ -159,7 +159,7 @@
                     <Button x:Name="keyboardButton69" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton68" />
                 </RelativePanel>
             </Grid>
-            <Grid Margin="15,15,22,0">
+            <Grid Margin="15,15,22,0" Height="695">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -192,7 +192,21 @@
                         <Button x:Name="ColourTool" Content="Match a Colour" IsEnabled='True' Click="KeyboardColourPickerButton_Click"/>
                     </StackPanel>
                 </Grid>
-                <my:ColorPicker x:Name="colourPicker" Grid.Column="1" Background="#FF36393E" Margin="8,0,0,0" Height="280" SelectedColorChanged="colourPicker_SelectedColorChanged" Foreground="#FF36393E"/>
+                <RelativePanel Grid.Column="1" HorizontalAlignment="Center">
+                    <ColorPicker x:Name="colourPicker"
+                        IsAlphaEnabled="True"
+                        IsHexInputVisible="True"
+                        ColorChanged="colourPicker_ColorChanged" Margin="0,0,0,-347" />
+
+                    <Grid RelativePanel.Below="colourPicker"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </RelativePanel>
 
                 <!--<Controls:ColorPicker Grid.Column="1" x:Name="colourPicker" Margin="10,5,0,15" Visibility="Visible" ColorChanged="colourPicker_colourChanged" Width="374" Height="358" SizeChanged="colourPicker_SizeChanged"/>-->
                 <!--<StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
@@ -203,10 +217,7 @@
                 <!--</StackPanel>-->
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />
-        </StackPanel>
-
     </Grid>
+    </ScrollViewer>
 </Page>
+    

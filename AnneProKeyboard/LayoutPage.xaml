@@ -7,17 +7,17 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:xcp="using:Color_Picker"
     xmlns:fa="using:FontAwesome.UWP"
-    mc:Ignorable="d" MinWidth="960" MinHeight="480">
+    mc:Ignorable="d" MinHeight="480">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
 
-    <Grid Background="#36393e">
+        <Grid Background="#36393e">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-
             <StackPanel Orientation="Vertical" Grid.Row="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,22,0" Canvas.ZIndex="1">
-                <ComboBox x:Name="LayoutProfilesCombo" Height="44" Width="296" 
+                    <ComboBox x:Name="LayoutProfilesCombo" Height="44" Width="296" 
                         ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="LayoutProfilesCombo_SelectionChanged" Loaded="LayoutProfilesCombo_Loaded">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -289,5 +289,7 @@
                     </PivotItem>
                 </Pivot>
             </StackPanel>
-        </Grid>
+    </Grid>
+    </ScrollViewer>
+
 </Page>

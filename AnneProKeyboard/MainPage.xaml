@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:fa="using:FontAwesome.UWP"
-    mc:Ignorable="d" MinWidth="960" MinHeight="480">
+    mc:Ignorable="d" MinHeight="480">
 
     <SplitView x:Name="splitView" DisplayMode="CompactOverlay"  IsPaneOpen="False" CompactPaneLength="50" OpenPaneLength="256">
         <SplitView.Resources>
@@ -62,7 +62,6 @@
                     </StackPanel>
                 </StackPanel>
             </Grid>
-
         </SplitView.Pane>
         <SplitView.Content>
             <Grid>
