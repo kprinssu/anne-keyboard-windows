@@ -42,7 +42,7 @@ namespace AnneProKeyboard
         private GattCharacteristic ReadGatt;
         private DeviceInformation KeyboardDeviceInformation;
 
-        private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+        //private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
         private AboutPage aboutPage;
         private LayoutPage layoutPage;
@@ -52,15 +52,16 @@ namespace AnneProKeyboard
         {
             this.InitializeComponent();
             initPages();
-            _frame.Content = layoutPage;
+            //_frame.Content = layoutPage;
             // Start up the background thread to find the keyboard
             FindKeyboard();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonInactiveBackgroundColor = Colors.White;
-            titleBar.ButtonInactiveForegroundColor = Color.FromArgb(1, 152, 152, 152);
-            Window.Current.SetTitleBar(MainTitleBar);
-            Window.Current.Activated += Current_Activated;
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
+            //titleBar = ApplicationView.GetForCurrentView().TitleBar;
+            //titleBar.ButtonInactiveBackgroundColor = Colors.White;
+            //titleBar.ButtonInactiveForegroundColor = Color.FromArgb(1, 152, 152, 152);
+            //Window.Current.SetTitleBar(MainTitleBar);
+            //Window.Current.Activated += Current_Activated;
+            lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
             Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
         }
 
@@ -295,11 +296,6 @@ namespace AnneProKeyboard
             EditingProfile.SyncProfile(this.WriteGatt);
         }
 
-        private void hamburgerHover(object sender, RoutedEventArgs e)
-        {
-            //HamburgerButton.Background = new SolidColorBrush(Colors.Red);
-        }
-
         private static Color lightenDarkenColor(Color color, double correctionFactor)
         {
             double red = (255 - color.R) * correctionFactor + color.R;
@@ -308,23 +304,21 @@ namespace AnneProKeyboard
             return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
         }
 
-        private void Current_Activated(object sender, WindowActivatedEventArgs e)
-        {
-            if (e.WindowActivationState != CoreWindowActivationState.Deactivated)
-            {
-                MainTitleBar.Background = new SolidColorBrush((Color)this.Resources["SystemAccentColor"]);
-                pageHeader.Foreground = new SolidColorBrush(Colors.White);
-                HamburgerButton.Background = new SolidColorBrush(Color.FromArgb(51,255,255,255));
-                HamburgerButton.Foreground = new SolidColorBrush(Colors.White);
-            }
-            else
-            {
-                pageHeader.Foreground = new SolidColorBrush(Color.FromArgb(255, 152, 152, 152));
-                MainTitleBar.Background = new SolidColorBrush(Colors.White);
-                HamburgerButton.Background = new SolidColorBrush(Colors.White);
-                HamburgerButton.Foreground = new SolidColorBrush(Color.FromArgb(255, 152, 152, 152));
-            }
-        }
+        //private void Current_Activated(object sender, WindowActivatedEventArgs e)
+        //{
+        //    if (e.WindowActivationState != CoreWindowActivationState.Deactivated)
+        //    {
+        //        MainTitleBar.Background = new SolidColorBrush((Color)this.Resources["SystemAccentColor"]);
+        //        pageHeader.Foreground = new SolidColorBrush(Colors.White);
+
+        //    }
+        //    else
+        //    {
+        //        pageHeader.Foreground = new SolidColorBrush(Color.FromArgb(255, 152, 152, 152));
+        //        MainTitleBar.Background = new SolidColorBrush(Colors.White);
+
+        //    }
+        //}
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
         {
@@ -400,58 +394,67 @@ namespace AnneProKeyboard
             };
         }
 
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        private void AnneNav_Loaded(object sender, RoutedEventArgs e)
         {
-            splitView.IsPaneOpen = !splitView.IsPaneOpen;
-        }
-
-        private void LightingNav_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (!(_frame.Content.GetType() == typeof(LightingPage)))
+            // set the initial SelectedItem 
+            foreach (NavigationViewItemBase item in AnneNav.MenuItems)
             {
-                _frame.Content = lightingPage;
-                lightingPage.LoadProfiles();
-                if (connectionStatusLabel.Text == "Connected")
+                if (item is NavigationViewItem && item.Tag.ToString() == "layout")
                 {
-                    ProfileSyncButton.IsEnabled = true;
+                    AnneNav.SelectedItem = item;
+                    break;
                 }
-                pageHeader.Text = "Lighting";
-                LightingMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }
 
-        private void LayoutNav_Clicked(object sender, RoutedEventArgs e)
+        private void AnneNav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (!(_frame.Content.GetType() == typeof(LayoutPage)))
+            if (args.IsSettingsSelected)
             {
-                _frame.Content = layoutPage;
-                layoutPage.LoadProfiles();
-                if(connectionStatusLabel.Text == "Connected")
+                sender.Header = "About";
+                this._frame.Content = aboutPage;
+            }
+            else
+            {
+
+                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
+
+                switch (item.Tag)
                 {
-                    ProfileSyncButton.IsEnabled = true;
+                    case "layout":
+                        _frame.Content = layoutPage;
+                        break;
+
+                    case "lighting":
+                        _frame.Content = lightingPage;
+                        break;
                 }
-                pageHeader.Text = "Layers";
-                LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }
 
-        private void AboutNav_Clicked(object sender, RoutedEventArgs e)
+        private void AnneNav_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (!(_frame.Content.GetType() == typeof(AboutPage)))
+            if (args.IsSettingsInvoked)
             {
+                //ContentFrame.Navigate(typeof(AboutPage));
+                        sender.Header = "About";
                 _frame.Content = aboutPage;
-                if (connectionStatusLabel.Text == "Connected")
-                {
-                    ProfileSyncButton.IsEnabled = false;
-                }
-                pageHeader.Text = "About";
-                LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
-        }
+            else
+            {
+                switch (args.InvokedItem)
+                {
+                    case "Layout":
+                        sender.Header = "Layout";
+                        _frame.Content = layoutPage;
+                        break;
 
-        private void pageHeader_SelectionChanged(object sender, RoutedEventArgs e)
-        {
-
+                    case "Lighting":
+                        sender.Header = "Lighting";
+                        _frame.Content = lightingPage;
+                        break;
+                }
+            }
         }
     }
 }

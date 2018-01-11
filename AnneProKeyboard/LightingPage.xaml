@@ -10,7 +10,7 @@
     mc:Ignorable="d" >
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    <Grid Background="#36393E">
+    <Grid Background="#000">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*" />
