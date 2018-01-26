@@ -18,9 +18,8 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
-using Windows.UI.Xaml.Input;
+using Windows.ApplicationModel;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -57,24 +56,21 @@ namespace AnneProKeyboard
         private LayoutPage layoutPage;
         private LightingPage lightingPage;
 
+        private Boolean IsContentPage;
+
         public MainPage()
         {
             this.InitializeComponent();
             initPages();
             this._frame.Content = new LayoutPage();
-            //_frame.Content = layoutPage;
-            // Start up the background thread to find the keyboard
+            IsContentPage = true;
             FindKeyboard();
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
-            //titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            //titleBar.ButtonInactiveBackgroundColor = Colors.White;
-            //titleBar.ButtonInactiveForegroundColor = Color.FromArgb(1, 152, 152, 152);
-            //Window.Current.SetTitleBar(MainTitleBar);
-            //Window.Current.Activated += Current_Activated;
             lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
             Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
             LoadProfiles();
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
         }
 
         private void initPages()
@@ -93,10 +89,9 @@ namespace AnneProKeyboard
 
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
-            //this.CreateNewKeyboardProfile();
-            //this.SaveProfiles();
-            //this.ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
-            //this.LightingProfilesCombo.SelectedIndex = this.LightingProfilesCombo.Items.Count - 1;
+            this.CreateNewKeyboardProfile();
+            (this._frame.Content as IContentPage).ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
+            this.ProfilesCombo.SelectedIndex = this.ProfilesCombo.Items.Count - 1;
         }
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
@@ -114,6 +109,7 @@ namespace AnneProKeyboard
             textblock.Visibility = Visibility.Collapsed;
 
             this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
+            SaveProfiles();
         }
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
@@ -331,6 +327,8 @@ namespace AnneProKeyboard
 
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
+            SaveProfiles();
+
             if (this.BluetoothDeviceWatcher != null)
             {
                 BluetoothDeviceWatcher.Added -= BluetoothDeviceAdded;
@@ -569,12 +567,13 @@ namespace AnneProKeyboard
         {
             if (args.IsSettingsSelected)
             {
+                IsContentPage = false;
                 sender.Header = "About";
                 this._frame.Content = aboutPage;
             }
             else
             {
-
+                IsContentPage = true;
                 NavigationViewItem item = args.SelectedItem as NavigationViewItem;
 
                 switch (item.Tag)
@@ -594,12 +593,13 @@ namespace AnneProKeyboard
         {
             if (args.IsSettingsInvoked)
             {
-                //ContentFrame.Navigate(typeof(AboutPage));
-                        sender.Header = "About";
+                IsContentPage = false;
+                sender.Header = "About";
                 _frame.Content = aboutPage;
             }
             else
             {
+                IsContentPage = true;
                 switch (args.InvokedItem)
                 {
                     case "Layout":

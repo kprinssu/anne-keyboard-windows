@@ -16,10 +16,10 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Vertical" Grid.Row="0">
-                <Pivot x:Name="rootPivot" Margin="0, 0,0,0" Canvas.ZIndex="0">
+                <Pivot x:Name="rootPivot" Canvas.ZIndex="0">
                     <PivotItem Header="Base Layer">
                         <!--Standard Pivot-->
-                        <Grid HorizontalAlignment="Center" Name="keyboardGridStd">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridStd" Margin="-50,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -143,7 +143,7 @@
                     </PivotItem>
                     <PivotItem Header="Fn Layer">
                         <!--Fn Pivot-->
-                        <Grid HorizontalAlignment="Center" Name="keyboardGridFn">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridFn" Margin="-50,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
