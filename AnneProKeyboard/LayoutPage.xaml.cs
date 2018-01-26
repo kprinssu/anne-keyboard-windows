@@ -28,19 +28,12 @@ namespace AnneProKeyboard
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class LayoutPage : Page
+    public sealed partial class LayoutPage : Page, IContentPage
     {
         //public MainPage ParentWindow { get; set; }
 
-        private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
-        public KeyboardProfileItem EditingProfile;
+        public KeyboardProfileItem editingProfile;
         public KeyboardProfileItem RenamingProfile;
-
-        public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
-        {
-            get { return _keyboardProfiles; }
-            set { }
-        }
 
         public ObservableCollection<String> KeyboardKeyLabels = new ObservableCollection<String>();
         private Dictionary<String, String> KeyboardKeyLabelTranslation = new Dictionary<String, String>();
@@ -57,77 +50,15 @@ namespace AnneProKeyboard
             }
 
             this.InitializeComponent();
-
-            LoadProfiles();
-
-            this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
         }
 
-        public async void SaveProfiles()
-        {
-            MemoryStream memory_stream = new MemoryStream();
-            DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-            serialiser.WriteObject(memory_stream, this._keyboardProfiles);
-            try
-            {
-                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
-                using (Stream file_stream = await file.OpenStreamForWriteAsync())
-                {
-                    memory_stream.Seek(0, SeekOrigin.Begin);
-                    await memory_stream.CopyToAsync(file_stream);
-                    await file_stream.FlushAsync();
-                }
-            } catch(UnauthorizedAccessException)
-            {
-                throw new UnauthorizedAccessException();
-            }
-        }
-
-        public async void LoadProfiles()
-        {
-            try
-            {
-                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("KeyboardProfilesData");
-                using (IInputStream inStream = await file.OpenSequentialReadAsync())
-                {
-                    DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-                    ObservableCollection <KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
-
-                    foreach (KeyboardProfileItem profile in saved_profiles)
-                    {
-                        if (!_keyboardProfiles.Contains(profile))
-                        {
-                            this._keyboardProfiles.Add(profile);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            // UI init code
-            if (this._keyboardProfiles.Count == 0)
-            {
-                this.CreateNewKeyboardProfile();
-            }
-
-            ChangeSelectedProfile(this._keyboardProfiles[0]);
-        }
-
-		private void CreateNewKeyboardProfile()
-        {
-            KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
-            this._keyboardProfiles.Add(profile_item);
-        }
-
-        private void ChangeSelectedProfile(KeyboardProfileItem profile)
+        public void ChangeSelectedProfile(KeyboardProfileItem profile)
         {
             if(profile == null)
             {
                 return;
             }
-            this.EditingProfile = profile;
+            this.editingProfile = profile;
 
             // set up the background colours for the keyboard lights
             for (int i = 0; i < 70; i++)
@@ -168,96 +99,6 @@ namespace AnneProKeyboard
                     continue;
                 }
                 int coloured_int = profile.KeyboardColours[i];
-            }
-        }
-
-        //private void KeyboardProfiles_ItemClick(object sender, EventArgs e)
-        //{
-        //    KeyboardProfileItem profile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
-        //    ChangeSelectedProfile(profile);
-        //}
-
-        private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox profileName = (sender as TextBox);
-            // update Views and KeyboardProfileItem class
-            if(this.EditingProfile == RenamingProfile)
-            {
-            }
-            
-            if(this.RenamingProfile != null)
-            {
-                this.RenamingProfile.Label = profileName.Text;
-            }
-        }
-
-        private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.CreateNewKeyboardProfile();
-            this.SaveProfiles();
-            this.ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
-            this.LayoutProfilesCombo.SelectedIndex = this.LayoutProfilesCombo.Items.Count - 1;
-        }
-
-        private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            textbox.IsEnabled = true;
-            textbox.Visibility = Visibility.Visible;
-            FocusState focus_state = FocusState.Keyboard;
-            textbox.Focus(focus_state);
-
-            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            textblock.Visibility = Visibility.Collapsed;
-
-            this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
-        }
-
-        private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
-
-            this._keyboardProfiles.Remove(selected_profile);
-            //this.LayoutProfilesCombo.Items.Remove(selected_profile);
-
-            // always make sure that the keyboard profiles list has 1 element in it
-            if (this._keyboardProfiles.Count == 0)
-            {
-                this.CreateNewKeyboardProfile();
-            }
-
-            // Change the chosen profile to the first element
-            ChangeSelectedProfile(this._keyboardProfiles[0]);
-            LayoutProfilesCombo.SelectedIndex = 0;
-            LayoutProfilesCombo.IsDropDownOpen = false;
-            this.SaveProfiles();
-        }
-        
-        private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            this.SaveProfiles();
-
-            TextBox textbox = (TextBox)sender;
-
-            this.RenamingProfile = null;
-        }
-  
-        private void KeyboardProfiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if(e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                // Really inefficient, we should consider re-implementing this later
-                for (int i = 0; i < this._keyboardProfiles.Count; i++)
-                {
-                    KeyboardProfileItem profile = this._keyboardProfiles[i];
-                    profile.ID = i;
-                }
             }
         }
 
@@ -349,7 +190,7 @@ namespace AnneProKeyboard
 
                 if(this.CurrentlyEditingFnKey != null)
                 {
-                    this.EditingProfile.FnKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+                    this.editingProfile.FnKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
 
 
                     this.CurrentlyEditingFnKey.Content = label;
@@ -357,14 +198,12 @@ namespace AnneProKeyboard
                 }
                 else
                 {
-                    this.EditingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
+                    this.editingProfile.NormalKeys[index] = KeyboardKey.StringKeyboardKeys[full_label];
 
                     this.CurrentlyEditingStandardKey.Content = label;
                     this.CurrentlyEditingStandardKey.Visibility = Visibility.Visible;
                 }
             }
-
-            this.SaveProfiles();
         }
 
         private void KeyboardStandardLayout_DropDownClosed(object sender, object e)
@@ -401,26 +240,6 @@ namespace AnneProKeyboard
             }
 
             this.keyboardLayoutSelection.Visibility = Visibility.Collapsed;
-        }
-
-        private void LayoutProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LayoutProfilesCombo == null) return;
-            var combo = (ComboBox) sender;
-            var item = (KeyboardProfileItem) combo.SelectedItem;
-            ChangeSelectedProfile(item);
-        }
-
-        private void LayoutProfilesCombo_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                LayoutProfilesCombo.SelectedIndex = 0;
-            } catch
-            {
-                //some occassions the load doesn't load correctly
-                //dont set any in combobox
-            }
         }
     }
 }

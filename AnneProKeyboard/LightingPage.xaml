@@ -1,11 +1,9 @@
-﻿<Page xmlns:my="using:ColorPicker" 
+﻿<Page
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:AnneProKeyboard"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:xcp="using:Color_Picker"
-    xmlns:Controls="using:Coding4Fun.Toolkit.Controls"
     x:Class="AnneProKeyboard.LightingPage"
     mc:Ignorable="d" >
 
@@ -15,29 +13,6 @@
             <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,22,0" Canvas.ZIndex="1">
-            <ComboBox x:Name="LightingProfilesCombo" Height="44" Width="296" 
-                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="LightingProfilesCombo_SelectionChanged" Loaded="LightingProfilesCombo_Loaded">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Grid.Row="3">
-                            <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
-                            <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
-                            <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
-                                <SymbolIcon Symbol="Edit" Foreground="White" />
-                            </Button>
-                            <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
-                                <SymbolIcon Symbol="Delete" Foreground="White" />
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
-                <SymbolIcon Symbol="Add" Foreground="#FFB8B9BA" />
-            </Button>
-        </StackPanel>
-        <!-- KeyboardColourButton_Click -->
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0">
             <Grid HorizontalAlignment="Center">
                 <Grid.Resources>
@@ -196,7 +171,7 @@
                     <ColorPicker x:Name="colourPicker"
                         IsAlphaEnabled="True"
                         IsHexInputVisible="True"
-                        ColorChanged="colourPicker_ColorChanged" Margin="0,0,0,-347" />
+                        ColorChanged="ColourPicker_ColorChanged" Margin="0,0,0,-347" />
 
                     <Grid RelativePanel.Below="colourPicker"
                         RelativePanel.AlignLeftWithPanel="True"

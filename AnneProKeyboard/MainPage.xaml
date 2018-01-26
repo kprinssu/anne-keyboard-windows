@@ -28,6 +28,25 @@
                     <RowDefinition Height="380*"/>
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Margin="0,-160,0,0" Height="50">
+                    <ComboBox x:Name="ProfilesCombo" Height="44" Width="296" 
+                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" Grid.Row="3">
+                                    <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
+                                    <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
+                                    <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
+                                        <SymbolIcon Symbol="Edit" Foreground="White" />
+                                    </Button>
+                                    <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
+                                        <SymbolIcon Symbol="Delete" Foreground="White" />
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </Grid>
                 <Frame Name="_frame" Grid.Row="0" Margin="0" Grid.RowSpan="2"/>
                 <Grid Grid.Row="2" Background="#2a2c31" Height="30">
                     <StackPanel Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}" Height="30px" >
