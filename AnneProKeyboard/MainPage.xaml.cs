@@ -114,24 +114,29 @@ namespace AnneProKeyboard
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //FrameworkElement parent = (FrameworkElement)button.Parent;
-            //TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            //KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
-
-            //this._keyboardProfiles.Remove(selected_profile);
+            Button button = (Button)sender;
+            FrameworkElement parent = (FrameworkElement)button.Parent;
+            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
+            KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
 
             //// always make sure that the keyboard profiles list has 1 element in it
-            //if (this._keyboardProfiles.Count == 0)
-            //{
-            //    this.CreateNewKeyboardProfile();
-            //    ChangeSelectedProfile(this._keyboardProfiles[0]);
-            //    LightingProfilesCombo.SelectedIndex = 0;
-            //}
-
+            if (this._keyboardProfiles.Count != 1)
+            {
+                int curr = this._keyboardProfiles.IndexOf(selected_profile);
+                if(curr - 1 == -1)
+                {
+                    ProfilesCombo.SelectedItem = this._keyboardProfiles[++curr];
+                } else
+                {
+                    ProfilesCombo.SelectedItem = this._keyboardProfiles[--curr];
+                }
+                this._keyboardProfiles.Remove(selected_profile);
+            }
+            //ensure not deleting the selected one or vice versa
+            //delete
             //// Change the chosen profile to the first element
 
-            //this.SaveProfiles();
+            this.SaveProfiles();
         }
 
         private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
@@ -617,7 +622,13 @@ namespace AnneProKeyboard
 
         private void ProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            SaveProfiles();
+            try
+            {
+                SaveProfiles();
+            } catch
+            {
+                this.SyncStatus.Text = "Profiles failed to save";
+            }
             lightingPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
             layoutPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
         }

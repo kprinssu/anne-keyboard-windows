@@ -168,8 +168,13 @@
                 </Grid>
                 <RelativePanel Grid.Column="1" HorizontalAlignment="Center">
                     <ColorPicker x:Name="colourPicker"
-                        IsAlphaEnabled="True"
+                        IsColorSliderVisible="True"
+                        IsColorChannelTextInputVisible="True"
                         IsHexInputVisible="True"
+                        IsAlphaEnabled="False"
+                        IsAlphaSliderVisible="True"
+                        IsAlphaTextInputVisible="True"
+                                 ColorSpectrumShape="Ring"
                         ColorChanged="ColourPicker_ColorChanged" Margin="0,0,0,-347" />
 
                     <Grid RelativePanel.Below="colourPicker"
