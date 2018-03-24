@@ -27,20 +27,12 @@ namespace AnneProKeyboard
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public partial class LightingPage : Page
+    public partial class LightingPage : Page, IContentPage
     {
-        private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
-        public KeyboardProfileItem EditingProfile;
-        public KeyboardProfileItem RenamingProfile;
-
         private Color SelectedColour;
         private Boolean matchingButtonColour = false;
 
-        public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
-        {
-            get { return _keyboardProfiles; }
-            set { }
-        }
+        public KeyboardProfileItem editingProfile = null;
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -49,74 +41,12 @@ namespace AnneProKeyboard
         public LightingPage()
         {
             this.InitializeComponent();
-            LoadProfiles();
             SelectedColour = colourPicker.Color;
-            this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
         }
 
-        public async void SaveProfiles()
+        public void ChangeSelectedProfile(KeyboardProfileItem profile)
         {
-            MemoryStream memory_stream = new MemoryStream();
-            DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-            serialiser.WriteObject(memory_stream, this._keyboardProfiles);
-
-            try
-            {
-                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
-                using (Stream file_stream = await file.OpenStreamForWriteAsync())
-                {
-                    memory_stream.Seek(0, SeekOrigin.Begin);
-                    await memory_stream.CopyToAsync(file_stream);
-                    await file_stream.FlushAsync();
-                }
-            }
-            catch (UnauthorizedAccessException)
-            {
-                throw new UnauthorizedAccessException();
-            }
-        }
-
-        public async void LoadProfiles()
-        {
-            try
-            {
-                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("KeyboardProfilesData");
-                using (IInputStream inStream = await file.OpenSequentialReadAsync())
-                {
-                    DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-                    ObservableCollection<KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
-
-                    foreach (KeyboardProfileItem profile in saved_profiles)
-                    {
-                        if (!_keyboardProfiles.Contains(profile))
-                        {
-                            this._keyboardProfiles.Add(profile);
-                        }
-                    }
-                }
-            }
-            catch
-            {
-            }
-
-            // UI init code
-            if (this._keyboardProfiles.Count == 0)
-            {
-                this.CreateNewKeyboardProfile();
-            }
-
-            ChangeSelectedProfile(this._keyboardProfiles[0]);
-        }
-
-        private void CreateNewKeyboardProfile()
-        {
-            KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
-            this._keyboardProfiles.Add(profile_item);
-        }
-
-        private void ChangeSelectedProfile(KeyboardProfileItem profile)
-        {
-            this.EditingProfile = profile;
+            this.editingProfile = profile;
             //chosenProfileName.Title = profile.Label;
 
             // set up the background colours for the keyboard lights
@@ -161,57 +91,57 @@ namespace AnneProKeyboard
             Color multi_colour = ConvertIntToColour(profile.KeyboardColours[16]); //W key idx
             Button multi_button = (this.FindName("WASDKeys") as Button);
             Color default_colour = Color.FromArgb(255, 94, 97, 102);
-            if (colour_wasd(profile))
+            if (ColourWASD(profile))
             {
-                setButtonColour(multi_button, multi_colour);
+                SetButtonColour(multi_button, multi_colour);
             }
             else
             {
-                setButtonColour(multi_button, default_colour);
+                SetButtonColour(multi_button, default_colour);
             }
 
             //check IJKL keys
-            if (colour_ijkl(profile))
+            if (ColourIJKL(profile))
             {
                 multi_colour = ConvertIntToColour(profile.KeyboardColours[22]); //I key idx
                 multi_button = (this.FindName("IJKLKeys") as Button);
-                setButtonColour(multi_button, multi_colour);
+                SetButtonColour(multi_button, multi_colour);
             }
             else
             {
-                setButtonColour(multi_button, default_colour);
+                SetButtonColour(multi_button, default_colour);
             }
 
             //check Modifier Keys
-            if (colour_modifiers(profile))
+            if (ColourModifiers(profile))
             {
                 multi_colour = ConvertIntToColour(profile.KeyboardColours[14]); //Tab key idx
                 multi_button = (this.FindName("ModifierKeys") as Button);
-                setButtonColour(multi_button, multi_colour);
+                SetButtonColour(multi_button, multi_colour);
             }
             else
             {
-                setButtonColour(multi_button, default_colour);
+                SetButtonColour(multi_button, default_colour);
             }
 
             //check num row
-            if (colour_num_row(profile))
+            if (ColourNumRow(profile))
             {
                 multi_colour = ConvertIntToColour(profile.KeyboardColours[1]); //1 key idx
                 multi_button = (this.FindName("NumKeys") as Button);
-                setButtonColour(multi_button, multi_colour);
+                SetButtonColour(multi_button, multi_colour);
             }
             else
             {
-                setButtonColour(multi_button, default_colour);
+                SetButtonColour(multi_button, default_colour);
             }
 
             //set all buttons colour to default colour. Easy to see if all buttons are the same colour
             multi_button = (this.FindName("AllKeys") as Button);
-            setButtonColour(multi_button, default_colour);
+            SetButtonColour(multi_button, default_colour);
         }
 
-        private Boolean colour_wasd(KeyboardProfileItem profile)
+        private Boolean ColourWASD(KeyboardProfileItem profile)
         {
             return (
                 profile.KeyboardColours[16] == profile.KeyboardColours[29] &&
@@ -220,7 +150,7 @@ namespace AnneProKeyboard
             );
         }
 
-        private Boolean colour_ijkl(KeyboardProfileItem profile)
+        private Boolean ColourIJKL(KeyboardProfileItem profile)
         {
             return (
                 profile.KeyboardColours[22] == profile.KeyboardColours[35] &&
@@ -229,7 +159,7 @@ namespace AnneProKeyboard
             );
         }
 
-        private Boolean colour_num_row(KeyboardProfileItem profile)
+        private Boolean ColourNumRow(KeyboardProfileItem profile)
         {
             int colour = profile.KeyboardColours[1];
             for (int i = 2; i < 11; i++)
@@ -240,7 +170,7 @@ namespace AnneProKeyboard
             return true;
         }
 
-        private Boolean colour_modifiers(KeyboardProfileItem profile)
+        private Boolean ColourModifiers(KeyboardProfileItem profile)
         {
             int[] modifiers = new int[14] { 14, 28, 42, 56, 57, 58, 66, 67, 68, 69, 55, 41, 13, 27 }; //Tab->LCtrl->RCtrl->Bkspc: 14,28,42,56,57,58,66,67,68,69,55,41,13,27
 
@@ -252,19 +182,13 @@ namespace AnneProKeyboard
             }
             return true;
         }
-
-        private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
+        
+        private void SetButtonColour(Button button)
         {
-            KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
-            ChangeSelectedProfile(profile);
+            SetButtonColour(button, this.SelectedColour);
         }
 
-        private void setButtonColour(Button button)
-        {
-            setButtonColour(button, this.SelectedColour);
-        }
-
-        private void setButtonColour(Button button, Color colour)
+        private void SetButtonColour(Button button, Color colour)
         {
             if (!matchingButtonColour)
             {
@@ -283,8 +207,8 @@ namespace AnneProKeyboard
             else if (button.Name.Length > 14)
             {
                 //Never gets hit, methinks
-                int button_index = Int32.Parse(button.Name.Remove(0, 14));
-                int colour_int = this.EditingProfile.KeyboardColours[button_index];
+                int buttonIndex = Int32.Parse(button.Name.Remove(0, 14));
+                int colourInt = this.editingProfile.KeyboardColours[buttonIndex];
                 this.SelectedColour = colour;
                 colourPicker.Color = colour;
                 matchingButtonColour = false;
@@ -306,24 +230,20 @@ namespace AnneProKeyboard
                 (this.FindName("ColourTool") as Button).Content = "Match a Colour";
                 matchingButtonColour = false;
                 Button button = (Button)sender;
-                int btn_int = Int32.Parse(button.Name.Remove(0, 14));
-                btn_int = this.EditingProfile.KeyboardColours[btn_int];
-                colourPicker.Color = ConvertIntToColour(btn_int);
-                this.SelectedColour = ConvertIntToColour(btn_int);
+                SolidColorBrush buttonBackground = button.Background as SolidColorBrush;
+                colourPicker.Color = buttonBackground.Color;
+                this.SelectedColour = colourPicker.Color;
                 //enable multikey buttons
-                enableMultiButtons();
+                EnableMultiButtons();
             }
             else
             {
                 Button button = (Button)sender;
-                setButtonColour(button);
+                SetButtonColour(button);
 
                 int button_index = Int32.Parse(button.Name.Remove(0, 14));
 
-                this.EditingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
-
-                //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-                this.SaveProfiles();
+                this.editingProfile.KeyboardColours[button_index] = ConvertColourToInt(this.SelectedColour);
             }
         }
 
@@ -331,7 +251,7 @@ namespace AnneProKeyboard
         {
 
             Button button = (Button)sender;
-            setButtonColour(button);
+            SetButtonColour(button);
 
             for (int i = 0; i < 70; i++)
             {
@@ -339,93 +259,78 @@ namespace AnneProKeyboard
                 {
                     continue;
                 }
-                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                this.editingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                setButtonColour(button);
+                SetButtonColour(button);
             }
             //set Multi selection button colors
-            setButtonColour(this.FindName("WASDKeys") as Button);
-            setButtonColour(this.FindName("IJKLKeys") as Button);
-            setButtonColour(this.FindName("NumKeys") as Button);
-            setButtonColour(this.FindName("AllKeys") as Button);
-            setButtonColour(this.FindName("ModifierKeys") as Button);
-
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
+            SetButtonColour(this.FindName("WASDKeys") as Button);
+            SetButtonColour(this.FindName("IJKLKeys") as Button);
+            SetButtonColour(this.FindName("NumKeys") as Button);
+            SetButtonColour(this.FindName("AllKeys") as Button);
+            SetButtonColour(this.FindName("ModifierKeys") as Button);
         }
 
         private void KeyboardWASDButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            setButtonColour(button);
+            SetButtonColour(button);
 
             int[] modifiers = new int[4] { 16, 29, 30, 31 };
             foreach (int i in modifiers)
             {
-                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                this.editingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
 
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                setButtonColour(button);
+                SetButtonColour(button);
             }
-
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
         }
 
         private void KeyboardIJKLButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            setButtonColour(button);
+            SetButtonColour(button);
 
             int[] modifiers = new int[4] { 22, 35, 36, 37 };
             foreach (int i in modifiers)
             {
-                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                this.editingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
 
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                setButtonColour(button);
+                SetButtonColour(button);
             }
-
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
         }
 
         private void KeyboardNumRowButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            setButtonColour(button);
+            SetButtonColour(button);
 
             for (int i = 1; i < 11; i++) //num: 1-10 -=: 11-12
             {
-                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                this.editingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                setButtonColour(button);
+                SetButtonColour(button);
             }
-
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
         }
 
         private void KeyboardModifiersButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
-            setButtonColour(button);
+            SetButtonColour(button);
 
             int[] modifiers = new int[14] { 14, 28, 42, 56, 57, 58, 66, 67, 68, 69, 55, 41, 13, 27 }; //Tab->LCtrl->RCtrl->Bkspc: 14,28,42,56,57,58,66,67,68,69,55,41,13,27
             foreach (int i in modifiers)
             {
-                this.EditingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
+                this.editingProfile.KeyboardColours[i] = ConvertColourToInt(this.SelectedColour);
                 string s = "keyboardButton" + i;
                 button = (this.FindName(s) as Button);
-                setButtonColour(button);
+                SetButtonColour(button);
             }
-
-            //this may be resource intensive, but it's the only way to gurantee that profiles get saved
-            this.SaveProfiles();
         }
 
         private void KeyboardColourPickerButton_Click(object sender, RoutedEventArgs e)
@@ -438,18 +343,18 @@ namespace AnneProKeyboard
                 matchingButtonColour = true;
                 button.Content = "Cancel";
                 //Disable multikey buttons
-                disableMultiButtons();
+                DisableMultiButtons();
             }
             else
             {
                 matchingButtonColour = false;
                 button.Content = "Match a Colour";
                 //enable multikey buttons
-                enableMultiButtons();
+                EnableMultiButtons();
             }
         }
 
-        private void enableMultiButtons()
+        private void EnableMultiButtons()
         {
             (this.FindName("WASDKeys") as Button).IsEnabled = true;
             (this.FindName("IJKLKeys") as Button).IsEnabled = true;
@@ -458,7 +363,7 @@ namespace AnneProKeyboard
             (this.FindName("ModifierKeys") as Button).IsEnabled = true;
         }
 
-        private void disableMultiButtons()
+        private void DisableMultiButtons()
         {
             (this.FindName("WASDKeys") as Button).IsEnabled = false;
             (this.FindName("IJKLKeys") as Button).IsEnabled = false;
@@ -486,117 +391,7 @@ namespace AnneProKeyboard
             return Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
         }
 
-        private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            TextBox profileName = (sender as TextBox);
-            // update Views and KeyboardProfileItem class
-            if (this.EditingProfile == RenamingProfile)
-            {
-                //chosenProfileName.Title = profileName.Text;
-            }
-
-            if (this.RenamingProfile != null)
-            {
-                this.RenamingProfile.Label = profileName.Text;
-            }
-        }
-
-        private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.CreateNewKeyboardProfile();
-            this.SaveProfiles();
-            this.ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
-            this.LightingProfilesCombo.SelectedIndex = this.LightingProfilesCombo.Items.Count - 1;
-        }
-
-        private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            textbox.IsEnabled = true;
-            textbox.Visibility = Visibility.Visible;
-            FocusState focus_state = FocusState.Keyboard;
-            textbox.Focus(focus_state);
-
-            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            textblock.Visibility = Visibility.Collapsed;
-
-            this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
-        }
-
-        private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
-
-            this._keyboardProfiles.Remove(selected_profile);
-
-            // always make sure that the keyboard profiles list has 1 element in it
-            if (this._keyboardProfiles.Count == 0)
-            {
-                this.CreateNewKeyboardProfile();
-            }
-
-            // Change the chosen profile to the first element
-            ChangeSelectedProfile(this._keyboardProfiles[0]);
-            LightingProfilesCombo.SelectedIndex = 0;
-
-            this.SaveProfiles();
-        }
-
-        private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
-        {
-            this.SaveProfiles();
-
-            TextBox textbox = (TextBox)sender;
-
-            this.RenamingProfile = null;
-        }
-
-        private void KeyboardProfiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
-            {
-                // Really inefficient, we should consider re-implementing this later
-                for (int i = 0; i < this._keyboardProfiles.Count; i++)
-                {
-                    KeyboardProfileItem profile = this._keyboardProfiles[i];
-                    profile.ID = i;
-                }
-            }
-        }
-
-        private void LightingProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (LightingProfilesCombo == null) return;
-            var combo = (ComboBox)sender;
-            var item = (KeyboardProfileItem)combo.SelectedItem;
-            if (item == null)
-            {
-                this.CreateNewKeyboardProfile();
-                ChangeSelectedProfile(_keyboardProfiles[0]);
-            } else
-            {
-                ChangeSelectedProfile(item);
-            }
-        }
-
-        private void LightingProfilesCombo_Loaded(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                LightingProfilesCombo.SelectedIndex = 0;
-            } catch
-            {
-
-            }
-        }
-
-        private void colourPicker_ColorChanged(Windows.UI.Xaml.Controls.ColorPicker sender, ColorChangedEventArgs args)
+        private void ColourPicker_ColorChanged(Windows.UI.Xaml.Controls.ColorPicker sender, ColorChangedEventArgs args)
         {
             this.SelectedColour = sender.Color;
         }
