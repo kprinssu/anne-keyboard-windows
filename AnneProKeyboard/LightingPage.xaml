@@ -7,7 +7,7 @@
     mc:Ignorable="d" >
 
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-    <Grid Background="#000">
+    <Grid Background="#000" Height="876">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*" />
@@ -174,7 +174,6 @@
                         IsAlphaEnabled="False"
                         IsAlphaSliderVisible="True"
                         IsAlphaTextInputVisible="True"
-                                 ColorSpectrumShape="Ring"
                         ColorChanged="ColourPicker_ColorChanged" Margin="0,0,0,-347" />
 
                     <Grid RelativePanel.Below="colourPicker"

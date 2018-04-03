@@ -4,12 +4,12 @@
     "ColorPicker": "1.0.2",
     "Color_Picker": "1.0.5",
     "FontAwesome.UWP": "4.7.0.9",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
-    "Microsoft.Toolkit.Uwp": "1.5.0",
-    "Microsoft.Toolkit.Uwp.UI.Controls": "1.5.0"
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.8",
+    "Microsoft.Toolkit.Uwp": "2.2.0",
+    "Microsoft.Toolkit.Uwp.UI.Controls": "2.2.0"
   },
   "frameworks": {
-    "uap10.0": {}
+    "uap10.0.16299": {}
   },
   "runtimes": {
     "win10-arm": {},
