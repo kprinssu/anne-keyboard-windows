@@ -25,7 +25,6 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 ## Planned Features
 * Support for changing keyboard layouts
 * Implement keyboard macros
-* ~~Improve changing multiple button keyboard light colours~~
 
 ## Known Bugs
 * None so far. 
