@@ -17,10 +17,10 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 * Set keyboard backlight colours
 
 ### Screenshots:  
-<img src="https://i.imgur.com/EJFvNHE.png" />
-<img src="https://i.imgur.com/UNL9xg8.png" />
-<img src="https://i.imgur.com/EHNpCav.png" />
-<img src="https://i.imgur.com/Qchd8xw.png" />
+<img src="https://i.imgur.com/yMHa8Gq.png" />
+<img src="https://i.imgur.com/x2abzzy.png" />
+<img src="https://i.imgur.com/DG1eoFr.png" />
+<img src="https://i.imgur.com/t6eqNbH.png" />
 
 ## Planned Features
 * Support for changing keyboard layouts
