@@ -15,7 +15,7 @@
         ExpandedModeThresholdWidth="1920"
         IsSettingsVisible="{Binding ElementName=settingsCheck,Path=IsChecked}" 
         IsTabStop="false"
-        Background="#FF111111"
+        Background="#FF1f1f1f"
         Header="Layout">
         <NavigationView.MenuItems>
             <NavigationViewItem Icon="Keyboard" Content="Layout" Tag="layout" />
@@ -25,13 +25,11 @@
         </NavigationView.MenuItems>
         <NavigationView.HeaderTemplate>
             <DataTemplate>
-                
-                    
                     <CommandBar Grid.Column="1"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
-                            Background="#FF111111"
-                                OverflowButtonVisibility="Collapsed">
+                            Background="Transparent"
+                            OverflowButtonVisibility="Collapsed">
                         <AppBarButton Icon="Add" Click="ProfileAddButton_Click"/>
                         <AppBarSeparator/>
                         <AppBarButton Icon="Delete" Click="ProfileDeleteButton_Click"/>
