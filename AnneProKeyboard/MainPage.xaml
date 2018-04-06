@@ -15,11 +15,29 @@
         ExpandedModeThresholdWidth="1920"
         IsSettingsVisible="{Binding ElementName=settingsCheck,Path=IsChecked}" 
         IsTabStop="false"
+        Background="#FF111111"
         Header="Layout">
         <NavigationView.MenuItems>
             <NavigationViewItem Icon="Keyboard" Content="Layout" Tag="layout" />
             <NavigationViewItem x:Name="lightingNavItem" Content="Lighting" Tag="lighting" />
+            <NavigationViewItemSeparator/>
+            <NavigationViewItem Icon="Help" Content="About" Tag="about" />
         </NavigationView.MenuItems>
+        <NavigationView.HeaderTemplate>
+            <DataTemplate>
+                
+                    
+                    <CommandBar Grid.Column="1"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Background="#FF111111"
+                                OverflowButtonVisibility="Collapsed">
+                        <AppBarButton Icon="Add" Click="ProfileAddButton_Click"/>
+                        <AppBarSeparator/>
+                        <AppBarButton Icon="Delete" Click="ProfileDeleteButton_Click"/>
+                    </CommandBar>
+            </DataTemplate>
+        </NavigationView.HeaderTemplate>
         <Frame x:Name="ContentFrame">
             <Grid>
                 <Grid.RowDefinitions>
@@ -30,30 +48,20 @@
                 <Grid.Resources>
                     <converters:BooleanToVisibilityConverter x:Key="Bool2VisibilityConverter" />
                 </Grid.Resources>
-                <StackPanel Grid.Row="0" Margin="0,-44,50,0" Height="50" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Visibility="{Binding IsContentPage, Converter={StaticResource Bool2VisibilityConverter}}">
-                    <ComboBox x:Name="ProfilesCombo" Height="44" Width="296" 
-                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
+                    <ComboBox x:Name="ProfilesCombo" Height="44" Width="296" Grid.Row="0"
+                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,-46,185,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                     <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
-                                    <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
-                                    <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
-                                        <SymbolIcon Symbol="Edit" Foreground="White" />
-                                    </Button>
-                                    <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
-                                        <SymbolIcon Symbol="Delete" Foreground="White" />
-                                    </Button>
-                                </StackPanel>
+                            </StackPanel>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                    <Button Click="ProfileAddButton_Click" Content="Add Profile" ></Button>
-                </StackPanel>
                 <Frame Name="_frame" Grid.Row="0" Margin="0" Grid.RowSpan="2"/>
-                <Grid Grid.Row="2" Background="#2a2c31" Height="30">
+                <Grid Grid.Row="2" Background="#FF111111" Height="30">
                     <StackPanel Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}" Height="30px" >
-                        <StackPanel Background="#2a2c31" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
+                        <StackPanel Background="#FF111111" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE702;" Foreground="White" VerticalAlignment="Center" FontSize="20" />
                             <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" VerticalAlignment="Center" Foreground="Red" />
                         </StackPanel>

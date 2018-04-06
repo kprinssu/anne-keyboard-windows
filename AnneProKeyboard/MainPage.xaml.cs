@@ -20,6 +20,7 @@ using Windows.Storage;
 using Windows.Storage.Streams;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel;
+using Microsoft.Toolkit.Uwp;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -30,6 +31,7 @@ namespace AnneProKeyboard
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private KeyboardProfileItem selectedProfile;
         private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
         public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
         {
@@ -84,7 +86,7 @@ namespace AnneProKeyboard
         {
             KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
             (this._frame.Content as IContentPage).ChangeSelectedProfile(profile);
-
+            this.selectedProfile = profile;
         }
 
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
@@ -92,13 +94,13 @@ namespace AnneProKeyboard
             this.CreateNewKeyboardProfile();
             (this._frame.Content as IContentPage).ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
             this.ProfilesCombo.SelectedIndex = this.ProfilesCombo.Items.Count - 1;
+            this.selectedProfile = _keyboardProfiles[_keyboardProfiles.Count - 1];
         }
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
             FrameworkElement parent = (FrameworkElement)button.Parent;
-
             TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
             textbox.IsEnabled = true;
             textbox.Visibility = Visibility.Visible;
@@ -114,23 +116,30 @@ namespace AnneProKeyboard
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            KeyboardProfileItem selected_profile = this._keyboardProfiles[(int)button.Tag];
-
             //// always make sure that the keyboard profiles list has 1 element in it
             if (this._keyboardProfiles.Count != 1)
             {
-                int curr = this._keyboardProfiles.IndexOf(selected_profile);
-                if(curr - 1 == -1)
+                int curr = this._keyboardProfiles.IndexOf(selectedProfile);
+                if(curr == 0)
                 {
-                    ProfilesCombo.SelectedItem = this._keyboardProfiles[++curr];
+                    if(this._keyboardProfiles.Count > 2)
+                    {
+                        ProfilesCombo.SelectedItem = this._keyboardProfiles[1];
+                        this._keyboardProfiles.Remove(selectedProfile);
+                        this.selectedProfile = this._keyboardProfiles[1];
+                    } else
+                    {
+                        ProfilesCombo.SelectedItem = this._keyboardProfiles[1];
+                        this._keyboardProfiles.Remove(selectedProfile);
+                        this.selectedProfile = this._keyboardProfiles[0];
+                    }
+                    
                 } else
                 {
-                    ProfilesCombo.SelectedItem = this._keyboardProfiles[--curr];
+                    ProfilesCombo.SelectedItem = this._keyboardProfiles[0];
+                    this._keyboardProfiles.Remove(selectedProfile);
+                    this.selectedProfile = this._keyboardProfiles[0];
                 }
-                this._keyboardProfiles.Remove(selected_profile);
             }
             //ensure not deleting the selected one or vice versa
             //delete
@@ -159,6 +168,11 @@ namespace AnneProKeyboard
             this.SaveProfiles();
 
             TextBox textbox = (TextBox)sender;
+            textbox.Visibility = Visibility.Collapsed;
+            //FrameworkElement parent = (FrameworkElement)textbox.Parent;
+
+            //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
+            //textblock.Visibility = Visibility.Collapsed;
 
             this.RenamingProfile = null;
         }
@@ -190,11 +204,17 @@ namespace AnneProKeyboard
                     memory_stream.Seek(0, SeekOrigin.Begin);
                     await memory_stream.CopyToAsync(file_stream);
                     await file_stream.FlushAsync();
+                    file_stream.Close();
+                    this.SyncStatus.Text = "Profiles saved. Waiting for sync...";
                 }
             }
             catch (UnauthorizedAccessException)
             {
                 throw new UnauthorizedAccessException();
+            }
+            catch (System.IO.FileLoadException)
+            {
+                this.SyncStatus.Text = "Failed to load file. Profiles not saved...";
             }
         }
 
