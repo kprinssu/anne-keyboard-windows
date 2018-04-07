@@ -47,7 +47,54 @@
                                 <!-- While used here to remove the spacing between header items, the PivotHeaderItem template can also be used to
                                 display custom 'selected' visuals -->
                                 <Style TargetType="PivotHeaderItem">
-                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="PivotHeaderItem">
+                                                <Grid x:Name="Grid" Background="{TemplateBinding Background}">
+                                                    <VisualStateManager.VisualStateGroups>
+                                                        <VisualStateGroup x:Name="SelectionStates">
+                                                            <VisualState x:Name="Unselected">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Gray" />
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectedLine" Storyboard.TargetProperty="Background">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent" />
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <VisualState x:Name="Selected">
+                                                                <Storyboard>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="LightGray" />
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                    <ObjectAnimationUsingKeyFrames Storyboard.TargetName="SelectedLine" Storyboard.TargetProperty="Background">
+                                                                        <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlAccentAcrylicElementAccentMediumHighBrush}" />
+                                                                    </ObjectAnimationUsingKeyFrames>
+                                                                </Storyboard>
+                                                            </VisualState>
+                                                            <!--...-->
+                                                        </VisualStateGroup>
+                                                    </VisualStateManager.VisualStateGroups>
+                                                    <ContentPresenter x:Name="ContentPresenter" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                      Margin="{TemplateBinding Padding}" FontSize="{TemplateBinding FontSize}" FontFamily="{TemplateBinding FontFamily}"
+                                                      FontWeight="{TemplateBinding FontWeight}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                                        <ContentPresenter.RenderTransform>
+                                                            <TranslateTransform x:Name="ContentPresenterTranslateTransform" />
+                                                        </ContentPresenter.RenderTransform>
+                                                    </ContentPresenter>
+                                                    <Border x:Name="TopLine" Height="3" Background="Transparent" VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+                                                    <Border x:Name="BottomLine" Height="2" Background="Transparent" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" />
+                                                    <Border x:Name="RightLine" Width="1" Background="Transparent" VerticalAlignment="Center"
+                                                        HorizontalAlignment="Right" Height="{TemplateBinding FontSize}" />
+                                                    <Border x:Name="SelectedLine" Height="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"
+                                                        Background="Transparent" Margin="15,0,0,0" />
+                                                </Grid>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Padding" Value="25,0,25,0" />
                                 </Style>
                             </Grid.Resources>
 
@@ -115,7 +162,6 @@
                                 Visibility="Collapsed" />
 
                             <Grid Grid.Row="1">
-
                                 <Grid.Resources>
                                     <ResourceDictionary>
                                         <ResourceDictionary.ThemeDictionaries>
@@ -240,7 +286,7 @@
 
                                             <!-- By setting the column definitions to *,Auto,* allows the tabs to be centered by default -->
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50" />
+                                                <ColumnDefinition Width="25" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
@@ -279,38 +325,6 @@
                                                     </PivotHeaderPanel>
                                                 </Grid>
                                             </ContentControl>
-                                            <Button x:Name="PreviousButton"
-                                                Grid.Column="1"
-                                                Width="20"
-                                                Height="36"
-                                                Margin="{ThemeResource PivotNavButtonMargin}"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Top"
-                                                Background="Transparent"
-                                                IsEnabled="False"
-                                                IsTabStop="False"
-                                                Opacity="0"
-                                                Template="{StaticResource PreviousTemplate}"
-                                                UseSystemFocusVisuals="False" />
-                                            <Button x:Name="NextButton"
-                                                Grid.Column="1"
-                                                Width="20"
-                                                Height="36"
-                                                Margin="{ThemeResource PivotNavButtonMargin}"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Top"
-                                                Background="Transparent"
-                                                IsEnabled="False"
-                                                IsTabStop="False"
-                                                Opacity="0"
-                                                Template="{StaticResource NextTemplate}"
-                                                UseSystemFocusVisuals="False" />
-                                            <ContentPresenter x:Name="RightHeaderPresenter"
-                                                Grid.Column="2"
-                                                HorizontalAlignment="Stretch"
-                                                VerticalAlignment="Stretch"
-                                                Content="{TemplateBinding RightHeader}"
-                                                ContentTemplate="{TemplateBinding RightHeaderTemplate}" />
                                             <ItemsPresenter x:Name="PivotItemPresenter" Grid.Row="1" Grid.ColumnSpan="3">
                                                 <ItemsPresenter.RenderTransform>
                                                     <TransformGroup>
@@ -329,17 +343,17 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-        <Grid Background="#000">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" MaxWidth="1000">
+        <Grid Background="#000" Width="Auto">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <StackPanel Orientation="Vertical" Grid.Row="0">
-                <Pivot x:Name="rootPivot" Canvas.ZIndex="0" Margin="0,0,-1,0" TabNavigation="Local" IsTabStop="True" Style="{StaticResource TabsStylePivotStyle}">
+                <Pivot x:Name="rootPivot" Canvas.ZIndex="0" Margin="0,0,-1,0" TabNavigation="Local" IsTabStop="True" Style="{StaticResource TabsStylePivotStyle}" Width="Auto">
                     <PivotItem Header="Base Layer">
                         <!--Standard Pivot-->
-                        <Grid HorizontalAlignment="Center" Name="keyboardGridStd" Margin="-50,0,0,0">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridStd" Margin="-50,15,0,0" >
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -463,7 +477,7 @@
                     </PivotItem>
                     <PivotItem Header="Fn Layer">
                         <!--Fn Pivot-->
-                        <Grid HorizontalAlignment="Center" Name="keyboardGridFn" Margin="-50,0,0,0">
+                        <Grid HorizontalAlignment="Center" Name="keyboardGridFn" Margin="-50,15,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />
@@ -586,7 +600,7 @@
                     </PivotItem>
                 </Pivot>
             </StackPanel>
-    </Grid>
+        </Grid>
     </ScrollViewer>
 
 </Page>

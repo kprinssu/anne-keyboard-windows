@@ -13,7 +13,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0">
-            <Grid HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Center" Margin="0,15,0,0">
                 <Grid.Resources>
                     <Style TargetType="RelativePanel">
                         <Setter Property="Margin" Value="0,-4,0,0" />
