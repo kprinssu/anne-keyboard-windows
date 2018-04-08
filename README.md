@@ -27,8 +27,7 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 * ~~Improve changing multiple button keyboard light colours~~
 
 ## Known Bugs
-* None so far. 
-Please submit an issue to report any bugs.
+Please see the Github issue tracker.
 
 ## License
 The codebase and the project are released under the permissive MIT License. 
