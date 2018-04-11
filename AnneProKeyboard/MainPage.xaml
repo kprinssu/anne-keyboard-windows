@@ -13,7 +13,7 @@
         x:Name="AnneNav"
         IsPaneOpen="false"
         ExpandedModeThresholdWidth="1920"
-        IsSettingsVisible="{Binding ElementName=settingsCheck,Path=IsChecked}" 
+        IsSettingsVisible="False"
         IsTabStop="false"
         Background="#FF1f1f1f"
         Header="Layout">
@@ -29,11 +29,12 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
                             Background="Transparent"
-                            OverflowButtonVisibility="Collapsed">
+                            OverflowButtonVisibility="Collapsed" Margin="0,0,15,0" FontSize="11">
                         <AppBarButton Icon="Add" Click="ProfileAddButton_Click"/>
                         <AppBarSeparator/>
-                        <AppBarButton Icon="Delete" Click="ProfileDeleteButton_Click"/>
-                    </CommandBar>
+                    <AppBarButton Icon="Edit" Click="ProfileEditButton_Click"/>
+                    <AppBarButton Icon="Delete" Click="ProfileDeleteButton_Click"/>
+                </CommandBar>
             </DataTemplate>
         </NavigationView.HeaderTemplate>
         <Frame x:Name="ContentFrame">
@@ -46,8 +47,8 @@
                 <Grid.Resources>
                     <converters:BooleanToVisibilityConverter x:Key="Bool2VisibilityConverter" />
                 </Grid.Resources>
-                    <ComboBox x:Name="ProfilesCombo" Height="44" Width="296" Grid.Row="0"
-                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,-46,185,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
+                    <ComboBox x:Name="ProfilesCombo" Height="35" Width="270" Grid.Row="0"
+                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,-41,262,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">

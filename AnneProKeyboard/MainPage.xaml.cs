@@ -99,18 +99,18 @@ namespace AnneProKeyboard
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
-            FrameworkElement parent = (FrameworkElement)button.Parent;
-            TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            textbox.IsEnabled = true;
-            textbox.Visibility = Visibility.Visible;
-            FocusState focus_state = FocusState.Keyboard;
-            textbox.Focus(focus_state);
+            //Button button = (Button)sender;
+            //FrameworkElement parent = (FrameworkElement)button.Parent;
+            //TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
+            //textbox.IsEnabled = true;
+            //textbox.Visibility = Visibility.Visible;
+            //FocusState focus_state = FocusState.Keyboard;
+            //textbox.Focus(focus_state);
 
-            TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            textblock.Visibility = Visibility.Collapsed;
+            //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
+            //textblock.Visibility = Visibility.Collapsed;
 
-            this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
+            //this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
             SaveProfiles();
         }
 
@@ -610,6 +610,10 @@ namespace AnneProKeyboard
                     case "lighting":
                         _frame.Content = lightingPage;
                         break;
+
+                    case "about":
+                        _frame.Content = aboutPage;
+                        break;
                 }
             }
         }
@@ -635,6 +639,11 @@ namespace AnneProKeyboard
                     case "Lighting":
                         sender.Header = "Lighting";
                         _frame.Content = lightingPage;
+                        break;
+
+                    case "About":
+                        sender.Header = "About";
+                        _frame.Content = aboutPage;
                         break;
                 }
             }
