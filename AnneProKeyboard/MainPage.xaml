@@ -45,22 +45,26 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.Resources>
-                    <converters:BooleanToVisibilityConverter x:Key="Bool2VisibilityConverter" />
+                    <SolidColorBrush x:Key="FrameBackground" Color="{StaticResource SystemAltMediumColor}"/>
+                    <SolidColorBrush x:Key="StatusBarBackground" Color="{StaticResource SystemAltLowColor}"/>
                 </Grid.Resources>
-                    <ComboBox x:Name="ProfilesCombo" Height="35" Width="270" Grid.Row="0"
+                <StackPanel  Grid.Row="0">
+                    <ComboBox x:Name="ProfilesCombo" Height="35" Width="270"
                     ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,-41,262,0" SelectionChanged="ProfilesCombo_SelectionChanged"  Loaded="ProfilesCombo_Loaded">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" Grid.Row="3">
                                     <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
-                            </StackPanel>
+                                </StackPanel>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
-                <Frame Name="_frame" Grid.Row="0" Margin="0" Grid.RowSpan="2"/>
-                <Grid Grid.Row="2" Background="#FF111111" Height="30">
+                    <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top"  Canvas.ZIndex="999" LostFocus="ProfileNameTextbox_LostFocus"  Margin="0,-41,263,0" Background="Transparent" BorderThickness="0" Height="35" Width="270" TextChanged="ProfileNameChangedEvent_TextChanged" HorizontalAlignment="Right" />
+                </StackPanel>
+                <Frame Name="_frame" Grid.Row="0" Margin="0" Grid.RowSpan="2" Background="{ThemeResource FrameBackground}"/>
+                <Grid Grid.Row="2" Background="{ThemeResource StatusBarBackground}" Height="30">
                     <StackPanel Orientation="Horizontal" Grid.Row="2" DataContext="{Binding ElementName=main}" Height="30px" >
-                        <StackPanel Background="#FF111111" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
+                        <StackPanel Background="Transparent" Orientation="Horizontal" DataContext="{Binding ElementName=main}"  Height="30px" >
                             <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE702;" Foreground="White" VerticalAlignment="Center" FontSize="20" />
                             <TextBlock x:Name="connectionStatusLabel" Text="Not Connected" VerticalAlignment="Center" Foreground="Red" />
                         </StackPanel>

@@ -71,6 +71,7 @@ namespace AnneProKeyboard
             lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
             Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
             LoadProfiles();
+            this.selectedProfile = _keyboardProfiles[0];
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
         }
@@ -82,12 +83,12 @@ namespace AnneProKeyboard
             lightingPage = new LightingPage();
         }
 
-        private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
-            (this._frame.Content as IContentPage).ChangeSelectedProfile(profile);
-            this.selectedProfile = profile;
-        }
+        //private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    //KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
+        //    (this._frame.Content as IContentPage).ChangeSelectedProfile(profile);
+        //    this.selectedProfile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+        //}
 
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -101,22 +102,40 @@ namespace AnneProKeyboard
         {
             //Button button = (Button)sender;
             //FrameworkElement parent = (FrameworkElement)button.Parent;
-            //TextBox textbox = (TextBox)parent.FindName("ProfileNameTextbox");
-            //textbox.IsEnabled = true;
-            //textbox.Visibility = Visibility.Visible;
-            //FocusState focus_state = FocusState.Keyboard;
-            //textbox.Focus(focus_state);
+            TextBox textbox = ProfileNameTextbox;
+            textbox.IsEnabled = true;
+            textbox.Visibility = Visibility.Visible;
+            FocusState focus_state = FocusState.Keyboard;
+            textbox.Focus(focus_state);
 
-            //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            //textblock.Visibility = Visibility.Collapsed;
-
-            //this.RenamingProfile = this._keyboardProfiles[(int)button.Tag];
+            this.RenamingProfile = selectedProfile;
             SaveProfiles();
         }
 
         private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
         {
             //// always make sure that the keyboard profiles list has 1 element in it
+            int idx = ProfilesCombo.SelectedIndex;
+            KeyboardProfileItem kbp = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+            if(ProfilesCombo.Items.Count > 2)
+            {
+                //set the selected index to 0 if it is not the first element, else set it to the second
+                if (idx != 0)
+                    ProfilesCombo.SelectedIndex = 0;
+                else
+                    ProfilesCombo.SelectedIndex = 1;
+                this._keyboardProfiles.Remove(kbp);
+            }
+            else if(ProfilesCombo.Items.Count == 2)
+            {
+                if (idx == 0)
+                    ProfilesCombo.SelectedIndex = 1;
+                else
+                    ProfilesCombo.SelectedIndex = 0;
+                this._keyboardProfiles.Remove(kbp);
+            }
+
+            /*
             if (this._keyboardProfiles.Count != 1)
             {
                 int curr = this._keyboardProfiles.IndexOf(selectedProfile);
@@ -141,6 +160,7 @@ namespace AnneProKeyboard
                     this.selectedProfile = this._keyboardProfiles[0];
                 }
             }
+            */
             //ensure not deleting the selected one or vice versa
             //delete
             //// Change the chosen profile to the first element
@@ -169,6 +189,7 @@ namespace AnneProKeyboard
 
             TextBox textbox = (TextBox)sender;
             textbox.Visibility = Visibility.Collapsed;
+            textbox.Text = "";
             //FrameworkElement parent = (FrameworkElement)textbox.Parent;
 
             //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
@@ -658,6 +679,7 @@ namespace AnneProKeyboard
             {
                 this.SyncStatus.Text = "Profiles failed to save";
             }
+            this.selectedProfile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
             lightingPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
             layoutPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
         }
