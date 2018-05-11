@@ -58,20 +58,15 @@ namespace AnneProKeyboard
         private LayoutPage layoutPage;
         private LightingPage lightingPage;
 
-        private Boolean IsContentPage;
-
         public MainPage()
         {
             this.InitializeComponent();
             initPages();
-            this._frame.Content = new LayoutPage();
-            IsContentPage = true;
+            this._frame.Content = layoutPage;
             FindKeyboard();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
+            //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
             lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
-            Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
             LoadProfiles();
-            this.selectedProfile = _keyboardProfiles[0];
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
             Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
         }
@@ -135,36 +130,6 @@ namespace AnneProKeyboard
                 this._keyboardProfiles.Remove(kbp);
             }
 
-            /*
-            if (this._keyboardProfiles.Count != 1)
-            {
-                int curr = this._keyboardProfiles.IndexOf(selectedProfile);
-                if(curr == 0)
-                {
-                    if(this._keyboardProfiles.Count > 2)
-                    {
-                        ProfilesCombo.SelectedItem = this._keyboardProfiles[1];
-                        this._keyboardProfiles.Remove(selectedProfile);
-                        this.selectedProfile = this._keyboardProfiles[1];
-                    } else
-                    {
-                        ProfilesCombo.SelectedItem = this._keyboardProfiles[1];
-                        this._keyboardProfiles.Remove(selectedProfile);
-                        this.selectedProfile = this._keyboardProfiles[0];
-                    }
-                    
-                } else
-                {
-                    ProfilesCombo.SelectedItem = this._keyboardProfiles[0];
-                    this._keyboardProfiles.Remove(selectedProfile);
-                    this.selectedProfile = this._keyboardProfiles[0];
-                }
-            }
-            */
-            //ensure not deleting the selected one or vice versa
-            //delete
-            //// Change the chosen profile to the first element
-
             this.SaveProfiles();
         }
 
@@ -225,7 +190,6 @@ namespace AnneProKeyboard
                     memory_stream.Seek(0, SeekOrigin.Begin);
                     await memory_stream.CopyToAsync(file_stream);
                     await file_stream.FlushAsync();
-                    file_stream.Close();
                     this.SyncStatus.Text = "Profiles saved. Waiting for sync...";
                 }
             }
@@ -233,9 +197,14 @@ namespace AnneProKeyboard
             {
                 throw new UnauthorizedAccessException();
             }
-            catch (System.IO.FileLoadException)
+            catch (FileLoadException)
             {
-                this.SyncStatus.Text = "Failed to load file. Profiles not saved...";
+                this.SyncStatus.Text = "Failed to load file. Profiles not saved.";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Uncaught Exception");
+                Console.Write(e);
             }
         }
 
@@ -613,13 +582,11 @@ namespace AnneProKeyboard
         {
             if (args.IsSettingsSelected)
             {
-                IsContentPage = false;
                 sender.Header = "About";
                 this._frame.Content = aboutPage;
             }
             else
             {
-                IsContentPage = true;
                 NavigationViewItem item = args.SelectedItem as NavigationViewItem;
 
                 switch (item.Tag)
@@ -643,13 +610,11 @@ namespace AnneProKeyboard
         {
             if (args.IsSettingsInvoked)
             {
-                IsContentPage = false;
                 sender.Header = "About";
                 _frame.Content = aboutPage;
             }
             else
             {
-                IsContentPage = true;
                 switch (args.InvokedItem)
                 {
                     case "Layout":
