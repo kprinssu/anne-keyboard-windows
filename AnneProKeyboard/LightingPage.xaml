@@ -1,45 +1,19 @@
-﻿<Page xmlns:my="using:ColorPicker" 
+﻿<Page
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:AnneProKeyboard"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:xcp="using:Color_Picker"
-    xmlns:Controls="using:Coding4Fun.Toolkit.Controls"
     x:Class="AnneProKeyboard.LightingPage"
-    mc:Ignorable="d" MinWidth="960" MinHeight="480" Height="754" Width="1025">
+    mc:Ignorable="d" >
 
-    <Grid Background="#36393E">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Grid Background="Transparent" Height="876">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,22,0" Canvas.ZIndex="1">
-            <ComboBox x:Name="LightingProfilesCombo" Height="44" Width="296" 
-                    ItemsSource="{x:Bind KeyboardProfiles}" HorizontalAlignment="Right" Margin="0,0,23,0" SelectionChanged="LightingProfilesCombo_SelectionChanged" Loaded="LightingProfilesCombo_Loaded">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Grid.Row="3">
-                            <TextBlock x:Name="ProfileNameTextblock" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0" Width="140"/>
-                            <TextBox x:Name="ProfileNameTextbox" Visibility="Collapsed" IsEnabled="False" Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" LostFocus="ProfileNameTextbox_LostFocus"  Margin="5,0,0,0" Background="Transparent" BorderThickness="0" Width="140" TextChanged="ProfileNameChangedEvent_TextChanged" />
-                            <Button BorderThickness="0" Tag="{Binding ID}" Margin="5,0,0,0" Click="ProfileEditButton_Click">
-                                <SymbolIcon Symbol="Edit" Foreground="White" />
-                            </Button>
-                            <Button x:Name="ProfileDeleteButton" BorderThickness="0" Tag="{Binding ID}"  Margin="10,0,0,0" Click="ProfileDeleteButton_Click">
-                                <SymbolIcon Symbol="Delete" Foreground="White" />
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-            <Button BorderThickness="0,2,2,2" Click="ProfileAddButton_Click" HorizontalAlignment="Left" Margin="-23,0,0,0" Height="44" Width="45" BorderBrush="#FF86888B" Background="#FF202225" Foreground="#FFD2D3D3">
-                <SymbolIcon Symbol="Add" Foreground="#FFB8B9BA" />
-            </Button>
-        </StackPanel>
-        <!-- KeyboardColourButton_Click -->
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
         <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0">
-            <Grid HorizontalAlignment="Center">
+            <Grid HorizontalAlignment="Center" Margin="0,15,0,0">
                 <Grid.Resources>
                     <Style TargetType="RelativePanel">
                         <Setter Property="Margin" Value="0,-4,0,0" />
@@ -159,7 +133,7 @@
                     <Button x:Name="keyboardButton69" Click="KeyboardColourButton_Click" RelativePanel.RightOf="keyboardButton68" />
                 </RelativePanel>
             </Grid>
-            <Grid Margin="15,15,22,0">
+            <Grid Margin="15,15,22,0" Height="695">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -192,7 +166,25 @@
                         <Button x:Name="ColourTool" Content="Match a Colour" IsEnabled='True' Click="KeyboardColourPickerButton_Click"/>
                     </StackPanel>
                 </Grid>
-                <my:ColorPicker x:Name="colourPicker" Grid.Column="1" Background="#FF36393E" Margin="8,0,0,0" Height="280" SelectedColorChanged="colourPicker_SelectedColorChanged" Foreground="#FF36393E"/>
+                <RelativePanel Grid.Column="1" HorizontalAlignment="Center">
+                    <ColorPicker x:Name="colourPicker"
+                        IsColorSliderVisible="True"
+                        IsColorChannelTextInputVisible="True"
+                        IsHexInputVisible="True"
+                        IsAlphaEnabled="False"
+                        IsAlphaSliderVisible="True"
+                        IsAlphaTextInputVisible="True"
+                        ColorChanged="ColourPicker_ColorChanged" Margin="0,0,0,-347" />
+
+                    <Grid RelativePanel.Below="colourPicker"
+                        RelativePanel.AlignLeftWithPanel="True"
+                        RelativePanel.AlignRightWithPanel="True">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </RelativePanel>
 
                 <!--<Controls:ColorPicker Grid.Column="1" x:Name="colourPicker" Margin="10,5,0,15" Visibility="Visible" ColorChanged="colourPicker_colourChanged" Width="374" Height="358" SizeChanged="colourPicker_SizeChanged"/>-->
                 <!--<StackPanel Orientation="Vertical" Margin="5,0,0,0" Grid.Row="2">
@@ -203,10 +195,7 @@
                 <!--</StackPanel>-->
             </Grid>
         </StackPanel>
-        <StackPanel Grid.Row="2" Orientation="Horizontal">
-            <TextBlock Text="Status: " Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
-            <TextBlock x:Name="SyncStatus" Text="Waiting for sync..." Margin="10,0,0,0" VerticalAlignment="Center" Foreground="White" />
-        </StackPanel>
-
     </Grid>
+    </ScrollViewer>
 </Page>
+    

@@ -17,14 +17,14 @@ The keyboard has to be in L0 mode by: pressing ```Fn+B, Fn+0, ESC, Fn+B, +```
 * Set keyboard backlight colours
 
 ### Screenshots:  
-<img src="https://i.imgur.com/oJv5uQu.png" />
-<img src="https://i.imgur.com/EHNpCav.png" />
-<img src="https://i.imgur.com/Qchd8xw.png" />
+<img src="https://i.imgur.com/yMHa8Gq.png" />
+<img src="https://i.imgur.com/x2abzzy.png" />
+<img src="https://i.imgur.com/DG1eoFr.png" />
+<img src="https://i.imgur.com/t6eqNbH.png" />
 
 ## Planned Features
 * Support for changing keyboard layouts
 * Implement keyboard macros
-* ~~Improve changing multiple button keyboard light colours~~
 
 ## Known Bugs
 Please see the Github issue tracker.

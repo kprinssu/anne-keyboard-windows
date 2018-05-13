@@ -18,9 +18,9 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 using Windows.Storage;
 using Windows.Storage.Streams;
-using Windows.UI.ViewManagement;
 using Windows.ApplicationModel.Core;
-using Windows.UI.Xaml.Input;
+using Windows.ApplicationModel;
+using Microsoft.Toolkit.Uwp;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,6 +31,16 @@ namespace AnneProKeyboard
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private KeyboardProfileItem selectedProfile;
+        private ObservableCollection<KeyboardProfileItem> _keyboardProfiles = new ObservableCollection<KeyboardProfileItem>();
+        public ObservableCollection<KeyboardProfileItem> KeyboardProfiles
+        {
+            get { return _keyboardProfiles; }
+            set { }
+        }
+        public KeyboardProfileItem EditingProfile;
+        public KeyboardProfileItem RenamingProfile;
+
         private DeviceWatcher BluetoothDeviceWatcher;
         private DeviceWatcher AllDevicesWatcher;
 
@@ -42,7 +52,7 @@ namespace AnneProKeyboard
         private GattCharacteristic ReadGatt;
         private DeviceInformation KeyboardDeviceInformation;
 
-        private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+        //private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
 
         private AboutPage aboutPage;
         private LayoutPage layoutPage;
@@ -52,16 +62,13 @@ namespace AnneProKeyboard
         {
             this.InitializeComponent();
             initPages();
-            _frame.Content = layoutPage;
-            // Start up the background thread to find the keyboard
+            this._frame.Content = layoutPage;
             FindKeyboard();
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
-            titleBar = ApplicationView.GetForCurrentView().TitleBar;
-            titleBar.ButtonInactiveBackgroundColor = Colors.White;
-            titleBar.ButtonInactiveForegroundColor = Color.FromArgb(1, 152, 152, 152);
-            Window.Current.SetTitleBar(MainTitleBar);
-            Window.Current.Activated += Current_Activated;
-            Color systemAccentColor = (Color)App.Current.Resources["SystemAccentColor"];
+            //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
+            lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
+            LoadProfiles();
+            this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
+            Application.Current.Suspending += new SuspendingEventHandler(App_Suspending);
         }
 
         private void initPages()
@@ -70,6 +77,185 @@ namespace AnneProKeyboard
             aboutPage = new AboutPage();
             lightingPage = new LightingPage();
         }
+
+        //private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
+        //{
+        //    //KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
+        //    (this._frame.Content as IContentPage).ChangeSelectedProfile(profile);
+        //    this.selectedProfile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+        //}
+
+        private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.CreateNewKeyboardProfile();
+            (this._frame.Content as IContentPage).ChangeSelectedProfile(_keyboardProfiles[_keyboardProfiles.Count - 1]);
+            this.ProfilesCombo.SelectedIndex = this.ProfilesCombo.Items.Count - 1;
+            this.selectedProfile = _keyboardProfiles[_keyboardProfiles.Count - 1];
+        }
+
+        private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
+        {
+            //Button button = (Button)sender;
+            //FrameworkElement parent = (FrameworkElement)button.Parent;
+            TextBox textbox = ProfileNameTextbox;
+            textbox.IsEnabled = true;
+            textbox.Visibility = Visibility.Visible;
+            FocusState focus_state = FocusState.Keyboard;
+            textbox.Focus(focus_state);
+
+            this.RenamingProfile = selectedProfile;
+            SaveProfiles();
+        }
+
+        private void ProfileDeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            //// always make sure that the keyboard profiles list has 1 element in it
+            int idx = ProfilesCombo.SelectedIndex;
+            KeyboardProfileItem kbp = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+            if(ProfilesCombo.Items.Count > 2)
+            {
+                //set the selected index to 0 if it is not the first element, else set it to the second
+                if (idx != 0)
+                    ProfilesCombo.SelectedIndex = 0;
+                else
+                    ProfilesCombo.SelectedIndex = 1;
+                this._keyboardProfiles.Remove(kbp);
+            }
+            else if(ProfilesCombo.Items.Count == 2)
+            {
+                if (idx == 0)
+                    ProfilesCombo.SelectedIndex = 1;
+                else
+                    ProfilesCombo.SelectedIndex = 0;
+                this._keyboardProfiles.Remove(kbp);
+            }
+
+            this.SaveProfiles();
+        }
+
+        private void ProfileNameChangedEvent_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox profileName = (sender as TextBox);
+            // update Views and KeyboardProfileItem class
+            if (this.EditingProfile == RenamingProfile)
+            {
+                //chosenProfileName.Title = profileName.Text;
+            }
+
+            if (this.RenamingProfile != null)
+            {
+                this.RenamingProfile.Label = profileName.Text;
+            }
+        }
+
+        private void ProfileNameTextbox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            this.SaveProfiles();
+
+            TextBox textbox = (TextBox)sender;
+            textbox.Visibility = Visibility.Collapsed;
+            textbox.Text = "";
+            //FrameworkElement parent = (FrameworkElement)textbox.Parent;
+
+            //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
+            //textblock.Visibility = Visibility.Collapsed;
+
+            this.RenamingProfile = null;
+        }
+
+        private void KeyboardProfiles_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Remove)
+            {
+                // Really inefficient, we should consider re-implementing this later
+                for (int i = 0; i < this._keyboardProfiles.Count; i++)
+                {
+                    KeyboardProfileItem profile = this._keyboardProfiles[i];
+                    profile.ID = i;
+                }
+            }
+        }
+
+        public async void SaveProfiles()
+        {
+            MemoryStream memory_stream = new MemoryStream();
+            DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
+            serialiser.WriteObject(memory_stream, this._keyboardProfiles);
+
+            try
+            {
+                StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
+                using (Stream file_stream = await file.OpenStreamForWriteAsync())
+                {
+                    memory_stream.Seek(0, SeekOrigin.Begin);
+                    await memory_stream.CopyToAsync(file_stream);
+                    await file_stream.FlushAsync();
+                    this.SyncStatus.Text = "Profiles saved. Waiting for sync...";
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                throw new UnauthorizedAccessException();
+            }
+            catch (FileLoadException)
+            {
+                this.SyncStatus.Text = "Failed to load file. Profiles not saved.";
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Uncaught Exception");
+                Console.Write(e);
+            }
+        }
+
+        public async void LoadProfiles()
+        {
+            try
+            {
+                StorageFile file = await ApplicationData.Current.LocalFolder.GetFileAsync("KeyboardProfilesData");
+                using (IInputStream inStream = await file.OpenSequentialReadAsync())
+                {
+                    DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
+                    ObservableCollection<KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
+
+                    foreach (KeyboardProfileItem profile in saved_profiles)
+                    {
+                        if (!_keyboardProfiles.Contains(profile))
+                        {
+                            this._keyboardProfiles.Add(profile);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            // UI init code
+            if (this._keyboardProfiles.Count == 0)
+            {
+                this.CreateNewKeyboardProfile();
+            }
+
+            (this._frame.Content as IContentPage).ChangeSelectedProfile(this._keyboardProfiles[0]);
+        }
+
+        private void CreateNewKeyboardProfile()
+        {
+            KeyboardProfileItem profile_item = new KeyboardProfileItem(this._keyboardProfiles.Count, "Profile " + (this._keyboardProfiles.Count + 1));
+            this._keyboardProfiles.Add(profile_item);
+        }
+
+        private Color ConvertIntToColour(int coloured_int)
+        {
+            int red = (coloured_int >> 16) & 0xff;
+            int green = (coloured_int >> 8) & 0xff;
+            int blue = (coloured_int >> 0) & 0xff;
+
+            return Color.FromArgb(255, (byte)red, (byte)green, (byte)blue);
+        }
+
+        
 
         private async void FindKeyboard()
         {
@@ -156,6 +342,8 @@ namespace AnneProKeyboard
 
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
+            SaveProfiles();
+
             if (this.BluetoothDeviceWatcher != null)
             {
                 BluetoothDeviceWatcher.Added -= BluetoothDeviceAdded;
@@ -295,35 +483,12 @@ namespace AnneProKeyboard
             EditingProfile.SyncProfile(this.WriteGatt);
         }
 
-        private void hamburgerHover(object sender, RoutedEventArgs e)
-        {
-            //HamburgerButton.Background = new SolidColorBrush(Colors.Red);
-        }
-
         private static Color lightenDarkenColor(Color color, double correctionFactor)
         {
             double red = (255 - color.R) * correctionFactor + color.R;
             double green = (255 - color.G) * correctionFactor + color.G;
             double blue = (255 - color.B) * correctionFactor + color.B;
             return Color.FromArgb(color.A, (byte)red, (byte)green, (byte)blue);
-        }
-
-        private void Current_Activated(object sender, WindowActivatedEventArgs e)
-        {
-            if (e.WindowActivationState != CoreWindowActivationState.Deactivated)
-            {
-                MainTitleBar.Background = new SolidColorBrush((Color)this.Resources["SystemAccentColor"]);
-                pageHeader.Foreground = new SolidColorBrush(Colors.White);
-                HamburgerButton.Background = new SolidColorBrush(Color.FromArgb(51,255,255,255));
-                HamburgerButton.Foreground = new SolidColorBrush(Colors.White);
-            }
-            else
-            {
-                pageHeader.Foreground = new SolidColorBrush(Color.FromArgb(255, 152, 152, 152));
-                MainTitleBar.Background = new SolidColorBrush(Colors.White);
-                HamburgerButton.Background = new SolidColorBrush(Colors.White);
-                HamburgerButton.Foreground = new SolidColorBrush(Color.FromArgb(255, 152, 152, 152));
-            }
         }
 
         private void KeyboardSyncButton_Click(object sender, RoutedEventArgs e)
@@ -341,15 +506,15 @@ namespace AnneProKeyboard
 
         private void LightingSyncButton(LightingPage child)
         {
-            if (!child.EditingProfile.ValidateKeyboardKeys())
+            if (!child.editingProfile.ValidateKeyboardKeys())
             {
-                //this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
+                this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
                 return;
             }
 
             try
             {
-                child.SaveProfiles();
+                SaveProfiles();
             }
             catch (UnauthorizedAccessException)
             {
@@ -358,8 +523,8 @@ namespace AnneProKeyboard
 
             ProfileSyncButton.IsEnabled = false;
 
-            this.SyncProfile(child.EditingProfile);
-            child.EditingProfile.SyncStatusNotify += async (object_s, events) =>
+            this.SyncProfile(child.editingProfile);
+            child.editingProfile.SyncStatusNotify += async (object_s, events) =>
             {
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
@@ -372,7 +537,7 @@ namespace AnneProKeyboard
 
         private void LayoutSyncButton(LayoutPage child)
         {
-            if (!child.EditingProfile.ValidateKeyboardKeys())
+            if (!child.editingProfile.ValidateKeyboardKeys())
             {
                 this.SyncStatus.Text = "Fn or Anne keys were not found in the Standard or Fn layouts";
                 return;
@@ -380,7 +545,7 @@ namespace AnneProKeyboard
 
             try
             {
-                child.SaveProfiles();
+                SaveProfiles();
             }
             catch (UnauthorizedAccessException)
             {
@@ -388,8 +553,8 @@ namespace AnneProKeyboard
             }
             ProfileSyncButton.IsEnabled = false;
 
-            this.SyncProfile(child.EditingProfile);
-            child.EditingProfile.SyncStatusNotify += async (object_s, events) =>
+            this.SyncProfile(child.editingProfile);
+            child.editingProfile.SyncStatusNotify += async (object_s, events) =>
             {
                 await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
                 {
@@ -400,58 +565,96 @@ namespace AnneProKeyboard
             };
         }
 
-        private void HamburgerButton_Click(object sender, RoutedEventArgs e)
+        private void AnneNav_Loaded(object sender, RoutedEventArgs e)
         {
-            splitView.IsPaneOpen = !splitView.IsPaneOpen;
-        }
-
-        private void LightingNav_Clicked(object sender, RoutedEventArgs e)
-        {
-            if (!(_frame.Content.GetType() == typeof(LightingPage)))
+            // set the initial SelectedItem 
+            foreach (NavigationViewItemBase item in AnneNav.MenuItems)
             {
-                _frame.Content = lightingPage;
-                lightingPage.LoadProfiles();
-                if (connectionStatusLabel.Text == "Connected")
+                if (item is NavigationViewItem && item.Tag.ToString() == "layout")
                 {
-                    ProfileSyncButton.IsEnabled = true;
+                    AnneNav.SelectedItem = item;
+                    break;
                 }
-                pageHeader.Text = "Lighting";
-                LightingMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }
 
-        private void LayoutNav_Clicked(object sender, RoutedEventArgs e)
+        private void AnneNav_SelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
         {
-            if (!(_frame.Content.GetType() == typeof(LayoutPage)))
+            if (args.IsSettingsSelected)
             {
-                _frame.Content = layoutPage;
-                layoutPage.LoadProfiles();
-                if(connectionStatusLabel.Text == "Connected")
+                sender.Header = "About";
+                this._frame.Content = aboutPage;
+            }
+            else
+            {
+                NavigationViewItem item = args.SelectedItem as NavigationViewItem;
+
+                switch (item.Tag)
                 {
-                    ProfileSyncButton.IsEnabled = true;
+                    case "layout":
+                        _frame.Content = layoutPage;
+                        break;
+
+                    case "lighting":
+                        _frame.Content = lightingPage;
+                        break;
+
+                    case "about":
+                        _frame.Content = aboutPage;
+                        break;
                 }
-                pageHeader.Text = "Layers";
-                LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }
 
-        private void AboutNav_Clicked(object sender, RoutedEventArgs e)
+        private void AnneNav_ItemInvoked(NavigationView sender, NavigationViewItemInvokedEventArgs args)
         {
-            if (!(_frame.Content.GetType() == typeof(AboutPage)))
+            if (args.IsSettingsInvoked)
             {
+                sender.Header = "About";
                 _frame.Content = aboutPage;
-                if (connectionStatusLabel.Text == "Connected")
+            }
+            else
+            {
+                switch (args.InvokedItem)
                 {
-                    ProfileSyncButton.IsEnabled = false;
+                    case "Layout":
+                        sender.Header = "Layout";
+                        _frame.Content = layoutPage;
+                        break;
+
+                    case "Lighting":
+                        sender.Header = "Lighting";
+                        _frame.Content = lightingPage;
+                        break;
+
+                    case "About":
+                        sender.Header = "About";
+                        _frame.Content = aboutPage;
+                        break;
                 }
-                pageHeader.Text = "About";
-                LayoutMenuButton.Background = new SolidColorBrush(Color.FromArgb(1, 0, 0, 0));
             }
         }
 
-        private void pageHeader_SelectionChanged(object sender, RoutedEventArgs e)
+        private void ProfilesCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            try
+            {
+                SaveProfiles();
+            } catch
+            {
+                this.SyncStatus.Text = "Profiles failed to save";
+            }
+            this.selectedProfile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
+            lightingPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
+            layoutPage.ChangeSelectedProfile((KeyboardProfileItem)ProfilesCombo.SelectedItem);
+        }
 
+        private void ProfilesCombo_Loaded(object sender, RoutedEventArgs e)
+        {
+            if(_keyboardProfiles.Count > 0)
+            {
+                ProfilesCombo.SelectedIndex = 0;
+            }
         }
     }
 }
