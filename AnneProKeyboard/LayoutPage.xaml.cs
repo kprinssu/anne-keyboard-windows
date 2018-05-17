@@ -157,7 +157,8 @@ namespace AnneProKeyboard
             
             keyboardLayoutSelection.Visibility = Visibility.Visible;
 
-            await Task.Delay(1);
+            // hack to have combobox be shown
+            await Task.Delay(50);
             
             keyboardLayoutSelection.IsDropDownOpen = true;
         }
