@@ -415,23 +415,42 @@ namespace AnneProKeyboard
                     return;
                 }
 
-                var service = keyboard.GetGattService(OAD_GUID);
+                var services = await keyboard.GetGattServicesAsync();
 
-                if (service == null)
+                if (services == null)
                 {
                     return;
                 }
 
-                var write_gatt = service.GetCharacteristics(WRITE_GATT_GUID)[0];
-                var read_gatt = service.GetCharacteristics(READ_GATT_GUID)[0];
-
-                if (write_gatt == null || read_gatt == null)
+                GattDeviceService oadService = null;
+                foreach (GattDeviceService service in services.Services)
                 {
-                    return;
+                    if (service.Uuid == OAD_GUID)
+                    {
+                        oadService = service;
+                        break;
+                    }
                 }
 
-                this.WriteGatt = write_gatt;
-                this.ReadGatt = read_gatt;
+                GattCharacteristicsResult characteristics = await oadService.GetCharacteristicsAsync();
+                GattCharacteristic writeGatt = null;
+                GattCharacteristic readGatt = null;
+
+                foreach (GattCharacteristic characteristic in characteristics.Characteristics)
+                {
+                    if (characteristic.Uuid == WRITE_GATT_GUID)
+                    {
+                        writeGatt = characteristic;
+                    }
+                    else if (characteristic.Uuid == READ_GATT_GUID)
+                    {
+                        readGatt = characteristic;
+                    }
+                }
+
+                this.WriteGatt = writeGatt;
+                this.ReadGatt = readGatt;
+                this.KeyboardDeviceInformation = device;
                 this.KeyboardDeviceInformation = device;
 
                 await this.ReadGatt.WriteClientCharacteristicConfigurationDescriptorAsync(GattClientCharacteristicConfigurationDescriptorValue.Notify);
