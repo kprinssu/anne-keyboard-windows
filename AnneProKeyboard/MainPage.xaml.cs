@@ -201,10 +201,10 @@ namespace AnneProKeyboard
             {
                 this.SyncStatus.Text = "Failed to load file. Profiles not saved.";
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Console.WriteLine("Uncaught Exception");
-                Console.Write(e);
+                Console.WriteLine("Uncaught Exception when saving profiles:");
+                Console.Write(ex);
             }
         }
 
@@ -227,8 +227,10 @@ namespace AnneProKeyboard
                     }
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("Uncaught Exception when loading profiles:");
+                Console.Write(ex);
             }
 
             // UI init code
@@ -607,7 +609,7 @@ namespace AnneProKeyboard
             else
             {
                 NavigationViewItem item = args.SelectedItem as NavigationViewItem;
-
+                
                 switch (item.Tag)
                 {
                     case "layout":
