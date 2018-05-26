@@ -52,8 +52,6 @@ namespace AnneProKeyboard
         private GattCharacteristic ReadGatt;
         private DeviceInformation KeyboardDeviceInformation;
 
-        //private ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-
         private AboutPage aboutPage;
         private LayoutPage layoutPage;
         private LightingPage lightingPage;
@@ -64,7 +62,6 @@ namespace AnneProKeyboard
             initPages();
             this._frame.Content = layoutPage;
             FindKeyboard();
-            //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
             lightingNavItem.Icon = new FontIcon { Glyph = "\uE706" };
             LoadProfiles();
             this._keyboardProfiles.CollectionChanged += KeyboardProfiles_CollectionChanged;
@@ -78,13 +75,6 @@ namespace AnneProKeyboard
             lightingPage = new LightingPage();
         }
 
-        //private void KeyboardProfiles_ItemClick(object sender, ItemClickEventArgs e)
-        //{
-        //    //KeyboardProfileItem profile = (e.ClickedItem as KeyboardProfileItem);
-        //    (this._frame.Content as IContentPage).ChangeSelectedProfile(profile);
-        //    this.selectedProfile = ProfilesCombo.SelectedItem as KeyboardProfileItem;
-        //}
-
         private void ProfileAddButton_Click(object sender, RoutedEventArgs e)
         {
             this.CreateNewKeyboardProfile();
@@ -95,8 +85,6 @@ namespace AnneProKeyboard
 
         private void ProfileEditButton_Click(object sender, RoutedEventArgs e)
         {
-            //Button button = (Button)sender;
-            //FrameworkElement parent = (FrameworkElement)button.Parent;
             TextBox textbox = ProfileNameTextbox;
             textbox.IsEnabled = true;
             textbox.Visibility = Visibility.Visible;
@@ -155,10 +143,6 @@ namespace AnneProKeyboard
             TextBox textbox = (TextBox)sender;
             textbox.Visibility = Visibility.Collapsed;
             textbox.Text = "";
-            //FrameworkElement parent = (FrameworkElement)textbox.Parent;
-
-            //TextBlock textblock = (TextBlock)parent.FindName("ProfileNameTextblock");
-            //textblock.Visibility = Visibility.Collapsed;
 
             this.RenamingProfile = null;
         }
@@ -184,6 +168,12 @@ namespace AnneProKeyboard
 
             try
             {
+                var profileFileItem = await ApplicationData.Current.LocalFolder.TryGetItemAsync("KeyboardProfilesData");
+                if(profileFileItem == null)
+                {
+                    File.Create(ApplicationData.Current.LocalFolder.Path + "//KeyboardProfilesData").Close();
+                }
+
                 StorageFile file = await ApplicationData.Current.LocalFolder.CreateFileAsync("KeyboardProfilesData", CreationCollisionOption.ReplaceExisting);
                 using (Stream file_stream = await file.OpenStreamForWriteAsync())
                 {
@@ -216,8 +206,9 @@ namespace AnneProKeyboard
                 using (IInputStream inStream = await file.OpenSequentialReadAsync())
                 {
                     DataContractSerializer serialiser = new DataContractSerializer(typeof(ObservableCollection<KeyboardProfileItem>));
-                    ObservableCollection<KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(inStream.AsStreamForRead());
-
+                    Stream rawStream = inStream.AsStreamForRead();
+                    ObservableCollection<KeyboardProfileItem> saved_profiles = (ObservableCollection<KeyboardProfileItem>)serialiser.ReadObject(rawStream);
+                    
                     foreach (KeyboardProfileItem profile in saved_profiles)
                     {
                         if (!_keyboardProfiles.Contains(profile))
@@ -344,7 +335,7 @@ namespace AnneProKeyboard
 
         private void App_Suspending(object sender, Windows.ApplicationModel.SuspendingEventArgs e)
         {
-            SaveProfiles();
+           // SaveProfiles();
 
             if (this.BluetoothDeviceWatcher != null)
             {
